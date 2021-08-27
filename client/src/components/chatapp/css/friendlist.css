@@ -1,0 +1,37 @@
+.friendlist {
+    /* height: calc(100% - 100px - 45px); */
+    padding: 15px;
+    position: absolute;
+    top: 0px;
+    z-index: -1;
+    height: 100%;
+    width: 100%;
+    /* overflow: none; */
+    overflow-y: scroll;
+    background: rgb(85, 85, 85);
+      /* padding of mother element is 20px  */
+}
+.friendlist .friend {
+  width: 100%;
+  color: white;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.friendlist .friend > :nth-child(2) {
+  margin-left: 10px;
+  text-transform: uppercase;
+}
+.friendlist .friend > :nth-child(3) {
+  position: absolute;
+  right: 0px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.friendlist .friend > .notonline {
+  color: black;
+}
+.friendlist .friend > .online {
+  color: green;
+}

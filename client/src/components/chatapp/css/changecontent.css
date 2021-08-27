@@ -1,0 +1,21 @@
+.change-content {
+  border-radius: 10px;
+    height: calc(100% - 50px - 45px);
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    background-color: rgb(37, 37, 37);
+}
+.change-content > .active {
+  animation: showupbox 0.2s ease forwards;
+}
+@keyframes showupbox {
+  0% {
+    z-index: 4;
+    top: 100%;
+  }
+  100% {
+    z-index: 4;
+    top: 0%;
+  }
+}

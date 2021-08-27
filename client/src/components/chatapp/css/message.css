@@ -1,0 +1,11 @@
+.message{
+  position: absolute;
+  z-index: -1;
+  top: 0px;
+  height: 100%;
+  width: 100%;
+  /* overflow: none; */
+  overflow-y: scroll;
+  background-color: rgb(88, 88, 88);
+    /* padding of mother element is 20px  */
+}
