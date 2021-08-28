@@ -41,7 +41,7 @@ const Banner_Circle_Animation = (props) => {
         this.radius = radius;
         this.color  = color;
         this.radians = Math.random() * Math.PI * 2;
-        this.velocity = 0.01;
+        this.velocity = Math.PI / 2;
         this.distanceFromCenter =  {
             x: Math.random() * 10 + 70,
             y: Math.random() * 10 + 70,
@@ -50,14 +50,17 @@ const Banner_Circle_Animation = (props) => {
             x : mouse.x,
             y : mouse.y
         }
+        this.date = new Date();
         this.update = () => {
-            this.radians += this.velocity;
-            this.lastmouse.x += (mouse.x - this.lastmouse.x ) * 0.01
-            this.lastmouse.y += (mouse.y - this.lastmouse.y ) *0.01
+            let frameDate = new Date();
+            this.radians += this.velocity * (frameDate.getTime() - this.date.getTime()) / 1000;
+            this.lastmouse.x += (mouse.x - this.lastmouse.x ) * (frameDate.getTime() - this.date.getTime()) / 1000 * 0.5;
+            this.lastmouse.y += (mouse.y - this.lastmouse.y ) * (frameDate.getTime() - this.date.getTime()) / 1000 * 0.5;
             // this.lastmouse.x += (mouse.x - this.lastmouse.x) * 0.05
             this.x = this.lastmouse.x + Math.cos(this.radians) * this.distanceFromCenter.x;
             this.y = this.lastmouse.y + Math.sin(this.radians) * this.distanceFromCenter.y;
             this.draw()
+            this.date = new Date()
         }
         this.draw = () => {
             context.beginPath();
