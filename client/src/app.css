@@ -18,7 +18,7 @@ body {
     position: relative;
     overflow: hidden;
 }
-body > #root {
+body > a {
     height: 100%;
     max-width: 1810px;
     margin: auto;
