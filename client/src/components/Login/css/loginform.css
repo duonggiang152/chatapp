@@ -1,4 +1,5 @@
 #form-container {
+    flex-shrink: 0;
     margin-top: 20px;
     margin-left: 10px;
     width: calc(80% - 10px);
@@ -178,4 +179,178 @@
 
 .active_aniamtion_btn_login {
     animation: down_aniamtion 0.5s forwards;
+}
+
+
+/* responsive setting query media */
+@media (max-width: 700px) {
+    #form-container {
+        flex-shrink: 0;
+        margin: 10px 0px 0px 0px;
+        margin-top: 70px;
+        width: 90%;
+        height: calc(100% - 70px);
+        overflow: hidden;
+    }
+    .form {
+        /* border: 2px solid black; */
+        color: rgb(94, 94, 94);
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+    .form > h3 {
+        position: relative;
+        left: 0px;
+        height: 40px;
+        font-size: 20px;
+        width: 100%;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    .form > div {
+        display: flex;
+        flex-direction: column;
+    }
+    /* -------- */
+    /* login-form */
+    #login-form > div > input {
+        width: 95%;
+        outline: none;
+        border: none;
+        padding: 4px 2px;
+        font-size: 20px;
+        margin: 15px auto;
+        background: none;
+    }
+    #login-form > div > input:focus {
+        border-bottom: 2px solid grey ;
+        background: rgb(224, 224, 224);
+    
+    }
+    #login-form > div > :nth-child(3) {
+        border-radius: 10px;
+        cursor: pointer;
+        width: 130px;
+        margin: 15px 0px 0px 5px;
+        padding: 5px;
+        background: rgb(158, 158, 158);
+        transition: background 0.2s ease;
+    }
+    #login-form > div > :nth-child(3):hover {
+        cursor: pointer;
+        background: rgb(216, 216, 216);
+    }
+
+    /* register -form */
+    #register-form > div > :nth-child(4) {
+        border-radius: 10px;
+        width: 150px;
+        transition: background 0.3s ease;
+    }
+    #register-form > div > :nth-child(4):hover {
+        background: rgb(192, 192, 192);
+    }
+    #register-form > div {
+        margin: 10px 15px;
+    }
+    #register-form > div > input {
+        color: white;
+        width: 95%;
+        outline: none;
+        border: none;
+        margin: 20px auto;
+        font-size: 20px;
+        background: rgb(75, 75, 75);
+    }
+    #register-form > div > :nth-child(4) {
+        border-radius: 10px;
+        width: 150px;
+        transition: background 0.3s ease;
+        margin: 20px 0px 0px 5px;
+    }
+    #register-form > div > input::placeholder {
+        color: white;
+        font-size: 14px;
+    }
+    #form-container {
+        position: relative;
+    }
+    #register-form {
+        position: absolute;
+        top: 90%;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+    }
+
+    #register-form::before {
+        top: 0px;
+        content: " ";
+        position: absolute;
+        z-index: -1;
+        width: 100%;
+        height: 110%;
+        background-color: rgb(155, 155, 155);
+        border-radius: 40% 40% 10px 10px / 30px 30px 20px 20px;
+    }
+    #register-form > h3 {
+        cursor: pointer;
+        color: rgb(255, 255, 255);
+        font-size: 20px;
+        padding: 10px 0px;
+        transition: color 0.2s ease;
+    }
+    #register-form > .select_btn:hover {
+        color: rgb(221, 221, 221);
+    }
+    @keyframes register_form_aniamtion {
+        0% {
+            top: 90%;
+        }
+        15% {
+            top: 92.5%;
+        }
+        25% {
+            top: 94%;
+        }
+        100% {
+            top: 0%;
+        }
+    }
+    .active_aniamtion {
+        animation: register_form_aniamtion 0.5s forwards;
+    }
+
+    /* css for btn-login */
+    #register-form {
+        position: absolute;
+    }
+    #btn-login {
+        cursor: pointer;
+        display: inline-block;
+        font-weight: 900;
+        padding: 2px 5px;
+        border-radius: 3px;
+        text-align: center;
+        font-size: 10px;
+        background: white;
+        color: rgb(90, 90, 90);
+        position: absolute;
+        left: 50%;
+        bottom: 2px;
+        transform: translateX(-50%);
+    }
+    #btn-login::before {
+        content: " ";
+        background: white;
+        position: absolute;
+        z-index: -1;
+        top: -5px;
+        width: 400%;
+        height: 500%;
+        left: 50%;
+        border-radius: 40% 40% 10px 10px / 140px 140px 20px 20px;
+        transform: translateX(-50%);
+    }
 }

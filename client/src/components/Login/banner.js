@@ -1,12 +1,13 @@
+import { useEffect, useState } from "react"
 import "./css/banner.css"
 import Banner_Circle_Animation from "./banner_circle_animation"
-function Banner() {
+function Banner(props) {
     return (
         <div id = "banner">
             <p>
                 CHAT APP
             </p>
-            <Banner_Circle_Animation />
+            <Banner_Circle_Animation  {...props} />
         </div>
     )
 }

@@ -1,10 +1,13 @@
 textarea, input { outline: none; }
 body {
     background-color: rgb(128, 128, 128);
+    position: relative;
+    width: calc(100vw - 15px);
+    height: calc(100vh - 15px);
+    /* overflow: hidden; */
 }
 #login-section {
     border-radius: 15px;
-  
     background-color: rgb(255, 255, 255);
     width: 600px;
     height: 400px;
@@ -12,4 +15,20 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+@media (max-width: 700px) {
+    body {
+        position: relative;
+    }
+    #login-section {
+        display: flex;
+        position: absolute;
+        flex-direction: column;
+        width: 100vw;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        height: calc(100vh - 150px);
+        max-height: calc(300px + 150px);
+    }
 }

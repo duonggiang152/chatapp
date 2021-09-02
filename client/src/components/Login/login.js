@@ -1,12 +1,42 @@
+import { useEffect, useState } from "react"
 import {LoginForm} from "./loginform"
 import {Banner} from "./banner"
 import "./css/login.css"
+let windowSize = {width : undefined,height: undefined}
+let Type = "pc"
 function Login() {
+    const [type, setType] = useState("pc")
+    const [screenSize, setScreensize]    = useState(windowSize)
+    const updateType = () => {
+        windowSize.width = document.documentElement.clientWidth
+        windowSize.height = document.documentElement.clientHeight
+        if(windowSize.width <= 700 && Type !== "mobile" ){ 
+            console.log("mobile: " + windowSize.width)
+            Type = "mobile"
+            setType(Type)
+        }
+        else if (windowSize.width > 700 && Type !== "pc" ){    
+            console.log("pc: " + windowSize.width)
+            Type = "pc"
+            setType(Type)
+        }
+        
+    } 
+    useEffect(() => {
+        updateType();
+        window.addEventListener('resize',updateType)
+        return () => {
+            console.log("clean")
+            window.removeEventListener('resize', updateType)
+            
+        }
+    }, [])
     return (
         <section id = "login-section">
-            <LoginForm />
-            <Banner />
+            <Banner screenType = {Type} />
+            <LoginForm screenType = {type}/>
         </section>
     )
+
 }
 export {Login}
