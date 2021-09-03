@@ -39,7 +39,7 @@ const SlideBar = (props) => {
         setContenInside(type)
     }
     return (
-        <div style = {(TypeScreen === "mobile"? mobileStyle : {})} id = {"slide-bar"}>
+        <div style = {(document.documentElement.clientWidth <= 610? mobileStyle : {})} id = {"slide-bar"}>
             <UserInfor typeSelect = {contentInside} showMessageFunc = {showMessageBox} />
             <ContenChange content = {contentInside}>
             <SearchBox />
