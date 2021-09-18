@@ -11,12 +11,10 @@ function Login() {
         windowSize.width = document.documentElement.clientWidth
         windowSize.height = document.documentElement.clientHeight
         if(windowSize.width <= 700 && Type !== "mobile" ){ 
-            console.log("mobile: " + windowSize.width)
             Type = "mobile"
             setType(Type)
         }
         else if (windowSize.width > 700 && Type !== "pc" ){    
-            console.log("pc: " + windowSize.width)
             Type = "pc"
             setType(Type)
         }
@@ -26,7 +24,6 @@ function Login() {
         updateType();
         window.addEventListener('resize',updateType)
         return () => {
-            console.log("clean")
             window.removeEventListener('resize', updateType)
             
         }

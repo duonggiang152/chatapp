@@ -16,7 +16,7 @@ body {
     margin: auto;
     display: flex;
     position: relative;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 body > a {
     height: 100%;

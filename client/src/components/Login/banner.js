@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react"
 import "./css/banner.css"
 import Banner_Circle_Animation from "./banner_circle_animation"
 function Banner(props) {
