@@ -1,4 +1,5 @@
-const db = require("./databaseModel");
+const db       = require("./databaseModel");
+const Password = require("./password")
 class User {
     m_name     = undefined;
     m_password = undefined;
@@ -29,7 +30,7 @@ class User {
      * @param {String} userName 
      * @returns true if exits and false if not
      */
-    static isExistUser(userName, callback) {
+    static isExistUser(userName) {
         const promise = new Promise((res, rej) => {
             const query = `
             SELECT 1
@@ -59,10 +60,11 @@ class User {
      */
     static addUser(userName, password) {
         return User.isExistUser(userName)
-        .then((isExist) => new Promise((res, rej) => {
+        .then((isExist) => new Promise( async (res, rej) => {
             if(!isExist) {
+                const hashPassword = await Password.hash(password)
                 // create new user
-                const sql = `INSERT INTO Users VALUES ("${userName}", "${password}");`
+                const sql = `INSERT INTO Users VALUES ("${userName}", "${hashPassword}");`
                 res(db.query(sql)
                       .then(() => {
                           return "added a new user to database";
@@ -73,14 +75,52 @@ class User {
             }
         }))
     }
+    /**
+     * Return a promise
+     * 
+     * return true if username and password exits in database and false otherwise
+     * 
+     * @param {String} userName 
+     * @param {String} password 
+     * @returns 
+     */
+    static async matchUserNameAndPassword(userName, password) {
+        // get password maches with username
+        const promise   =   new Promise(async (res, rej) => {
+                            const query =   `SELECT * FROM Users
+                                            WHERE userName = "${userName}";`;
+                            try {
+                            const rowDataResult = await db.query(query);
+                            const json = JSON.parse(JSON.stringify(rowDataResult))
+                            res(json)
+                            }
+                            catch(err) {
+                                rej(err)
+                            }
+                            })
+        // check if password exist
+                            .then((data) => {
+                                return new Promise((res, rej) => {
+                                    if(data.length === 0) {
+                                        const err = new Error("user don't exist")
+                                        res(false)
+                                    }
+                                    else if(data.length === 1) {
+                                        res(data[0].password)
+                                    }
+                                    else {
+                                        rej(new Error("unknow err"))
+                                    }
+                                })
+                            })
+        // check if password match
+                            .then((hash) => {
+                                if(hash === false) return hash
+                                return Password.compare(password, hash)
+                            })
 
-    getUserInformation = () => {
-
+        return promise
     }
-
 }
 
-/**
- * Export a class User
- */
 module.exports = User;

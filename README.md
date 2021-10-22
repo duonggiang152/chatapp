@@ -1,2 +1,2 @@
 # chatapp
-using Javascript, html5, reactjs, css3
+using reactjs, mysql, nodejs, expressjs
