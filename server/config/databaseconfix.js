@@ -1,6 +1,3 @@
-/**
- * @param {String} typeDBConfig    
- */
 const configSigleConnection = {
     host     : 'localhost',
     user     : 'root',

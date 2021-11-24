@@ -1,8 +1,27 @@
+/**
+ * Module dependencies
+ * @private
+ */
 const db       = require("./databaseModel");
 const Password = require("./password")
+
+/**
+ * Module exports
+ */
+module.exports = User;
+
+/**
+ * Class interact with users
+ */
 class User {
+    /**
+     * User infomation
+     * @private
+     */
     m_name     = undefined;
     m_password = undefined;
+
+
     /**
      * @constructor
      * @param {string} userName  
@@ -14,11 +33,13 @@ class User {
         this.m_password = password;
     }
     // ---------------------
-    //  private function
+    //  Private function
 
     /** 
-    * @param {Function} callback(err) if err occurre it will pass err to callback 
-    * add username to database
+    * Add a new user to database base on the user object
+    * @return   {Promise<string>} message
+    * @err       catch in promise state
+    * @private
     */
     addUser() {
         return User.addUser(this.m_name, this.m_password)
@@ -27,8 +48,11 @@ class User {
     // static function
 
     /**
+     * Checking if user exist
+     * @async
      * @param {String} userName 
-     * @returns true if exits and false if not
+     * @returns {Boolean} True if exist False if not
+     * @static
      */
     static isExistUser(userName) {
         const promise = new Promise((res, rej) => {
@@ -51,12 +75,12 @@ class User {
 
     /**
      * Add a new user to database
-     * 
-     * Return a promises (mess) 
-     * 
-     * catch 0 if user exist
-     * @param {String} userName 
-     * @param {String} password 
+     * @async
+     * @param    {String} userName 
+     * @param    {String} password 
+     * @return   {Promise<string>} message
+     * @err       catch in promise
+     * @static
      */
     static addUser(userName, password) {
         return User.isExistUser(userName)
@@ -76,15 +100,15 @@ class User {
         }))
     }
     /**
-     * Return a promise
-     * 
-     * return true if username and password exits in database and false otherwise
-     * 
+     * Checking if username and password correct
+     * @async
      * @param {String} userName 
      * @param {String} password 
-     * @returns 
+     * @return {Boolean} True if username and password correct, False if not
+     * @err    handdle by rej and catch method state in Promise
+     * @static
      */
-    static async matchUserNameAndPassword(userName, password) {
+    static async checkAccountAndPassword(userName, password) {
         // get password maches with username
         const promise   =   new Promise(async (res, rej) => {
                             const query =   `SELECT * FROM Users
@@ -118,9 +142,6 @@ class User {
                                 if(hash === false) return hash
                                 return Password.compare(password, hash)
                             })
-
         return promise
     }
 }
-
-module.exports = User;
