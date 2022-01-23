@@ -1,0 +1,42 @@
+.friend-chat-list {
+    /* height: calc(100% - 100px - 45px); */
+    position: absolute;
+    top: 0px;
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+    /* overflow: none; */
+    overflow-y: scroll;
+    background-color: rgb(37, 37, 37);
+      /* padding of mother element is 20px  */
+}
+/* #slide-bar > .friend-chat-list */
+
+.friend-chat-list article {
+    cursor: pointer;
+    color: white;
+    background-color: rgb(90, 90, 90);
+    padding: 10px 5px;
+    margin: 5px 0px;
+    display: flex;
+    overflow: none;
+    border-radius: 5px;
+}
+.friend-chat-list article > * {
+    flex-shrink: 0;
+}
+.friend-chat-list article > :nth-child(2) {
+    margin-left: 5px;
+    width: calc(100% - 10px - 35px - 5px );
+}
+.friend-chat-list article .contentchat{
+    display: flex;
+    font-size: 12px;
+}
+.friend-chat-list article .contentchat > :nth-child(2){
+    margin: 0px 5px;
+}
+.friend-chat-list article .contentchat :nth-child(3) {
+    width: 60px;
+    flex-shrink: 0;
+}

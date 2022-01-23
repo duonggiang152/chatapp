@@ -1,0 +1,28 @@
+#chat-content .chat-input {
+    color: white;
+    height: 41px;
+}
+#chat-content .chat-input > :nth-child(1) {
+    display: flex;
+    align-items: center;
+}
+#chat-content .chat-input > :nth-child(1) > textarea {
+
+    width: calc(100% - 30px);
+    border-radius: 10px;
+    padding: 5px 10px;
+    color: white;
+    flex-grow: 0;
+    background-color: rgb(36, 35, 35);
+} 
+#chat-content .chat-input > :nth-child(1) > :nth-child(2) {
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    flex-grow: none;
+    cursor: pointer;
+    background-color: rgb(36, 35, 35);
+}
+#chat-content .chat-input > :nth-child(1) > :nth-child(2) > i {
+    color: rgb(16, 214, 240);
+}

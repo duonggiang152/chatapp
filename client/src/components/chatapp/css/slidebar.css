@@ -1,0 +1,23 @@
+#slide-bar {
+    width: calc((100% - 10px) / 3);
+    min-width: 300px;
+    max-width: 900px;
+    height: calc(100%);
+    flex-grow: 0;
+    background-color: rgb(37, 37, 37); 
+    padding: 20px;
+    margin-right: 5px;
+    /* add when resize */
+}
+#slide-bar-mobile {
+    flex-grow: 0;
+    width: 100%;
+    min-width: 300px;
+    max-width: 900px;
+    height: 100%;
+    background-color: rgb(37, 37, 37); 
+    padding: 20px;
+    margin-right: 5px;
+    position: absolute;
+}
+

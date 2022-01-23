@@ -1,0 +1,24 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "server for chat app",
+  "main": "App.js",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
+    "colors": "^1.4.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.15",
+    "passport": "^0.5.2",
+    "passport-local": "^1.0.0",
+    "session": "^0.1.0"
+  },
+  "scripts": {
+    "start": "nodemon App.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "giang",
+  "license": "MIT"
+}

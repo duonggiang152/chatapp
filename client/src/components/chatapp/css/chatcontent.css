@@ -1,0 +1,50 @@
+.chat-content {
+
+    width: calc((100%) / 3 * 2);
+    min-width: 300px;
+    /* max-width: 900px; */
+    height: calc(100%);
+    flex-grow: 0;
+    background-color: rgb(90, 90, 90);
+    padding: 20px;
+}
+.chat-content-mobile {
+    flex-grow: 0;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(90, 90, 90);
+    position: absolute;
+    padding: 20px 10px 5px 20px;
+    z-index: -2;
+}
+.chat-content-mobile-showed {
+    z-index: 5;
+    right: 0%;
+}
+.chat-content-mobile-out-animation {
+    animation: outro-aniamtion 0.5s ease forwards;
+}
+@keyframes outro-aniamtion {
+    0% {
+        z-index: 5;
+        right: 0%;
+    }
+    100% {
+        z-index: 5;
+        right: -100%;
+    }
+}
+.chat-content-mobile-active-animation {
+    animation: chatcontentanimation 0.5s ease forwards; 
+}
+@keyframes chatcontentanimation {
+    0% {
+        z-index: 5;
+        right: -100%;
+    }
+    100% {
+        z-index: 5;
+        right: 0%;
+    }
+}

@@ -1,0 +1,59 @@
+/* User infor */
+#slide-bar > :nth-child(1) {
+    display: flex;
+    justify-content: start;
+    position: relative;
+}
+#slide-bar > :nth-child(1) > :nth-child(3) {
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+}
+#slide-bar > :nth-child(1) > :nth-child(1) {
+    margin-right: 10px;
+}
+#slide-bar > :nth-child(1) > :nth-child(2) {
+    color: rgb(247, 247, 247);
+    width: 200px;
+    text-align: center;
+    font-size: 25px;
+    padding: 0px;
+    margin: 0px;
+    text-transform: uppercase;
+    /* background-color: white; */
+    display: flex;
+    align-items: center;
+}
+#slide-bar > :nth-child(1) > :nth-child(3) {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: rgb(75, 72, 72);
+    color: white;
+    font-size: 13px;
+    margin: 10px 0px;
+    transition: background-color 1s ease;
+}
+#slide-bar > :nth-child(1) > :nth-child(3) > :nth-child(1) {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#slide-bar > :nth-child(1) > :nth-child(3) >  div {
+    transition: background-color 1s ease;
+    width: 12px;
+    height: 12px;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    font-size: 10px;
+    background: rgba(48, 92, 226, 0.8);
+    text-align: center;
+    border-radius: 50%;
+    padding: 1px;
+}
+/* #slide-bar > :nth-child(1) > :nth-child(3) >  div > p {
+    text-align: left;
+} */

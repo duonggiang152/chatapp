@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@600&display=swap');
+/* style banner */
+#login-section {
+    position: relative;
+}
+#banner {
+    border-radius: 50%;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    width: 250px;
+    height: 250px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: -40px;
+    z-index: 2;
+    background: rgb(32, 32, 32);
+    overflow: hidden;
+  
+}
+#banner > p {
+    cursor: pointer;
+    /* padding: 30px; */
+    color: white;
+    text-align: center;
+    position: absolute;
+    display: inline-block;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    font-size: 30px;
+    font-weight: 900;
+    /* text-align: center; */
+    /* height: 50px; */
+    z-index: 2;
+}
+/* style canvas */
+#banner > :nth-child(2) {
+    position: absolute;
+    left: 0px;
+    /* padding: 0px;
+    border-radius: 0px;
+    width: 100%;
+    height: calc(100% - 50px); */
+}
+@media (max-width: 700px) {
+    #login-section {
+        display: flex;
+        position: relative;
+        flex-direction: column;
+        width: 100%;
+    }
+    #banner {
+        flex-shrink: 0;
+        border-radius: 20px;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        width: 70vw;
+        height: 75px;
+        position: absolute;
+        top: -40px;
+        /* top: 0px; */
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 0;
+    }
+    #banner > :nth-child(2) {
+   
+        position: static;
+    }
+    #banner > p {
+        cursor: pointer;
+        padding-top: 5px;
+        color: white;
+        width: 100%;
+        text-align: center;
+        position: relative;
+        top: 0px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 20px;
+        height: 25px;
+    }
+    #form-container {
+        width: 100%;
+    }
+}
+

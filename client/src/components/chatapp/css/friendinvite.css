@@ -1,0 +1,26 @@
+.friend-invite {
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    margin: 2px 5px;
+    padding: 0px 10px;
+    border-radius: 10px;
+    background-color: rgb(51, 51, 51);
+}
+.friend-invite > :nth-child(2) {
+    width: 60px;
+    font-size: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+.friend-invite > :nth-child(2) > :nth-child(1) {
+    width: 25px;
+  
+    color: green;
+
+}
+.friend-invite > :nth-child(2) > :nth-child(2) {
+    width: 25px;
+    color: red;
+  
+}

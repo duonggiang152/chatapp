@@ -1,0 +1,19 @@
+#chat-content .chat-box-infor {
+    display: flex;
+    align-items: center;
+    background-color: rgb(59, 59, 59);
+    height: 70px;
+    padding: 0px 10px;
+    border-radius: 15px;
+}
+#chat-content .chat-box-infor > .fas {
+    font-size: 35px;
+    color: white;
+    margin-right: 10px;
+}
+#chat-content .chat-box-infor > .tittle {
+    font-size: 24px;
+    color: white;
+    margin-left: 10px; 
+    text-transform: uppercase;
+}

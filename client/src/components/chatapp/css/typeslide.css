@@ -1,0 +1,32 @@
+#type-slide {
+    margin-top: 5px;
+    display: flex;
+    font-size: 20px;
+    color: white;
+    height: 40px;
+    background-color: rgb(56, 52, 52);
+}
+#type-slide > :nth-child(1) {
+    padding: 5px;
+    width: calc(50% - 5px);
+    height: 100%;
+    margin-right: 10px;
+    border-radius: 5px;
+    background-color: rgb(56, 52, 52);
+  
+}
+#type-slide > * > h3 {
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+#type-slide > :nth-child(2) {
+    padding: 5px;
+    width: calc(50% - 5px);
+    height: 100%;
+    border-radius: 5px;
+    background-color: rgb(56, 52, 52);
+    transition: background-color 2.0s ease;
+}
+#type-slide .active {
+    background-color: rgb(116, 114, 114);
+}
