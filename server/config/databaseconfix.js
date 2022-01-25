@@ -11,8 +11,6 @@ const configPoolConnection = {
     user     : 'root',
     password : 'password',
     database : 'chatapptest',
-    
-    
 }
 /**
  * create a sigle connection to database
