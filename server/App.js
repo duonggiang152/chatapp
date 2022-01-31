@@ -4,6 +4,10 @@
 const express  = require("express")
 const session  = require("express-session")
 const passport = require("./config/passportconfig")
+const LoginRoute = require("./routes/authentication/login.js")
+const LogoutRoute = require("./routes/authentication/Logout")
+// need for testing
+const test = require("./routes/routetest")
 /**
  * Local variable
  * @private
@@ -14,6 +18,10 @@ const PORT     = process.env.PORT || 3000
 /**
  * Middleware
  */
+ app.use(express.urlencoded({
+    extended: true
+}))
+app.use(express.json())
 app.use(session(
    { 
     secret: 'keyboard',
@@ -21,34 +29,16 @@ app.use(session(
     resave: false,
     saveUninitialized: true
    }))
-app.use(express.urlencoded({
-    extended: true
-}))
-app.use(express.json())
+
 app.use(passport.initialize());
 app.use(passport.session());
 
 /**
  * Route
  */
-app.post("/login",
-    (req, res, next) => {
-        passport.authenticate(
-            'local',
-            (err, user) => {
-                if(!user) {return res.send("authentication faile")}
-                else return res.send("authenticated")
-            }
-        )(req, res, next)
-    },
-    (req, res) => {
-        console.log(req.session);
-        res.send(`hello ${req.user.id}`);
-    })
-app.get("/faillogin", (req, res) => {
-    res.send("wrong user")
-})
-
+app.use("/login", LoginRoute)
+app.use("/logout",LogoutRoute)
+app.use("/routetest", test)
 app.listen(PORT, (err) => {
     if(err) throw err
     else {

@@ -15,10 +15,10 @@ passport.use(new LocalStrategy({
             },
             async (username, password, done) => {
                 // checking if userName exist
-                await User.isExistUser(username)
+                User.isExistUser(username)
                     .then(isUserExist => {
                         if(isUserExist) {
-                            User.checkAccountAndPassword(username, password)
+                            User.GetUserByAccountAndPassword(username, password)
                                 .then(user => {
                                     if(user !== null) {
                                         return done(null, user)
@@ -51,7 +51,7 @@ passport.deserializeUser(async (id, done) => {
             done(null, {id: data.idUser,
                         username: data.userName})
         })
-        .cache(err => {
+        .catch(err => {
             done(err, null)
         })
 })
