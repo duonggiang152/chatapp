@@ -13,6 +13,7 @@ const router = express.Router()
 
 /**
  * Login route
+ * @method POST
  */
  router.post("/",
             (req, res, next) => {
