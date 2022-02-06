@@ -6,7 +6,7 @@
  * @private
  */
 const mysql  = require("mysql")
-const config = require("../config/databaseconfix")
+const config = require("../config/databaseconfig")
 const ConnectMysqlDatabaseFailed = require("../controller/Exception/ConnectMysqlDatabseFailed")
 const QueryFailed = require("../controller/Exception/QueryFailed")
 

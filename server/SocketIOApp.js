@@ -1,5 +1,3 @@
-const Logger = require("./controller/Logger/Logger");
-
 /**
 * Module dependencies
 */
@@ -11,10 +9,8 @@ const Middlewares = require("./middleware/SocketIOAppMiddlewares")
 let io;
 module.exports = function SocketIOApp(httpServer) {
     io = new Server(httpServer)
-    // io.use(Middlewares)
-    io.use(Middlewares[0])
-    io.use(Middlewares[1])
-    io.use(Middlewares[2])
+    for(let i = 0; i< Middlewares.length; i++)
+                io.use(Middlewares[i])
     io.on('connection', (socket) => {
         console.log(socket.request.session);
         if(!socket.request.session.passport || !socket.request.session.passport.user) {

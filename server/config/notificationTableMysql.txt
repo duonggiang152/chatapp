@@ -1,0 +1,7 @@
+CREATE TABLE Notification(
+	ntfID int NOT NULL AUTO_INCREMENT,
+    userID int NOT NULL,
+    notificationBody TEXT,
+    PRIMARY KEY(ntfID),
+    FOREIGN KEY (userID) REFERENCES Users(idUser)
+);

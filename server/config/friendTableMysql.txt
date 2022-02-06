@@ -1,0 +1,10 @@
+CREATE TABLE FRIEND (
+	userID   int NOT NULL,
+    friendID int NOT NULL,
+    status   int DEFAULT 0,
+    FOREIGN  KEY (userID)   REFERENCES Users(idUser),
+    FOREIGN  KEY (friendID) REFERENCES Users(idUser)
+);
+-- 0: accept  request 
+-- 1: watting accepted request
+-- 2: denied  friend request 
