@@ -1,0 +1,28 @@
+--------------------- CHATBOX -----------------------------------------------
+
+CREATE TABLE ChatBox (
+	cbID int NOT NULL AUTO_INCREMENT,
+    ChatBoxName TEXT,
+    type int NOT NULL,
+	PRIMARY KEY(cbID)
+);
+-- type field
+-- 0: private
+-- 1: group
+---------------------------------------------------------------------------------
+
+---------------------------CHATBOXMEMBER-------------------------------------
+
+CREATE TABLE ChatBoxMember(
+	cbID 	int NOT NULL,
+    userID 	int NOT NULL,
+    admin  	int,
+	nickname TEXT,
+    FOREIGN KEY (cbID) REFERENCES ChatBox(cbID),
+    FOREIGN KEY (userID) REFERENCES Users(idUser)
+);
+-- admin field:
+-- 0 : normal User
+-- 1 : admin
+
+----------------------------------------------------------------------------

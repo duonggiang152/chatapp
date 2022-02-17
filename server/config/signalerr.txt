@@ -1,0 +1,19 @@
+--------- FRIEND REQUEST ---------------
+mysqlerr : 100        ->  this friend requested was send before
+mysqlerr : 101        ->  both user was already friend, this friend request already accepted
+mysqlerr : 103        ->  user 1 or user 2 in parameter don't exist
+
+
+-------- ACCEPT FRIEND REQUEST ----------
+mysqlerr : 101        ->  both user was already friend, this friend request already accepted
+mysqlerr : 102        ->  Friend Request don't exist
+
+
+-------- CREATE GROUP CHAT   ------------
+mysqlerr : 103        ->  user 1 or user 2 in parameter don't exist
+
+-------- ADD MEMBER TO GROUP CHAT   ------
+mysqlerr : 103        ->  user 1 or user 2 in parameter don't exist
+mysqlerr : 106        ->  chat box don't exist or userID1 was not admin of chatbox 
+mysqlerr : 107        ->  This person already in chatbox
+

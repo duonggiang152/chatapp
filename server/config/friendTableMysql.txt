@@ -7,4 +7,6 @@ CREATE TABLE FRIEND (
 );
 -- 0: accept  request 
 -- 1: watting accepted request
--- 2: denied  friend request 
+ALTER TABLE Friend
+ADD CONSTRAINT IS_FRIEND_RELATIONSHIP_EXIST
+UNIQUE (userID, friendID);

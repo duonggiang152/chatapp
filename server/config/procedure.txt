@@ -1,0 +1,123 @@
+----------------    friend request --------------------------
+
+DELIMITER $$
+
+CREATE PROCEDURE FriendRequest(IN userID1 int, IN userID2 int, IN notificationBody TEXT)
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+		ROLLBACK;
+        RESIGNAL;
+    END;
+    START TRANSACTION;
+    IF (SELECT COUNT(*) FROM Users WHERE idUser = userID1 OR idUser = userID2) != 2 THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "user1 or user2 don't exist", MYSQL_ERRNO = 103;
+	END IF;
+    IF EXISTS (	SELECT *
+				FROM Friend 
+                WHERE userID = userID1 AND friendID = userID2 AND status = 0) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "user1 and user2 are already friend", MYSQL_ERRNO = 101;  
+	END IF;
+    IF EXISTS (SELECT * FROM Notification WHERE userID = userID2 AND userIDSend = userID1 AND type = 0) THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "This friend requested was send before", MYSQL_ERRNO = 100;
+	END IF;
+	INSERT INTO Notification(userID,userIDSend, notificationBody, status, type) value(userID2,userID1,notificationBody, 0,0);
+    INSERT INTO Friend value(userID1, userID2, 1);
+	COMMIT;
+    
+END$$
+DELIMITER ;
+-----------------------------------------------------------------
+
+----------------  Accept friend request --------------------------
+
+DELIMITER $$
+CREATE PROCEDURE AcceptFriendRequest(IN ntfID int)
+BEGIN
+	DECLARE userSendRequestID 	INT DEFAULT 0;
+    DECLARE userAcceptRequestID INT DEFAULT 0;
+    DECLARE privateChatBoxID    INT DEFAULT 0;
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+		ROLLBACK;
+		RESIGNAL;
+    END;
+    START TRANSACTION;
+    IF NOT EXISTS (SELECT * FROM Notification WHERE Notification.ntfID = ntfID AND type = 0) THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "This Friend Request Don't exist", MYSQL_ERRNO = 102;  
+	END IF;
+    SELECT userIDSend, userID
+    INTO userSendRequestID,userAcceptRequestID  	
+    FROM Notification 
+    WHERE Notification.ntfID = ntfID AND type = 0
+    LIMIT 1;
+    IF EXISTS (SELECT * FROM Friend WHERE userID = userSendRequestID AND friendID = userAcceptRequestID AND status = 0) THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "This friend request was accepted before", MYSQL_ERRNO = 101;  
+	END IF;
+	UPDATE Friend
+    SET    status = 0
+    WHERE  Friend.userID = userSendRequestID;
+	INSERT INTO Friend(userID, friendID) VALUE(userAcceptRequestID, userSendRequestID);
+    INSERT INTO ChatBox(type) VALUE(0);
+    SET privateChatBoxID =	LAST_INSERT_ID();
+    INSERT INTO ChatBoxMember(cbID, userID) VALUES (privateChatBoxID, userAcceptRequestID), (privateChatBoxID, userSendRequestID);
+	COMMIT;
+    
+END $$
+DELIMITER ;
+-----------------------------------------------------------------
+
+-------------------- CREATE GROUP CHATBOX -----------------------
+
+DELIMITER $$
+
+CREATE PROCEDURE CreateGroupChat(IN userID1 int, IN userID2 int, IN name TEXT)
+BEGIN
+	DECLARE publicChatBoxID INT DEFAULT 0;
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+		ROLLBACK;
+        RESIGNAL;
+    END;
+    START TRANSACTION;
+    IF (SELECT COUNT(*) FROM Users WHERE idUser = userID1 OR idUser = userID2) != 2 THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "user1 or user2 don't exist", MYSQL_ERRNO = 103;
+	END IF;
+    INSERT INTO Chatbox(ChatBoxName, type) Value(name, 1);
+    SET publicChatBoxID = LAST_INSERT_ID();
+    INSERT INTO ChatBoxMember(cbID, userID, admin, nickname) VALUES(publicChatBoxID, userID1, 1, null), (publicChatBoxID, userID2, 0, null);
+	COMMIT;
+    
+END$$
+DELIMITER ;
+
+--------------------------------------------------------------------------
+
+
+
+------------------- ADD MEMBER TO GROUP CHAT -----------------------------
+
+CREATE PROCEDURE AddMemberToGroupChat(IN cbID int ,IN userID1 int, IN userID2 int)
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+		ROLLBACK;
+        RESIGNAL;
+    END;
+    START TRANSACTION;
+    IF (SELECT COUNT(*) FROM Users WHERE idUser = userID1 OR idUser = userID2) != 2 THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "user1 or user2 don't exist", MYSQL_ERRNO = 103;
+	END IF;
+    IF NOT EXISTS (SELECT * FROM ChatBoxMember WHERE ChatBoxMember.cbID = cbID AND ChatBoxMember.userID = userID1 AND admin = 1 ) THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "chat box don't exist or userID1 was not admin of chatbox ", MYSQL_ERRNO = 106;
+	END IF;
+    IF EXISTS (SELECT * FROm ChatBoxMember WHERE ChatBoxMember.cbID = cbID AND ChatBoxMember.userID = userID2) THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "This person already in chatbox", MYSQL_ERRNO = 107;
+	END IF;
+    INSERT INTO ChatBoxMember(cbID, userID, admin) VALUES (cbID, userID2, 0);
+    COMMIT;
+    
+END$$
+DELIMITER ;
+
+--------------------------------------------------------------------------------

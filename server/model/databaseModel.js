@@ -39,6 +39,9 @@ class DataBase {
                         let queryError = new QueryFailed()
                         queryError.sqlMessage = err.sqlMessage
                         queryError.sql        = err.sql
+                        queryError.errno      = err.errno
+                        queryError.index      = err.index
+                        queryError.code       = err.code
                         rej(queryError)
                     }
                     else  res(JSON.parse(JSON.stringify(result)))

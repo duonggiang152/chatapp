@@ -6,6 +6,7 @@ const LoginRoute    = require("./routes/authentication/login.js")
 const LogoutRoute   = require("./routes/authentication/Logout")
 const RegisterRoute = require("./routes/authentication/register")
 const Middleware    = require("./middleware/ExpressAppMiddlewares")
+const FriendRequest = require("./routes/user/friendrequest")
 // need for testing
 const test = require("./routes/routetest")
 /**
@@ -26,7 +27,7 @@ app.use("/login", LoginRoute)
 app.use("/logout",LogoutRoute)
 app.use("/routetest", test)
 app.use("/register", RegisterRoute)
-
+app.use("/friendrequest", FriendRequest)
 
 /**
  * Export module

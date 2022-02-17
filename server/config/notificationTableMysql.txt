@@ -1,7 +1,20 @@
 CREATE TABLE Notification(
 	ntfID int NOT NULL AUTO_INCREMENT,
     userID int NOT NULL,
+    userIDSend int NOT NULL,
     notificationBody TEXT,
+    status int DEFAULT 0,
+    type int NOT NULL,
     PRIMARY KEY(ntfID),
-    FOREIGN KEY (userID) REFERENCES Users(idUser)
+    FOREIGN KEY (userID) REFERENCES Users(idUser),
+    CONSTRAINT satus_limit check ( status = 0 or status = 1) 
 );
+CREATE INDEX Notification_Type_Index ON Notification(type);
+-- userIDSend:
+-- -1: admin
+-- else : iduser
+-- status:
+-- 0: notification was not read
+-- 0: notification was read
+-- type:
+-- 0 :  friend request
