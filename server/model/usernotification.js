@@ -120,8 +120,21 @@ class UserNotification {
     static NewFrienRequestNotification(userID, ntfID) {
         eventSocketIOAppHandle.emit("new-friendrequest-notification", userID, ntfID)
     }
+    /**
+     * Notificating user base on userID when friend request was accepted
+     * @param {number} userID 
+     * @param {number} ntfID 
+     */
     static NewAcceptFriendRequestNotification(userID, ntfID) {
         eventSocketIOAppHandle.emit("new-accept-friend-request-notification", userID, ntfID)
+    }
+    /**
+     * notification to user in same chatbox that new message was send
+     * @param {number} userID 
+     * @param {Object} message(mID, cbID, userID, message, datetime) 
+     */
+    static NewMessageNotification(userID, message) {
+        eventSocketIOAppHandle.emit("new-message",userID, message)
     }
 }
 
