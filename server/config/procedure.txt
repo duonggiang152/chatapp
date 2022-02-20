@@ -137,6 +137,7 @@ DELIMITER $$
 CREATE PROCEDURE AddMessageToChatBox(IN cbID int ,IN userID int, IN message TEXT)
 BEGIN
 	DECLARE datetime DATETIME;
+    DECLARE messageID INT;
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
 		ROLLBACK;
@@ -147,7 +148,9 @@ BEGIN
     IF NOT EXISTS (SELECT * FROM ChatBoxMember WHERE ChatBoxMember.cbID = cbID AND ChatBoxMember.userID = userID ) THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "chat box don't exist or userID was not in chatbox ", MYSQL_ERRNO = 109;
 	END IF;
-    INSERT INTO ChatMessage VALUE(cbID, userID, message, datetime);
+    INSERT INTO ChatMessage(cbID, userID, message, datetime) VALUE(cbID, userID, message, datetime);
+    SET messageID = LAST_INSERT_ID();
+    SELECT * FROM ChatMessage WHERE Chatmessage.mID = messageID;
     COMMIT;
     
 END$$
