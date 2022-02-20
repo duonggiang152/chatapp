@@ -11,6 +11,7 @@ class ChatMessage {
      * @param {number} idBox 
      * @param {number} idUser 
      * @param {string} message
+     * @return Object(mID, cbID, userID, message, datetime) for new message insert to db
      * @err 
      * query err
      * 
@@ -28,6 +29,7 @@ class ChatMessage {
         }
         const query = `CALL AddMessageToChatBox(${idBox},${idUser},"${message}");`
         return DataBase.query(query)
+                        .then(data => data[0][0])
     }  
     /**
      * get chat message infomation by ID
@@ -44,8 +46,10 @@ class ChatMessage {
         const query = `SELECT * from ChatMessage WHERE mID = ${mID};`
         return DataBase.query(query)
                        .then(data => data[0]) 
+
     }
     
 }
 
 module.exports = ChatMessage
+
