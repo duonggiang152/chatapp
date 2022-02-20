@@ -30,14 +30,22 @@ class ChatMessage {
         return DataBase.query(query)
     }  
     /**
+     * get chat message infomation by ID
+     * @static
+     * @async
+     * @return Object(mID, cbID, userID, message, datetime)
+     * @err 
      * 
+     * throw queryfailed
+     * 
+     *  throw dberr 
      */
-    static async getChatMessage() {
-
+    static async getChatMessagebyID(mID) {
+        const query = `SELECT * from ChatMessage WHERE mID = ${mID};`
+        return DataBase.query(query)
+                       .then(data => data[0]) 
     }
     
 }
 
 module.exports = ChatMessage
-
-
