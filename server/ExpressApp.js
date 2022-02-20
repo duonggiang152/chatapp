@@ -8,6 +8,7 @@ const RegisterRoute         = require("./routes/authentication/register")
 const Middleware            = require("./middleware/ExpressAppMiddlewares")
 const FriendRequest         = require("./routes/user/friendrequest")
 const AcceptFriendRequest   = require("./routes/user/acceptFriendRequest")
+const SendMessage           = require("./routes/user/sendMessage")
 // need for testing
 const test = require("./routes/routetest")
 /**
@@ -30,7 +31,7 @@ app.use("/routetest", test)
 app.use("/register", RegisterRoute)
 app.use("/friendrequest", FriendRequest)
 app.use("/acceptfriendrequest",AcceptFriendRequest)
-
+app.use("/sendmessage", SendMessage)
 /**
  * Export module
  */
