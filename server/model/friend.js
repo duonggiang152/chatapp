@@ -40,7 +40,7 @@ class Friend {
      * Accept Friend Request base on notification talbe
      * @async
      * @param notificationID
-     * @return notificationID
+     * @return notificationID anouce friend request was accepted
      * @Err 
      * throw QueryErr if exist
      * 
@@ -60,7 +60,7 @@ class Friend {
         }
         let query = `call AcceptFriendRequest(${ntfID});`
         return  db.query(query)
-                  .then(data => data[0][0])
+                  .then(data => data[0][0].ntfID)
                   
     }
     /**

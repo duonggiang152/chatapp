@@ -26,7 +26,7 @@ router.post('/', async (req, res) => {
     }
     return Friend.FriendRequest(req.user.id, req.body.userID)
                 .then((ntfID) => {
-                    UserNotification.Notification(req.body.userID, ntfID, 0)
+                    UserNotification.NewFrienRequestNotification(req.body.userID, ntfID)
                     return res.send(  
                         { 
                             status: 200,
@@ -35,6 +35,7 @@ router.post('/', async (req, res) => {
                 })
                 .catch(err => {
                     if(err instanceof SystemError) {
+                        console.log(err)
                         res.status("404")
                         return res.send();
                     }
@@ -66,6 +67,7 @@ router.post('/', async (req, res) => {
                         }
                     }
                     else {
+                        console.log(err)
                         res.status("404")
                         return res.send();
                     }

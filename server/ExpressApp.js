@@ -1,12 +1,13 @@
 /**
 * Module dependencies
 */
-const express       = require("express")
-const LoginRoute    = require("./routes/authentication/login.js")
-const LogoutRoute   = require("./routes/authentication/Logout")
-const RegisterRoute = require("./routes/authentication/register")
-const Middleware    = require("./middleware/ExpressAppMiddlewares")
-const FriendRequest = require("./routes/user/friendrequest")
+const express               = require("express")
+const LoginRoute            = require("./routes/authentication/login.js")
+const LogoutRoute           = require("./routes/authentication/Logout")
+const RegisterRoute         = require("./routes/authentication/register")
+const Middleware            = require("./middleware/ExpressAppMiddlewares")
+const FriendRequest         = require("./routes/user/friendrequest")
+const AcceptFriendRequest   = require("./routes/user/acceptFriendRequest")
 // need for testing
 const test = require("./routes/routetest")
 /**
@@ -28,6 +29,7 @@ app.use("/logout",LogoutRoute)
 app.use("/routetest", test)
 app.use("/register", RegisterRoute)
 app.use("/friendrequest", FriendRequest)
+app.use("/acceptfriendrequest",AcceptFriendRequest)
 
 /**
  * Export module

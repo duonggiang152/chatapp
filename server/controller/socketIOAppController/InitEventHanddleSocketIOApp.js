@@ -1,9 +1,10 @@
-const InitNewNotificationAppHandle = require("./EventHandleForApp.js/OnNewNotification")
-const eventEmitterSocketIOApp      = require("./eventsocketioapphandle")
-
+const InitNewFriendRequestNotification          = require("./EventHandleForApp/OnNewFriendRequestNotification")
+const InitNewAcceptFriendRequestNotification    = require("./EventHandleForApp/OnNewAcceptFriendRequestNotification")
+const eventEmitterSocketIOApp                   = require("./eventsocketioapphandle")
 
 module.exports = () => {
     eventEmitterSocketIOApp.removeAllListeners()
-    InitNewNotificationAppHandle()
+    InitNewFriendRequestNotification()
+    InitNewAcceptFriendRequestNotification()
 }
 

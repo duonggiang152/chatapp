@@ -111,15 +111,18 @@ class UserNotification {
                     })
     }
     /**
-     * Notifi user have new message
+     * Notificating an user base on ID have new FriendRequest
+     * @ClientListionChannel new-notification
      * @sync 
      * @param {numer} userID 
      * @void
      */
-    static Notification(userID, ntfID, type) {
-        eventSocketIOAppHandle.emit("new-notification", userID, ntfID, type)
+    static NewFrienRequestNotification(userID, ntfID) {
+        eventSocketIOAppHandle.emit("new-friendrequest-notification", userID, ntfID)
     }
-    
+    static NewAcceptFriendRequestNotification(userID, ntfID) {
+        eventSocketIOAppHandle.emit("new-accept-friend-request-notification", userID, ntfID)
+    }
 }
 
 
