@@ -1,0 +1,8 @@
+CREATE TABLE ChatMessage (
+	cbID int NOT NULL,
+    userId int NOT NULL,
+    message TEXT,
+    datetime DATETIME,
+    FOREIGN KEY (cbID) REFERENCES ChatBox(cbID),
+    FOREIGN KEY (userID) REFERENCES Users
+);

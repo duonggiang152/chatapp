@@ -2,13 +2,36 @@
  * Module depences
  */
 const databaseModel = require("./databaseModel")
-const eventSocketIOAppHandle = require("../controller/eventsocketioapphandle");
+const eventSocketIOAppHandle = require("../controller/socketIOAppController/eventsocketioapphandle");
 const Error = require("../controller/Error/Error.js/Error");
 const SystemError = require("../controller/Exception/SystemError");
+const DataBase = require("./databaseModel");
 /**
  * UserNotification 
  */
 class UserNotification {
+    /**
+     * get the notification infomation by it ID
+     * @async
+     * @static
+     * @param {number} ntfID 
+     * @return notification data(ntfID, userID, userIDSend, notificationBody,status, type)
+     * @err
+     * 
+     * typeErr
+     * 
+     * QueryFailed
+     * 
+     * DBERR
+     * 
+     */
+    static async getNotificationByID(ntfID) {
+        if(typeof(ntfID) != typeof(1))
+            throw new TypeError("notification id must be number")
+        const Query = `SELECT * FROM Notification WHERE ntfID = ${ntfID};`
+        return DataBase.query(Query)
+                        .then(data => data[0])
+    }
     /**
      * getUserNewNotification by ID user, the result will 
      * return all the notification which this user wasn't read yet  base on the latest
@@ -93,8 +116,8 @@ class UserNotification {
      * @param {numer} userID 
      * @void
      */
-    static Notification(userID) {
-        eventSocketIOAppHandle.emit("new-notification", userID)
+    static Notification(userID, ntfID, type) {
+        eventSocketIOAppHandle.emit("new-notification", userID, ntfID, type)
     }
     
 }
@@ -102,4 +125,3 @@ class UserNotification {
 
 
 module.exports = UserNotification
-

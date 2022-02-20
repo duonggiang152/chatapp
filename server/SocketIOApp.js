@@ -1,32 +1,26 @@
 /**
 * Module dependencies
 */
-const {Server}      = require("socket.io")
+const IOServer    = require("./controller/IOServer")
 const Middlewares   = require("./middleware/SocketIOAppMiddlewares")
-const SocketManager = require("./controller/SocketManager");
+const SocketManager = require("./controller/socketIOAppController/SocketManager");
 const Logger        = require("./controller/Logger/Logger");
 const Friend        = require("./model/friend") 
-const eventEmitterSocketIOApp = require("./controller/eventsocketioapphandle");
-const UserNotification = require("./model/usernotification");
-/**
- * @private
- */
-// socketIOServer
-let io;
+const InitSocketIOAppHanddle = require("./controller/socketIOAppController/InitEventHanddleSocketIOApp")
 
 module.exports= function SocketIOApp(httpServer) {
-    eventEmitterSocketIOApp.removeAllListeners()
-    if(io) {
+    if(IOServer.io) {
       Logger.Error("You only need init this app once!!")
     }
     // init server
-    io = new Server(httpServer)
+    IOServer.Init(httpServer)
+    // get eventlistener
+    let io = IOServer.io
     // init middleware
     for(let i = 0; i< Middlewares.length; i++)
                 io.use(Middlewares[i])
     // cheking authentication when user init a connection
     io.on('connection', (socket) => {
-      console.log(SocketManager.SocketStorage)
         if(!socket.request.session.passport || !socket.request.session.passport.user) {
           let dataSend = {
             message: "You are unauthenticated"
@@ -53,15 +47,6 @@ module.exports= function SocketIOApp(httpServer) {
 
         })
       });
-    // event haddle
-    eventEmitterSocketIOApp.on("new-notification", async (userid) => {
-      const socketUsers = SocketManager.getSocket(userid)
-      if(!socketUsers) return;
-      socketUsers.forEach(async (socketid) => {
-          let newNotification = await UserNotification.getUserNotification(userid)
-          console.log(`user id ${userid}`)
-          io.to(socketid).emit("new-notification", newNotification)
-      });
-    })
+    InitSocketIOAppHanddle()
 
 }

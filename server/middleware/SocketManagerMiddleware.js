@@ -1,10 +1,9 @@
 /**
  * Module dependence
  */
-const SocketManager = require("../controller/SocketManager")
+const SocketManager = require("../controller/socketIOAppController/SocketManager")
 
 module.exports = (socket, next) => {
-    console.log(socket.request.session)
     if(!socket.request.session.passport || !socket.request.session.passport.user) {
         return next()
     }

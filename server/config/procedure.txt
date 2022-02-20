@@ -4,6 +4,7 @@ DELIMITER $$
 
 CREATE PROCEDURE FriendRequest(IN userID1 int, IN userID2 int, IN notificationBody TEXT)
 BEGIN
+	DECLARE privateNotificationID int;
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
 		ROLLBACK;
@@ -22,7 +23,9 @@ BEGIN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "This friend requested was send before", MYSQL_ERRNO = 100;
 	END IF;
 	INSERT INTO Notification(userID,userIDSend, notificationBody, status, type) value(userID2,userID1,notificationBody, 0,0);
+    SET privateNotificationID = LAST_INSERT_ID();
     INSERT INTO Friend value(userID1, userID2, 1);
+    SELECT privateNotificationID as ntfID;
 	COMMIT;
     
 END$$
@@ -37,6 +40,7 @@ BEGIN
 	DECLARE userSendRequestID 	INT DEFAULT 0;
     DECLARE userAcceptRequestID INT DEFAULT 0;
     DECLARE privateChatBoxID    INT DEFAULT 0;
+    DECLARE newNotification     INT DEFAULT 0;
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
 		ROLLBACK;
@@ -61,10 +65,14 @@ BEGIN
     INSERT INTO ChatBox(type) VALUE(0);
     SET privateChatBoxID =	LAST_INSERT_ID();
     INSERT INTO ChatBoxMember(cbID, userID) VALUES (privateChatBoxID, userAcceptRequestID), (privateChatBoxID, userSendRequestID);
+    INSERT INTO Notification(userID, userIDSend, type) VALUE(userSendRequestID, userAcceptRequestID,1);
+    SET newNotification = LAST_INSERT_ID();
+    SELECT newNotification AS ntfID;
 	COMMIT;
     
 END $$
 DELIMITER ;
+
 -----------------------------------------------------------------
 
 -------------------- CREATE GROUP CHATBOX -----------------------
@@ -121,3 +129,26 @@ END$$
 DELIMITER ;
 
 --------------------------------------------------------------------------------
+
+
+--------------- Add new Chat Message --------------------------------------------
+DELIMITER $$
+
+CREATE PROCEDURE AddMessageToChatBox(IN cbID int ,IN userID int, IN message TEXT)
+BEGIN
+	DECLARE datetime DATETIME;
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+		ROLLBACK;
+        RESIGNAL;
+    END;
+    START TRANSACTION;
+    SET datetime = NOW();
+    IF NOT EXISTS (SELECT * FROM ChatBoxMember WHERE ChatBoxMember.cbID = cbID AND ChatBoxMember.userID = userID ) THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "chat box don't exist or userID was not in chatbox ", MYSQL_ERRNO = 109;
+	END IF;
+    INSERT INTO ChatMessage VALUE(cbID, userID, message, datetime);
+    COMMIT;
+    
+END$$
+DELIMITER ;

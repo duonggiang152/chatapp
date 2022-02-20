@@ -17,3 +17,5 @@ mysqlerr : 103        ->  user 1 or user 2 in parameter don't exist
 mysqlerr : 106        ->  chat box don't exist or userID1 was not admin of chatbox 
 mysqlerr : 107        ->  This person already in chatbox
 
+--------------- Add new Chat Message --------------------------------------------
+mysqlerr : 109        ->  ChatBox was not exist or user not in chatbox

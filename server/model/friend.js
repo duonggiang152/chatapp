@@ -40,7 +40,7 @@ class Friend {
      * Accept Friend Request base on notification talbe
      * @async
      * @param notificationID
-     * @return 1 if successs
+     * @return notificationID
      * @Err 
      * throw QueryErr if exist
      * 
@@ -60,16 +60,15 @@ class Friend {
         }
         let query = `call AcceptFriendRequest(${ntfID});`
         return  db.query(query)
-                  .then(() => {
-                      return 1
-                  })
+                  .then(data => data[0][0])
+                  
     }
     /**
      * User1 make FriendRequest to User2
      * @async 
      * @param {number} userID1
      * @param {number} userID2
-     * @return 1: if this request successfuly
+     * @return notification ID announce friend request: if this request successfuly
      * @Err 
      * throw ParamMustBeNumber exception
      * 
@@ -89,6 +88,10 @@ class Friend {
             throw new ParamMustBeNumber("userID1 and userID2 mustbe number")
         }
         let userNameSendRequest = await User.getUserById(userID1)
+        if(!userNameSendRequest) {
+            let err =  new QueryFailed("user 1 or user 2 in parameter don't exist")
+            throw err
+        }
         // set notificationBody
         let notificationBody = {
             typeNo: 0,
@@ -99,7 +102,7 @@ class Friend {
         }
         const setRequestQuery = `call FriendRequest(${userID1},${userID2},'${JSON.stringify(notificationBody)}');`
         return db.query(setRequestQuery)
-                 .then(() => 1)
+                 .then(data => data[0][0].ntfID)   
     }
 }
 

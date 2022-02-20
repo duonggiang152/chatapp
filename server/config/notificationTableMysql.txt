@@ -15,6 +15,7 @@ CREATE INDEX Notification_Type_Index ON Notification(type);
 -- else : iduser
 -- status:
 -- 0: notification was not read
--- 0: notification was read
+-- 1: notification was read
 -- type:
 -- 0 :  friend request
+-- 1 :  accept friend request

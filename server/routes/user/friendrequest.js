@@ -2,6 +2,8 @@
  * Module dependencies
  */
 const express = require("express")
+const QueryFailed = require("../../controller/Exception/QueryFailed")
+const SystemError = require("../../controller/Exception/SystemError")
 const Friend    = require("../../model/friend")
 const UserNotification = require("../../model/usernotification")
  /**
@@ -17,18 +19,57 @@ const UserNotification = require("../../model/usernotification")
   * @method POST
   */
 router.post('/', async (req, res) => {
-    console.log(req.user)
-    if(await Friend.FriendRequest(req.user.id, req.body.userID)) {
-        UserNotification.Notification(req.body.userID)
-        return res.send({
-            status : 200,
-            message: "sending success"}
-            )
+    // making friend request to db
+    if(!req.user) {
+        res.status("404")
+        return res.send();
     }
-    return res.send({
-        status: 400,
-        message: "you already sending friend request to this user"}
-        )
+    return Friend.FriendRequest(req.user.id, req.body.userID)
+                .then((ntfID) => {
+                    UserNotification.Notification(req.body.userID, ntfID, 0)
+                    return res.send(  
+                        { 
+                            status: 200,
+                            message: "Request was send"
+                        })
+                })
+                .catch(err => {
+                    if(err instanceof SystemError) {
+                        res.status("404")
+                        return res.send();
+                    }
+                    else if(err instanceof QueryFailed) {
+                        switch(err.errno) {
+                            case 100:
+                                return res.send(  
+                                { 
+                                    status: 100,
+                                    message: "You already send this friend request before"
+                                })
+                            case 101:
+                                return res.send(
+                                    {
+                                        status: 101,
+                                        message: "Friend already"
+                                    }
+                                )
+                            case 103:
+                                return res.send(
+                                    {
+                                        status: 103,
+                                        message: "User don't exist"
+                                    }
+                                )
+                            default:
+                                res.status("404")
+                                return res.send();
+                        }
+                    }
+                    else {
+                        res.status("404")
+                        return res.send();
+                    }
+                })
 })
 
 
