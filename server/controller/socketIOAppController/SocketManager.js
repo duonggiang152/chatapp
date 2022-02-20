@@ -24,12 +24,11 @@ class SocketManager {
     /**
      * This method will return an array of sockets which match with the userID
      * @sync
-     * @param {String} userID
+     * @param {String,number} userID
      * @return array if exist socket mathch with the ID and null if not
      * @static
      */
     static getSocket(userID) {
-        // userID = userID.toString()
         if(!this.SocketStorage[userID]) return null
         return this.SocketStorage[userID]
     }

@@ -66,13 +66,30 @@ class ChatBox {
      * 
      * DBERR
      */
-    static addUser(boxID,userID1 , userID2) {
+    static async addUser(boxID,userID1 , userID2) {
         let query = `CALL AddMemberToGroupChat(${boxID}, ${userID1}, ${userID2})`;
         return DataBase.query(query)
     }
+
+    /**
+     * Get member in chatBox base on chatbox ID
+     * @async
+     * @static
+     * @param {number}
+     * @return array of chatbox member
+     * @err 
+     * 
+     * throw queryFaile
+     * 
+     * throw DBERR
+     * 
+     */
+    static async getMemberOfChatBox(cbID) {
+        let query = `SELECT * FROM ChatBoxMember WHERE cbID = ${cbID};`
+        return DataBase.query(query)
+    }
+
 }
 
 module.exports = ChatBox
-
-
 
