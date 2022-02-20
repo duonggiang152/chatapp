@@ -76,7 +76,7 @@ class ChatBox {
      * @async
      * @static
      * @param {number}
-     * @return array of chatbox member
+     * @return array of chatbox member (cbIDm, userID, admin, nickname)
      * @err 
      * 
      * throw queryFaile
