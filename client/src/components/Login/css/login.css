@@ -4,7 +4,6 @@ body {
     position: relative;
     width: calc(100vw - 15px);
     height: calc(100vh - 15px);
-    /* overflow: hidden; */
 }
 #login-section {
     border-radius: 15px;
@@ -17,7 +16,7 @@ body {
     transform: translate(-50%, -50%);
 }
 
-@media (max-width: 700px) {
+@media (max-width: 700px), (max-height: 400px) {
     body {
         position: relative;
         overflow: visible;
@@ -34,12 +33,10 @@ body {
         transform: translate(-50%, -50%);
         height: calc(100vh - 150px);
         height: 450px; 
-        /* max-height: calc(300px + 150px); */
     }
 }
-@media (max-height: 500px) { 
+@media (max-height: 400px) { 
     #login-section {
-    /* padding-top: 40px; */
     position: absolute;
     top: 100px;
     left: 50%;

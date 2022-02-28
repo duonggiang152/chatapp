@@ -21,14 +21,21 @@ const router = express.Router()
                     'local',
                     (err, user) => {
                         if(err) {
-                            res.status('404')
-                            return res.send({message: "Authenticate failed"})
+                            console.log(err)
+                            res.status('400')
+                            return res.send({message: "Authenticate failed1"})
+                        }
+                        if(!user) {
+                            res.status("400")
+                            return res.send({message: "Username wrong or password not correct"})
                         }
                         req.login(user, (err) => {
                             if(err) {
-                                res.status('404')
-                                return res.send({message: "Authenticate failed"})
+                                console.log(err)
+                                res.status('400')
+                                return res.send({message: "Authenticate failed2"})
                             }
+                            res.status('200')
                             return res.send({message: "Authenticated"})
                         })
                     }

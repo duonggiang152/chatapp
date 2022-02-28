@@ -30,20 +30,14 @@
     width: 100%;
     font-size: 30px;
     font-weight: 900;
-    /* text-align: center; */
-    /* height: 50px; */
     z-index: 2;
 }
 /* style canvas */
 #banner > :nth-child(2) {
     position: absolute;
     left: 0px;
-    /* padding: 0px;
-    border-radius: 0px;
-    width: 100%;
-    height: calc(100% - 50px); */
 }
-@media (max-width: 700px) {
+@media (max-width: 700px), (max-height: 400px) {
     #login-section {
         display: flex;
         position: relative;
@@ -58,7 +52,6 @@
         height: 75px;
         position: absolute;
         top: -40px;
-        /* top: 0px; */
         left: 50%;
         transform: translateX(-50%);
         z-index: 0;

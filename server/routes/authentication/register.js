@@ -18,8 +18,14 @@ const router = express.Router()
 router.post("/", async (req, res) => {
     User.addUser(req.body.userName, req.body.password)
         .then(result => {
-            if(result) return res.redirect("/login")
-            else return res.send({message: "UserName Existed"})
+            if(result) {
+                res.status(200)
+                return res.send("/login")
+            }
+            else { 
+                res.status(404)
+                return res.send({message: "UserName Existed"})
+            }
         })
         .catch(err => {
             res.status("404")

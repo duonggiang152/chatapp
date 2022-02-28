@@ -1,6 +1,7 @@
 /**
 * Module dependencies
 */
+const cors                  = require("cors")
 const express               = require("express")
 const LoginRoute            = require("./routes/authentication/login.js")
 const LogoutRoute           = require("./routes/authentication/Logout")
@@ -9,6 +10,7 @@ const Middleware            = require("./middleware/ExpressAppMiddlewares")
 const FriendRequest         = require("./routes/user/friendrequest")
 const AcceptFriendRequest   = require("./routes/user/acceptFriendRequest")
 const SendMessage           = require("./routes/user/sendMessage")
+const isauth                = require("./routes/authentication/isauth")
 // need for testing
 const test = require("./routes/routetest")
 /**
@@ -16,8 +18,7 @@ const test = require("./routes/routetest")
  * @private
  */
 const app      = express();
-
-
+app.use(cors())
 /**
  * Middleware
  */
@@ -32,6 +33,7 @@ app.use("/register", RegisterRoute)
 app.use("/friendrequest", FriendRequest)
 app.use("/acceptfriendrequest",AcceptFriendRequest)
 app.use("/sendmessage", SendMessage)
+app.use("/isauth", isauth)
 /**
  * Export module
  */

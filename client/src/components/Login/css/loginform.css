@@ -7,7 +7,6 @@
     overflow: hidden;
 }
 .form {
-    /* border: 2px solid black; */
     color: rgb(94, 94, 94);
     width: 100%;
     height: 100%;
@@ -30,6 +29,10 @@
 }
 /* ---------------------- */
 /* login-form */
+#login-form > .message {
+    color: rgb(211, 32, 19);
+    font-size : 14px;
+}
 #login-form > div > input {
     width: 80%;
     outline: none;
@@ -53,10 +56,14 @@
 }
 #login-form > div > :nth-child(3):hover {
     cursor: pointer;
-    background: rgb(216, 216, 216);
+    background: rgb(218, 214, 214);
 }
 
 /* register -form */
+#register-form > .message {
+    color: rgb(211, 32, 19);
+    font-size : 14px;
+}
 #register-form > div > :nth-child(4) {
     position: relative;
     bottom: 20px;
@@ -65,6 +72,7 @@
     transition: background 0.3s ease;
 }
 #register-form > div > :nth-child(4):hover {
+    cursor: pointer;
     background: rgb(192, 192, 192);
 }
 #register-form > div {
@@ -95,8 +103,7 @@
     height: 100%;
     z-index: 1;
 }
-
-#register-form::before {
+.active_aniamtion_btn_login::before {
     top: 0px;
     content: " ";
     position: absolute;
@@ -105,6 +112,18 @@
     height: 110%;
     background-color: rgb(155, 155, 155);
     border-radius: 40% 50% 10px 10px / 80px 120px 20px 20px;
+    transition: border-radius 0.5s ease;
+}
+.active_aniamtion::before {
+    top: 0px;
+    content: " ";
+    position: absolute;
+    z-index: -1;
+    width: 100%;
+    height: 110%;
+    background-color: rgb(155, 155, 155);
+    border-radius: 10px;
+    transition: border-radius 0.5s ease;
 }
 #register-form > h3 {
     cursor: pointer;
@@ -165,6 +184,7 @@
     border-radius: 40% 50% 10px 10px / 120px 140px 20px 20px;
     transform: translateX(-50%);
 }
+
 /* onclic btn-login animation */
 
 @keyframes down_aniamtion {
@@ -188,7 +208,7 @@
 
 
 /* responsive setting query media */
-@media (max-width: 700px) {
+@media (max-width: 700px), (max-height: 400px)  {
     
     #form-container {
         flex-shrink: 0;
@@ -250,11 +270,13 @@
 
     /* register -form */
     #register-form > div > :nth-child(4) {
+        cursor: pointer;
         border-radius: 10px;
         width: 150px;
         transition: background 0.3s ease;
     }
     #register-form > div > :nth-child(4):hover {
+        cursor: pointer;
         background: rgb(192, 192, 192);
     }
     #register-form > div {
@@ -289,7 +311,6 @@
         height: 100%;
         z-index: 1;
     }
-
     #register-form::before {
         top: 0px;
         content: " ";
@@ -308,6 +329,7 @@
         transition: color 0.2s ease;
     }
     #register-form > .select_btn:hover {
+        cursor: pointer;
         color: rgb(221, 221, 221);
     }
     @keyframes register_form_aniamtion {

@@ -5,6 +5,7 @@
  */
 const passport = require("passport")
 const LocalStrategy = require("passport-local")
+const Logger = require("../controller/Logger/Logger")
 const User = require("../model/user")
 /**
  * middleware passport 
@@ -43,7 +44,10 @@ passport.use(new LocalStrategy({
 ) )
 
 passport.serializeUser((user, done) => {
-    done(null, user.idUser)
+    if(!user) {
+        return done(null, null)
+    }
+    return done(null, user.idUser)
 })
 passport.deserializeUser(async (id, done) => {
     User.getUserById(id)

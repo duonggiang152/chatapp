@@ -8,9 +8,6 @@ import {
     Link,
   } from "react-router-dom";
 import './app.css'
-function Hello() {
-    return <h1>Hello</h1>
-}
 function App() {
     return (
         // <ChatApp></ChatApp>

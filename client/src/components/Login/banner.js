@@ -10,4 +10,4 @@ function Banner(props) {
         </div>
     )
 }
-export {Banner}
+export default Banner

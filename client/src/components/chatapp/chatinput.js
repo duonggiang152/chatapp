@@ -3,7 +3,6 @@ import "./css/chatinput.css"
 const m_style = {
  
     resize: "none",
-    // overflow: "hidden"
 }
 function ChatInput(props) {
     const [chatcontent, setChatcontent] = useState("");
