@@ -17,13 +17,15 @@ const avartarStyle = {
  * @return Avarter component 
  */
 const Avartar = (props) => {
+    console.log(props.url)
     if(props.small) {
-        if(props.url === "") {
+        if(props.url == "" || !props.url) {
             return (
                 <div className = "avatar" style = {avartarStyle.default_small}>
                 </div>
             )
         }
+       
     }
     else {
         if(props.url === "") {
@@ -33,5 +35,8 @@ const Avartar = (props) => {
             )
         }
     }
+    // return (
+    //     <div>sdfsdf</div>
+    // )
 }
 export {Avartar}

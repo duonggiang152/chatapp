@@ -11,13 +11,17 @@ class socketIO {
      */
     static connect() {
         this.socket.disconnect()
-        this.socket.connect(domain, {autoConnect: false})
+        this.socket.connect(domain, {autoConnect: false, reconnection: false})
         this.socket.on("connect", () => {
             console.log("success conneting with server")
         })
         this.socket.on("disconnect", () => {
             console.log("disconect with server")
         })
+    }
+    static listen(event, callback) {
+        this.socket.removeAllListeners(event)
+        this.socket.on(event, callback)
     }
 }
 

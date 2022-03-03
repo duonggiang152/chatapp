@@ -1,12 +1,16 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import "./css/chatinput.css"
+// default properties of chatboxinput
 const m_style = {
- 
     resize: "none",
 }
 function ChatInput(props) {
+    const boxChat = useRef(null)
     const [chatcontent, setChatcontent] = useState("");
     function processSubmit() {
+        boxChat.current.value = ""
+        setChatcontent("")
+        if(chatcontent !== "")
         props.submitbtnfuc(chatcontent);
     }
     function press(e) {
@@ -21,7 +25,7 @@ function ChatInput(props) {
     return (
         <div   className = {"chat-input"} id = "chat-content-input">
             <div>
-                <textarea onKeyPress = {(e) => press(e)} onSubmit = {(e) => {e.preventDefault()}} name = "chatcontent" onChange = {(e) => {
+                <textarea ref={boxChat} onKeyPress = {(e) => press(e)} onSubmit = {(e) => {e.preventDefault()}} name = "chatcontent" onChange = {(e) => {
                     setChatcontent(e.target.value);
                     e.target.style.height = "auto";
                     let temp = e.target.scrollHeight;

@@ -16,7 +16,7 @@ const initialState = {
     type : undefined,
     message : undefined
 }
-// const acction
+// acction
 const actions = {
     update_login_message: "UPDATE_LOGIN_MESSAGE",
     update_register_message: "UPDATE_REGISTER_MESSAGE"
@@ -44,7 +44,6 @@ const reducer = (state, action) => {
  */
 function Login() {
     const Message = useContext(MessageContext)
-    console.log("message", Message)
     const usernameInputElement = useRef(null)
     const passwordInputElement = useRef(null)
     const history = useHistory()
@@ -178,7 +177,6 @@ function LoginForm() {
         updateLoginMessage : (LoginMessage) => {dispathMessageMethod({type: actions.update_login_message, message: LoginMessage})},
         updateRegisterMessage: (RegisterMessage) => {dispathMessageMethod({type: actions.update_register_message, message: RegisterMessage})}
     }
-    console.log(MessageState)
     return (
         <MessageContext.Provider value={value}>
             <div id = "form-container">

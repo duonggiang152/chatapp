@@ -141,6 +141,7 @@ const Banner_Circle_Animation = (props) => {
     var handlerAniamtionFrame;
     const Animate = () => {
         const canvas = canvasRef.current;
+        if(!canvas) return
         const ctx = canvas.getContext('2d');
         if(props.screenType === "mobile")
         ctx.fillStyle = 'rgba(32, 32, 32,0.05)'

@@ -1,7 +1,8 @@
 import {useState} from 'react'
 import "./css/friendlist.css";
-
+import { SearchBox } from './searchbox'
 import {Avartar} from "./avartar"
+import dommain   from "../../config/domain"
 let ownStyle_friendlist = {
 
 }
@@ -11,7 +12,8 @@ function Friend(props) {
             <div className = {"friend"}>
                 <Avartar small url = {`${props.friendurl}`} />
                 <h3>{props.username}</h3>
-                <i class="notonline fas fa-circle"></i>
+                <i class="notonline fa fa-solid fa-user"></i>
+
             </div>
         )
     }
@@ -20,35 +22,25 @@ function Friend(props) {
             <div className = {"friend"}>
                 <Avartar small url = {`${props.friendurl}`} />
                 <h3>{props.username}</h3>
-                <i class="online fas fa-circle"></i>
+                <i class="online fa fa-solid fa-user"></i>
+
             </div>
         )
     }
 }
-let data = [
-    {
-        friendurl: "",
-        username: "giang",
-        online: false, 
-    },
-    {
-        friendurl: "",
-        username: "giang",
-        online: true, 
-    },
-    {
-        friendurl: "",
-        username: "giang",
-        online: false, 
-    },
-    {
-        friendurl: "",
-        username: "giang",
-        online: true, 
-    },
-]
+// private variable
+/**
+ *  similarName for checking if the response was usefull or not. If the smilarName was change the response will not display
+ */ 
+let smilarName = ""
+/**
+ * Generate a box which searching for adding a new friend
+ * @param {*} props 
+ * @returns 
+ */
 function FriendList(props) {
     const [styleComponentInline, setStyleComponentInline] = useState(ownStyle_friendlist);
+    const [friendSuggest, setFriendSuggest]               = useState([])
     // console.log(styleComponentInline.zIndex)
     let animationactive = "friendlist";
     if(props.content === "friendlist") {
@@ -58,7 +50,6 @@ function FriendList(props) {
     && styleComponentInline.zIndex !== "1") {
         ownStyle_friendlist = {
             zIndex: "1",
-            top: "0%"
         }
         setStyleComponentInline(ownStyle_friendlist)
     }
@@ -72,9 +63,38 @@ function FriendList(props) {
                 setStyleComponentInline({});
             }, 150)
     }
+    // function for handle event when searchBox value change
+    const onSearchBoxChange = async (value) => {
+        // update the similarName cheking variable
+        if(value === smilarName) return
+        smilarName = value
+        // stating request
+        const route = dommain + `/findsimilarname/${value}`
+        await fetch(route,
+            {
+               method: 'GET'
+            })
+        .then(response => response.json())
+        .then( async (data) => {
+            if(value === smilarName) {
+                console.log(data)
+                const update = await data.map((user) => {
+                    return {
+                        id: user.id,
+                        friendurl: "",
+                        username:  user.userName,
+                        online : true
+                    }
+                })
+                setFriendSuggest(update)
+                
+            }
+        })
+    }
     return (
         <div style = {styleComponentInline} className = {animationactive}>
-           {data.map(element => {
+            <SearchBox haddlerChanging = {(value) => onSearchBoxChange(value)}/>
+           {friendSuggest.map(element => {
                return <Friend {...element} />
            })}
         </div>

@@ -104,6 +104,31 @@ class Friend {
         return db.query(setRequestQuery)
                  .then(data => data[0][0].ntfID)   
     }
+    /**
+     * Checking if userID1 was send friend request to userID2 before
+     * @async
+     * @param {number} userID1 
+     * @param {number} userID2 
+     * @return  true if request was send before and false if not
+     * throw query exceptio
+     * throw system err
+     * @static
+     */
+    static async FriendRequestSended(userID1, userID2) {
+        if(typeof(userID1) != typeof(1) || typeof(userID2) != typeof(1)) {
+            throw new ParamMustBeNumber("userID1 and userID2 mustbe number")
+        }
+        const query = `
+        SELECT * FROM Notification 
+        WHERE userID = ${userID2} AND userIDSend = ${userID1} AND type = 0;
+        `
+        return db.query(query)
+                .then(data => {
+                    if(data.length === 0) return false
+                    return true
+                })
+            
+    }
 }
 
 /**

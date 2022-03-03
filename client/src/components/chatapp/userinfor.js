@@ -1,8 +1,17 @@
+/**
+ * module dependencies
+ */
 import {useState} from 'react'
-import "./css/userinfor.css"
 import {Avartar} from "./avartar"
+// css
+import "./css/userinfor.css"
 
-const FriendInvite = (props) => {
+/**
+ * Create a Notification component witch take controll when the notification come
+ * @param {object} props 
+ * @returns 
+ */
+const Notification = (props) => {
     const [click, setClick] = useState(false);
     if(props.typeSelect === "message" || props.typeSelect === "messageactived") {
         if(!click) setClick(true)
@@ -42,7 +51,7 @@ function UserInfor (props) {
         <div>
             <Avartar url = {""} />
             <h3>{userName}</h3>
-            <FriendInvite number = {friendInvite} btnfunc = {props.showMessageFunc} {...props} />
+            <Notification number = {friendInvite} btnfunc = {props.showMessageFunc} {...props} />
         </div>
     )
 }

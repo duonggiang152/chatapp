@@ -11,6 +11,7 @@ const InitSocketIOAppHanddle = require("./controller/socketIOAppController/InitE
 module.exports= function SocketIOApp(httpServer) {
     if(IOServer.io) {
       Logger.Error("You only need init this app once!!")
+      InitSocketIOAppHanddle()
     }
     // init server
     IOServer.Init(httpServer)
@@ -47,6 +48,6 @@ module.exports= function SocketIOApp(httpServer) {
 
         })
       });
-    InitSocketIOAppHanddle()
+  
 
 }

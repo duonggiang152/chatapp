@@ -1,10 +1,14 @@
-import { useContext, useState } from "react"
-import { SizeScreenContext } from "./context"
-import "./css/chatcontent.css"
-
+/**
+ * module dependencies
+ */
+import { useContext, useEffect, useState } from "react"
+import { ResponsesiveContext } from "./context"
 import {ChatboxInfor} from "./chatboxinfor"
 import {ChatInput} from "./chatinput"
 import {MessageRoomBox} from "./messageroombox"
+// css
+import "./css/chatcontent.css"
+// data for test
 let data = [
     {
         url: "",
@@ -17,71 +21,68 @@ let data = [
         id: 123,
         message: "hello, my name is giang",
         isYou: false
-    },
-    {
-        url: "",
-        id: 123,
-        message: "hello, my name is giang",
-        isYou: false
-    },
-    {
-        url: "",
-        id: 123,
-        message: "hello, my name is giang",
-        isYou: true
-    },
-    {
-        url: "",
-        id: 123,
-        message: "hello, my name is giang",
-        isYou: false
-    },
+    }
 ]
+
+/**
+ * generate a CHATBOX
+ * @param {object} props 
+ * @returns 
+ */
 function ChatContent(props) {
-   
+    /**
+     * classComponent for store classname of container box in this container
+     * changing value mean changing display type
+     * value:
+     * 
+     * "chat-content"  : display chat box in pc mode
+     * 
+     * "chat-content- mobile" : display chatbox in mobile mode (default is hidding below the slidebar)
+     * 
+     * "chat-content-mobile chat-content-mobile-active-animation" : for active animation when chat box show up
+     * 
+     * "chat-content-mobile chat-content-mobile-showed"           : for show the content in mobile form
+     * 
+     * "chat-content-mobile chat-content-mobile-showed chat-content-mobile-out-animation" : for runing hidding animation chat box in screenType mobile
+     * 
+     */
     const [classComponent, setClassComponent] = useState("chat-content")
+    const responsiveContext                   = useContext(ResponsesiveContext)
     const [messageRoomBoxHeight, setMessageRoomBoxHeight] = useState("100% - 70px - 10px - 5px - 41px")
-    const ScreenType = useContext(SizeScreenContext);
-    console.log(ScreenType)
-    if(ScreenType === "pc" && classComponent !== "chat-content" ) {
-        console.log(ScreenType)
-        setClassComponent("chat-content")
-        console.log("run1")
-    }
-    else if(ScreenType === "mobile" && !props.show 
-            && classComponent !== "chat-content-mobile") {
-                setClassComponent("chat-content-mobile")
-    }
-    else if(ScreenType === "mobile" && classComponent !== "chat-content-mobile"
-            && classComponent !== "chat-content-mobile chat-content-mobile-active-animation"
-            && classComponent !== "chat-content-mobile chat-content-mobile-showed"
-            && classComponent !== "chat-content-mobile chat-content-mobile-showed chat-content-mobile-out-animation") {
-        setClassComponent("chat-content-mobile");
-        console.log(ScreenType)
-        console.log("run2")
-    }
-    else if(ScreenType === "mobile" && props.show && classComponent === "chat-content-mobile"
-     && classComponent !== "chat-content-mobile chat-content-mobile-active-animation"
-     && classComponent !== "chat-content-mobile chat-content-mobile-showed"
-     && classComponent !== "chat-content-mobile chat-content-mobile-showed chat-content-mobile-out-animation") {
-        setClassComponent("chat-content-mobile chat-content-mobile-active-animation");
-        setTimeout(() => {
-            setClassComponent("chat-content-mobile chat-content-mobile-showed");
+    // update display type by changing classComponent state when screen type change
+    const updateDisplayStyle = () => {
+        // pc type
+        if(responsiveContext.state.screenType === "pc") {
+            setClassComponent("chat-content")
+            return
         }
-        ,500)
+        // mobile type and the chatcontent will hide
+        else if(responsiveContext.state.screenType === "mobile" &&
+                responsiveContext.state.mobileProperties.slideBar === true) {
+                    setClassComponent("chat-content-mobile")
+                    return
+                }
+        // mobile type and the chatcontent will show
+        else if(responsiveContext.state.screenType === "mobile" &&
+                responsiveContext.state.mobileProperties.content === true) {
+                    setClassComponent("chat-content-mobile chat-content-mobile-active-animation")
+                    setTimeout(() => {
+                        setClassComponent("chat-content-mobile chat-content-mobile-showed");
+                    }
+                    ,500)
+                    return
+                }
     }
+    useEffect(() => {
+        console.log("hi")
+        updateDisplayStyle()
+    }, [responsiveContext])
     const BackBtn = () => {
-        if(ScreenType === "pc") return null;
-        else if(ScreenType === "mobile") return (
-            <i onClick = {
+        return(    
+        <i onClick = {
                 () => {
-                    if(ScreenType === "mobile")
+                    if(responsiveContext.state.screenType === "mobile")
                     {
-                    setTimeout(
-                        () => {
-                            props.backbtnactive();
-                        }
-                        ,500)
                     setClassComponent("chat-content-mobile chat-content-mobile-showed chat-content-mobile-out-animation")
                     }
                 }
@@ -99,13 +100,12 @@ function ChatContent(props) {
             message: value,
             isYou: true
         };
-        // data.push(temp)
         setdatatest([...datatest123, temp]);
     }
     return( 
     <div style = {{overflow: "hidden"}}  className = {classComponent} id = "chat-content">
         <ChatboxInfor>
-            <BackBtn/>
+            {responsiveContext.state && responsiveContext.state.screenType === "mobile" ? <BackBtn/> : ""}
         </ChatboxInfor>
         <MessageRoomBox height = {messageRoomBoxHeight} data_in = {datatest123}/>
         <ChatInput on_Resize = {controlmessageRoomBoxHeight} submitbtnfuc = {testsubmitbtn} />

@@ -1,8 +1,6 @@
 .chat-content {
-
     width: calc((100%) / 3 * 2);
     min-width: 300px;
-    /* max-width: 900px; */
     height: calc(100%);
     flex-grow: 0;
     background-color: rgb(90, 90, 90);

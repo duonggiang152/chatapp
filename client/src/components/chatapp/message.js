@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./css/message.css"
 import "./css/friendinvite.css"
 
@@ -74,7 +74,6 @@ function MessageBox(props) {
     && styleComponentInline.zIndex !== "1") {
         ownStyle_message = {
             zIndex: "1",
-            top: "0%"
         }
         setStyleComponentInline(ownStyle_message)
     }
@@ -88,6 +87,7 @@ function MessageBox(props) {
                         setStyleComponentInline(ownStyle_message);
                     }, 150)
     }
+    // setup socketIO listener to get new message
     return (
     <div style= {styleComponentInline}  className = {animationactive}>
        <SearchBox placeholder = {"Tìm Kiếm"}/>

@@ -108,6 +108,23 @@ class User {
         return promise
     }   
     /**
+     * find the user wich similar username as parameter
+     * @param {string} name 
+     * return array of user {id, name}
+     */
+    static async getUserBySimilarName(name, start = 0, end = 10) {
+        const limit = end - start
+        const query = `
+            SELECT idUser as id,userName 
+            FROM Users
+            WHERE userName REGEXP '^${name}'
+            LIMIT ${limit}
+            OFFSET ${start}
+            ;
+        `
+        return db.query(query)
+    }
+    /**
      * Add a new user to database
      * @async
      * @param    {String} userName 

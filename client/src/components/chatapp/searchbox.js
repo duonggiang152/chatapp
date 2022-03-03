@@ -1,8 +1,10 @@
-import React,{useState} from 'react'
+import {useState, useRef} from 'react'
 import "./css/searchbox.css"
 function SearchBox(props) {
     const [searchValue, setSearchValue] = useState("");
     const Update = (value) => {
+        if(props.haddlerChanging)
+        props.haddlerChanging(value)
         setSearchValue(value);
     }
     return (

@@ -11,6 +11,9 @@ const FriendRequest         = require("./routes/user/friendrequest")
 const AcceptFriendRequest   = require("./routes/user/acceptFriendRequest")
 const SendMessage           = require("./routes/user/sendMessage")
 const isauth                = require("./routes/authentication/isauth")
+const GetUserBySimilarName  = require("./routes/tool/getusersimilarname")
+const isFriend              = require("./routes/tool/isfriend")
+const isSendedFriendRequest = require("./routes/tool/idFriendRequestSendBefore")
 // need for testing
 const test = require("./routes/routetest")
 /**
@@ -34,6 +37,9 @@ app.use("/friendrequest", FriendRequest)
 app.use("/acceptfriendrequest",AcceptFriendRequest)
 app.use("/sendmessage", SendMessage)
 app.use("/isauth", isauth)
+app.use("/findsimilarname", GetUserBySimilarName)
+app.use("/isfriend", isFriend)
+app.use("/issendedfriendrequest", isSendedFriendRequest)
 /**
  * Export module
  */

@@ -1,7 +1,8 @@
 import React,{useState, useContext} from 'react'
 import "./css/friendchatlist.css"
 import { Avartar } from './avartar'
-import { ActiveChatContentMobileVersion } from './context'
+import {ResponsesiveContext } from './context'
+import { SearchBox } from './searchbox'
 const test = [
     {
         id : 1213123,
@@ -14,154 +15,24 @@ const test = [
             content: "hello giangsddsdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddffffffffffff",
             date : "10h30 PM"
         }
-    },
-    {
-        id : 1213123,
-        urlavatar: "",
-        tittle: "Hello Giang",
-        online : true,
-        lastmessage : {
-            id: 121121,
-            user: "Yasua",
-            content: "hello giangsddsdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddffffffffffff",
-            date : "10h30 PM"
-        }
-    },
-    {
-        id : 1213123,
-        urlavatar: "",
-        tittle: "Hello Giang",
-        online : true,
-        lastmessage : {
-            id: 121121,
-            user: "Yasua",
-            content: "hello giangsddsdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddffffffffffff",
-            date : "10h30 PM"
-        }
-    },
-    {
-        id : 1213123,
-        urlavatar: "",
-        tittle: "Hello Giang",
-        online : true,
-        lastmessage : {
-            id: 121121,
-            user: "Yasua",
-            content: "hello giangsddsdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddffffffffffff",
-            date : "10h30 PM"
-        }
-    },
-    {
-        id : 1213123,
-        urlavatar: "",
-        tittle: "Hello Giang",
-        online : true,
-        lastmessage : {
-            id: 121121,
-            user: "Yasua",
-            content: "hello giangsddsdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddffffffffffff",
-            date : "10h30 PM"
-        }
-    },
-    {
-        id : 1213123,
-        urlavatar: "",
-        tittle: "Hello Giang",
-        online : true,
-        lastmessage : {
-            id: 121121,
-            user: "Yasua",
-            content: "hello giangsddsdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddffffffffffff",
-            date : "10h30 PM"
-        }
-    },
-    {
-        id : 1213123,
-        urlavatar: "",
-        tittle: "Hello Giang",
-        online : true,
-        lastmessage : {
-            id: 121121,
-            user: "Yasua",
-            content: "hello giangsddsdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddffffffffffff",
-            date : "10h30 PM"
-        }
-    },
-    {
-        id : 1213123,
-        urlavatar: "",
-        tittle: "Hello Giang",
-        online : true,
-        lastmessage : {
-            id: 121121,
-            user: "Yasua",
-            content: "hello giangsddsdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddffffffffffff",
-            date : "10h30 PM"
-        }
-    },
-    {
-        id : 1213123,
-        urlavatar: "",
-        tittle: "Hello Giang",
-        online : true,
-        lastmessage : {
-            id: 121121,
-            user: "Yasua",
-            content: "hello giangsddsdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddffffffffffff",
-            date : "10h30 PM"
-        }
-    },
-    {
-        id : 1213123,
-        urlavatar: "",
-        tittle: "Hello Giang",
-        online : true,
-        lastmessage : {
-            id: 121121,
-            user: "Yasua",
-            content: "hello giangsddsdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddffffffffffff",
-            date : "10h30 PM"
-        }
-    },
-    {
-        id : 1213123,
-        urlavatar: "",
-        tittle: "Hello Giang",
-        online : true,
-        lastmessage : {
-            id: 121121,
-            user: "Yasua",
-            content: "hello giangsddsdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddffffffffffff",
-            date : "10h30 PM"
-        }
-    },
-    {
-        id : 1213123,
-        urlavatar: "",
-        tittle: "Hello Giang",
-        online : true,
-        lastmessage : {
-            id: 121121,
-            user: "Yasua",
-            content: "hello giangsddsdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddffffffffffff",
-            date : "10h30 PM"
-        }
-    },
+    }
 ]
 const Content_Style = {
-     whiteSpace: "nowrap",
-      textOverflow: "ellipsis",
-       overflow : "hidden"
+    whiteSpace: "nowrap",
+    textOverflow: "ellipsis",
+    overflow : "hidden"
 }
 let ownStyle_friendchatlist = {
     
 }
 function FriendChat(props) {
-    const showchatboxcontentfunc = useContext(ActiveChatContentMobileVersion);
+    // for access responsiveContext
+    const responsesiveContext = useContext(ResponsesiveContext)
     return (
         <article key = {props.id} onClick = {
             () => {
-                showchatboxcontentfunc();
+                if(responsesiveContext.state.screenType === "mobile")
+                responsesiveContext.setMobileModeOnChatbox()
             }
         }>
             <Avartar small url = {props.urlavatar} />
@@ -188,7 +59,6 @@ function FriendChatList (props) {
     && styleComponentInline.zIndex !== "1") {
         ownStyle_friendchatlist = {
             zIndex: "1",
-            top: "0%"
         }
        setStyleComponentInline(ownStyle_friendchatlist)
     }
@@ -204,7 +74,7 @@ function FriendChatList (props) {
     }
     return (
         <div style = {styleComponentInline} className = {animationactive}>
-            {props.children}
+            <SearchBox />
             {
                 chatListInfo.map(data => {
                     return <FriendChat {...data} />

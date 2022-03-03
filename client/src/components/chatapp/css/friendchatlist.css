@@ -1,16 +1,12 @@
 .friend-chat-list {
-    /* height: calc(100% - 100px - 45px); */
     position: absolute;
     top: 0px;
     z-index: 1;
     height: 100%;
     width: 100%;
-    /* overflow: none; */
     overflow-y: scroll;
     background-color: rgb(37, 37, 37);
-      /* padding of mother element is 20px  */
 }
-/* #slide-bar > .friend-chat-list */
 
 .friend-chat-list article {
     cursor: pointer;
