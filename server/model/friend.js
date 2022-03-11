@@ -29,7 +29,7 @@ class Friend {
         if(typeof(userID1) !== typeof(1) || typeof(userID2) !== typeof(1)) {
             throw new TypeError("userID1 and userID2 must be number")
         }
-        let query = `SELECT * FROM Friend WHERE userID = ${userID1} AND friendID = ${userID2} AND status = 1;`;
+        let query = `SELECT * FROM Friend WHERE userID = ${userID1} AND friendID = ${userID2} AND status = 0;`;
         let pairFriend = await db.query(query)
         if(pairFriend.length != 0) {
             return true
