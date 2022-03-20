@@ -14,6 +14,10 @@ const isauth                = require("./routes/authentication/isauth")
 const GetUserBySimilarName  = require("./routes/tool/getusersimilarname")
 const isFriend              = require("./routes/tool/isfriend")
 const isSendedFriendRequest = require("./routes/tool/idFriendRequestSendBefore")
+const isOnline              = require("./routes/tool/isOnline")
+const notification          = require("./routes/user/getnotification")
+const userInfo              = require("./routes/user/info")
+const isFriendRequestAccepted = require("./routes/tool/isAcceptFriendRequest")
 // need for testing
 const test = require("./routes/routetest")
 /**
@@ -40,6 +44,10 @@ app.use("/isauth", isauth)
 app.use("/findsimilarname", GetUserBySimilarName)
 app.use("/isfriend", isFriend)
 app.use("/issendedfriendrequest", isSendedFriendRequest)
+app.use("/isonline", isOnline)
+app.use("/notification", notification)
+app.use("/info", userInfo)
+app.use("/isacceptfriendrequest", isFriendRequestAccepted)
 /**
  * Export module
  */

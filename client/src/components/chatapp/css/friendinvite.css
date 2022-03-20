@@ -13,10 +13,16 @@
     display: flex;
     justify-content: space-between;
 }
-.friend-invite > :nth-child(2) > :nth-child(1) {
+.friend-invite .notsend {
     width: 25px;
   
     color: green;
+
+}
+.friend-invite .sent {
+    width: 25px;
+  
+    color: rgb(74, 131, 74);
 
 }
 .friend-invite > :nth-child(2) > :nth-child(2) {

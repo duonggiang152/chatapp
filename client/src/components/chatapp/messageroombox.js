@@ -39,7 +39,7 @@ function MessageRoomBox (props) {
     const texmessagebox = useRef(null);
     useEffect(() => {
             texmessagebox.current.scrollTop = texmessagebox.current.scrollHeight; 
-    })
+    },[])
     return (
         <div ref = {texmessagebox} className = {"message-room-box"} style = {{height: `calc(${props.height})`}}>
            {

@@ -21,8 +21,10 @@ import React from 'react'
  * Default value undefine
  */
 const ResponsesiveContext = React.createContext()
-// for checking the type of screen in every node tree inside the route "/"
-// const SizeScreenContext = React.createContext("pc")
-
-// const ActiveChatContentMobileVersion = React.createContext()
-export  {ResponsesiveContext}
+/** 
+* initialNotificaionContext = {
+*     isOpenNotificationBox: false
+* }
+*/
+const NotificationContext = React.createContext()
+export  {ResponsesiveContext, NotificationContext}

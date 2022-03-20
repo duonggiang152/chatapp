@@ -4,7 +4,8 @@
 const ParamMustBeNumber = require("../controller/Exception/ParamMustBeNumber");
 const QueryFailed = require("../controller/Exception/QueryFailed");
 const db   = require("./databaseModel")
-const User = require("./user")
+const User = require("./user");
+const UserNotification = require("./usernotification");
 /**
  * Friend
  */
@@ -62,6 +63,31 @@ class Friend {
         return  db.query(query)
                   .then(data => data[0][0].ntfID)
                   
+    }
+    static async isFriendRequestAccepted(ntfID) {
+        if(typeof(ntfID) != typeof(1)) {
+            throw new ParamMustBeNumber("ntfID must be number")
+        }
+        // get notification 
+        const notification =  await UserNotification.getNotificationByID(ntfID)
+                                                    .catch(err => {
+                                                        return null
+                                                    })
+        if(!notification) {
+            return false
+        }
+        const userID = notification.userID;
+        const userIDSend = notification.userIDSend;
+        let query = `
+            SELECT *
+            FROM Notification
+            WHERE userID = ${userIDSend} AND userIDSend = ${userID} AND type = 1;
+        
+        `
+        const result =await db.query(query)
+        if(result.length > 0) return true
+        return false
+       
     }
     /**
      * User1 make FriendRequest to User2

@@ -48,7 +48,7 @@ router.get("/:userid?", async (req, res) => {
         idList.push(userID)
     }
     else (
-        idList = req.body
+        idList = req.body.listID
     )
     let checkFriendList = []
     // checking if id was friend

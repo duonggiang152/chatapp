@@ -1,16 +1,19 @@
-import {useState} from 'react'
+import {useContext, useState} from 'react'
+import { NotificationContext } from './context';
 import "./css/typeslide.css"
 
 function TypeSlide(props) {
-    const [type, setType] = useState("chat");
+    const notificationContext = useContext(NotificationContext)
     const [click, setClick] = useState(0);
     if(props.typeSelect === "message") {
         if(click !== -1) setClick(-1);
     }
     const clickChat = () => {
+      
         setClick(0)
     }
     const clickFriend = () => {
+        
         setClick(1)
     }
     return (
@@ -18,6 +21,7 @@ function TypeSlide(props) {
             <div>
                 <h3 className = {(click === 0 ? "active" : "" )} style = {{textAlign: "center"}}
                 onClick = {() => {
+                    notificationContext.setNotificationBoxStatus(false)
                     if(props.typeSelect !== "chat" && props.typeSelect !== "chatactived") {
                         props.showChatboxfunc("chat");
                         setTimeout(() => {
@@ -30,6 +34,7 @@ function TypeSlide(props) {
             <div>
                 <h3 className = {(click === 1 ? "active" : "" )} style = {{textAlign: "center"}}
                 onClick = {() => {
+                    notificationContext.setNotificationBoxStatus(false)
                     if(props.typeSelect !== "friendlist" && props.typeSelect !== "friendlistactived") {
                         props.showChatboxfunc("friendlist");
                         setTimeout(() => {

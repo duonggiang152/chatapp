@@ -74,7 +74,6 @@ function ChatContent(props) {
                 }
     }
     useEffect(() => {
-        console.log("hi")
         updateDisplayStyle()
     }, [responsiveContext])
     const BackBtn = () => {
@@ -84,6 +83,7 @@ function ChatContent(props) {
                     if(responsiveContext.state.screenType === "mobile")
                     {
                     setClassComponent("chat-content-mobile chat-content-mobile-showed chat-content-mobile-out-animation")
+                    responsiveContext.setMobileModeOnSlideBar()
                     }
                 }
             } className="fas fa-angle-right"></i>

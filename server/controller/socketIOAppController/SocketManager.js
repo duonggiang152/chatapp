@@ -16,10 +16,22 @@ class SocketManager {
      * @static
      */
     static addSocket(userID, SocketID) {
-        if(!this.SocketStorage[userID]) {
-            this.SocketStorage[userID] = new Array()
+        if(!SocketManager.SocketStorage[userID]) {
+            SocketManager.SocketStorage[userID] = new Array()
         }
-        this.SocketStorage[`${userID}`].push(SocketID)
+        SocketManager.SocketStorage[`${userID}`].push(SocketID)
+    }
+    /**
+     * this method will remove a socket to the storage
+     * @param {int} userID 
+     * @param {string} socketID 
+     * @returns 
+     */
+    static disconnectSocket(userID, socketID) {
+        if(!SocketManager.SocketStorage[userID]) return
+        const index = SocketManager.SocketStorage[userID].indexOf(socketID)
+        if(index < 0) return
+        SocketManager.SocketStorage[userID].splice(index, 1)
     }
     /**
      * This method will return an array of sockets which match with the userID

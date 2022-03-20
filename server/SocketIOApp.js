@@ -11,13 +11,14 @@ const InitSocketIOAppHanddle = require("./controller/socketIOAppController/InitE
 module.exports= function SocketIOApp(httpServer) {
     if(IOServer.io) {
       Logger.Error("You only need init this app once!!")
-      InitSocketIOAppHanddle()
+      
     }
     // init server
     IOServer.Init(httpServer)
     // get eventlistener
     let io = IOServer.io
     // init middleware
+    InitSocketIOAppHanddle()
     for(let i = 0; i< Middlewares.length; i++)
                 io.use(Middlewares[i])
     // cheking authentication when user init a connection
@@ -35,17 +36,8 @@ module.exports= function SocketIOApp(httpServer) {
           }
           io.emit("chatmessage", dataSend)
         }
-        // this method will get all the new notification base on latest 
-        // notification the client have
-        io.on('uncheck-new-notification', async (latestNotificaionId) => {
-          const FriendRequest = Friend.FriendRequest()
-
-        })
-        /**
-         * this method will send a friend request to user base on id user's
-         */
-        io.on('friendrequest', (id) => {
-
+        socket.on('disconnect', () => {
+          SocketManager.disconnectSocket(socket.request.session.passport.user, socket.id)
         })
       });
   

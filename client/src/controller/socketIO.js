@@ -19,6 +19,11 @@ class socketIO {
             console.log("disconect with server")
         })
     }
+    /**
+     * Create a listener to global socketIO
+     * @param {string} event 
+     * @param {function} callback 
+     */
     static listen(event, callback) {
         this.socket.removeAllListeners(event)
         this.socket.on(event, callback)

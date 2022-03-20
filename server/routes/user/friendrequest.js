@@ -27,6 +27,7 @@ router.post('/', async (req, res) => {
     return Friend.FriendRequest(req.user.id, req.body.userID)
                 .then((ntfID) => {
                     UserNotification.NewFrienRequestNotification(req.body.userID, ntfID)
+                    res.status(200)
                     return res.send(  
                         { 
                             status: 200,
@@ -40,6 +41,7 @@ router.post('/', async (req, res) => {
                         return res.send();
                     }
                     else if(err instanceof QueryFailed) {
+                        res.status(404)
                         switch(err.errno) {
                             case 100:
                                 return res.send(  

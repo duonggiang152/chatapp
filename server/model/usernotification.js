@@ -69,10 +69,10 @@ class UserNotification {
      * @async
      * @param {int} userID
      * @param {int} begin 
-     * @param {int} notificationNumber 
+     * @param {int} limit
      * @return {Array} An array of notification
      */
-    static async getUserNotification(userID, begin, notificationNumber) {
+    static async getUserNotification(userID, begin, limit) {
         if(!begin) {
             // 10 lates notifications
             const query = `
@@ -91,15 +91,15 @@ class UserNotification {
                             throw new SystemError()
                             })
         }
-        if(!notificationNumber) {
-            notificationNumber = 10
+        if(!limit) {
+            limit = 10
         }
         const query = `
         SELECT *
         FROM Notification
         WHERE userID = ${userID} AND ntfID < ${begin}
         ORDER BY ntfID DESC
-        LIMIT ${notificationNumber};
+        LIMIT ${limit};
     `
     return  databaseModel.query(query)
                     .then(data => {
@@ -109,6 +109,38 @@ class UserNotification {
                     Error.ExamineSystemError(err)
                     throw new SystemError()
                     })
+    }
+    /**
+     * Change status of notification 0 if unread and 1 if read
+     * @param {number} ntfID
+     * @param {number} status 
+     */
+    static async changeStatusNotification(ntfID,status) {
+        const query = `
+            UPDATE Notification
+            SET status = ${status}
+            WHERE ntfID = ${ntfID}
+        `
+        await databaseModel.query(query)
+                            .catch(err => {
+                                Error.ExamineSystemError(err)
+                                throw new SystemError()
+                            })
+    }
+    static async getUnreadNotification(userID) {
+        const query = `
+            SELECT *
+            FROM Notification
+            WHERE userID = ${userID} AND status = ${0} ORDER BY ntfID DESC ;
+        `
+        return await databaseModel.query(query)
+                            .then(data => {
+                                return data
+                            })
+                            .catch(err => {
+                                Error.ExamineSystemError(err)
+                                throw new SystemError()
+                            })
     }
     /**
      * Notificating an user base on ID have new FriendRequest
