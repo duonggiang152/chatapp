@@ -1,9 +1,10 @@
 import React, { useState, useContext, useEffect } from 'react'
 import "./css/friendchatlist.css"
 import { Avartar } from './avartar'
-import { ResponsesiveContext, ChatContext, ControleCurrenRoomContext } from './context'
+import { ResponsesiveContext, ChatContext, ControleCurrenRoomContext, NewMessageContext } from './context'
 import { SearchBox } from './searchbox'
 import domain from '../../config/domain'
+import socketIO from '../../controller/socketIO'
 const Content_Style = {
     whiteSpace: "nowrap",
     textOverflow: "ellipsis",
@@ -27,8 +28,9 @@ function FriendChat(props) {
     // for access responsiveContext
     const responsesiveContext = useContext(ResponsesiveContext)
     const controleCurrenRoom  = useContext(ControleCurrenRoomContext)
+    const newMEssageContext = useContext(NewMessageContext)
+
     useEffect(() => {
-        console.log("runnnnnnnnnnnnnnnnnnnnnnnnn")
         const setup = async () => {
             fetch(domain + "/room/room-member/" + `${props.cbID}`,
                 {
@@ -97,16 +99,13 @@ function FriendChat(props) {
                 })
         }
         setup()
-    }, [])
+    }, [newMEssageContext])
     let profiID = props.profi.id
    
     if (profiID)
         return (
             <article  onClick={
                 () => {
-                    console.log("-------------")
-                    console.log(props.cbID)
-                    console.log("-----------")
                     controleCurrenRoom.setCurrenOpenRoomID(props.cbID)
                     if (responsesiveContext.state.screenType === "mobile") {
                         responsesiveContext.setMobileModeOnChatbox()
@@ -116,7 +115,6 @@ function FriendChat(props) {
             }>
                 <Avartar small url={props.urlavatar} />
                 <div className={"tittle-contentchat"}>
-                    {props.cbID}
                     {roomdetail && roomdetail.members && roomdetail.members.length >= 2 && profiID ?
                         <h3 className={"tittle"}>{roomdetail.members[0].id === profiID ? roomdetail.members[1].userName : roomdetail.members[0].userName}</h3> : ""
                     }

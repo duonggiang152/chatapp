@@ -1,18 +1,17 @@
 import { useState, useEffect, useRef, useContext } from "react"
-import { ControleCurrenRoomContext, ChatContext } from "./context"
+import { ControleCurrenRoomContext, ChatContext, NewMessageContext } from "./context"
 import "./css/messageroombox.css"
 import "./css/textmessage.css"
 
 import { Avartar } from "./avartar"
 import RoomController from "../../controller/roomController"
 import UserController from "../../controller/userController"
+import socketIO from "../../controller/socketIO"
 
 function TextMessage(props) {
     let _class_private = "";
-    console.log(props.isYou)
     if (props.isYou) {
-        console.log("run")
-        _class_private = "message-chat message-right"
+        _class_private = `message-chat message-right ${props.isYou}`
         return (
             <div style={{ width: "100%", overflow: "hidden" }} className={_class_private}>
                 <div>
@@ -22,7 +21,7 @@ function TextMessage(props) {
         )
     }
     else {
-        _class_private = "message-chat message-left"
+        _class_private = `message-chat message-left ${props.isYou}`
         return (
             <div className={_class_private}>
                 <Avartar small {...props} />
@@ -33,20 +32,6 @@ function TextMessage(props) {
         )
     }
 }
-let data = [
-    {
-        url: "",
-        id: 123,
-        message: "hello, my name is giang hello, my name is giang hello, my name is giang hello, my name is giang hello, my name is giang hello, my name is giang",
-        isYou: true
-    },
-    {
-        url: "",
-        id: 123,
-        message: "hello, my name is giang",
-        isYou: false
-    }
-]
 function MessageRoomBox(props) {
     const [currentRoom, setCurrentRoom] = useState()
     const curretRoomContext = useContext(ControleCurrenRoomContext)
@@ -54,42 +39,55 @@ function MessageRoomBox(props) {
     const texmessagebox = useRef(null);
     const [loginUser, setLoginUser] = useState()
     const [message, setMesssage] = useState([])
-    const testF = async () => {
-        // console.log(currentRoom)
-        // console.log(chatContext)
+    const initMessage = async () => {
         const room = await RoomController.getRoomByID(curretRoomContext.currenOpenRoomID)
-        if(!room) return
-        console.log("-----------------123")
-        const message = await room.getMessage(undefined, 30)
-        message.forEach((element , i) => {
-            const isYou = (element.userID === loginUser.id ? true : false)
-            console.log(isYou)
-            message[i] = {
-                ...element,
-                isYou: isYou
+        if (!room) return
+        const message = await room.getMessage(undefined, 50)
+        message.forEach((element, i) => {
+            if (message[i].isYou === undefined) {
+                const isYou = (element.userID === loginUser.id ? true : false)
+                message[i] = {
+                    ...element,
+                    isYou: isYou
+                }
             }
         });
         message.reverse()
-        setMesssage(message)
-        console.log("-----------------123")
+        props.setMessageData(message)
     }
-    
+    const [renderfrist, setRenerfrist] = useState(false)
     useEffect(() => {
-       
+        texmessagebox.current.scrollTop = texmessagebox.current.scrollHeight;
+    })
+    useEffect(() => {
+        socketIO.listen('new-message', async message => {
+            newMessageContext.setNewMessage(newMessageContext.state + 1)
+            const room = await RoomController.getRoomByID(message.cbID)
+            await room.addMessage(message, true)
+            props.setMessageData([...props.data_in, message])
+            texmessagebox.current.scrollTop = texmessagebox.current.scrollHeight;
+        })
+    }, [props])
+    const newMessageContext = useContext(NewMessageContext)
+    useEffect(() => {
+
         const callAPI = async () => {
             const loginuser = await UserController.getLoginUser()
+
             setLoginUser(loginuser)
-            console.log(loginuser)   
         }
         texmessagebox.current.scrollTop = texmessagebox.current.scrollHeight;
         callAPI()
-    }, [])
+    }, [props])
     useEffect(() => {
-        testF()
-        if(curretRoomContext.currenOpenRoomID !== currentRoom ) {
-        setCurrentRoom(curretRoomContext.currenOpenRoomID)
+        if (props.inputFocus) texmessagebox.current.scrollTop = texmessagebox.current.scrollHeight;
+        if (curretRoomContext.currenOpenRoomID !== currentRoom) {
+            setCurrentRoom(curretRoomContext.currenOpenRoomID)
+            initMessage()
         }
     }, [props])
+    console.log(props.data_in)
+    const data = props.data_in
     if (!currentRoom) {
         return (
             <div ref={texmessagebox} className={"message-room-box"} style={{ height: `calc(${props.height})` }}>
@@ -99,8 +97,7 @@ function MessageRoomBox(props) {
     return (
         <div ref={texmessagebox} className={"message-room-box"} style={{ height: `calc(${props.height})` }}>
             {
-                message.map(Element => {
-                    // console.log(Element)
+                data.map(Element => {
                     return <TextMessage {...Element} />
                 })
             }

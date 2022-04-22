@@ -2,7 +2,7 @@
  * module dependencies
  */
 import { useContext, useEffect, useState } from "react"
-import { ResponsesiveContext, ControleCurrenRoomContext, ChatContext } from "./context"
+import { ResponsesiveContext, ControleCurrenRoomContext, ChatContext, NewMessageContext } from "./context"
 import { ChatboxInfor } from "./chatboxinfor"
 import { ChatInput } from "./chatinput"
 import { MessageRoomBox } from "./messageroombox"
@@ -10,6 +10,7 @@ import domain from "../../config/domain"
 // css
 import "./css/chatcontent.css"
 import  Room  from "../../controller/roomController"
+import RoomController from "../../controller/roomController"
 // data for test
 let data = [
     {
@@ -124,25 +125,56 @@ function ChatContent(props) {
     const controlmessageRoomBoxHeight = (height) => {
         setMessageRoomBoxHeight(height)
     }
-    const [messageData, setMessageData] = useState(data);
-    function testsubmitbtn(value) {
-
+    const [messageData, setMessageData] = useState([]);
+    const newMessageContext = useContext(NewMessageContext)
+    const testsubmitbtn = async (value) => {
+        let temps = {
+            value: false
+        }
         let temp = {
             url: "",
             id: userID,
             message: value,
-            isYou: true
+            isYou: true,
+            sucess: temps
         };
+        
+        const cbID = currentRoom.currenOpenRoomID
+        const body = {
+            "cbID": cbID,
+            "message": value
+        }
+        fetch(domain + "/sendmessage", {
+            method: "POST",
+            credentials: "same-origin",
+            headers : {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(body)
+        })
+        .then(data => {
+            if(data.status === 200) {
+                temps.value = true
+                setUserID(userID)
+            }
+        })
+        .catch(err => {
+            console.log(err)
+        })
+        const room = await RoomController.getRoomByID(cbID)
+        if(!room || !room.addMessage) return
+        await room.addMessage(temp, true)
+        newMessageContext.setNewMessage(newMessageContext.state + 1)
         setMessageData([...messageData, temp]);
     }
-
+    const [inputFocus, setInputFocus] = useState(false) 
     return (
         <div style={{ overflow: "hidden" }} className={classComponent} id="chat-content">
             <ChatboxInfor userID = {userID} trgger = {currentRoom}>
                 {responsiveContext.state && responsiveContext.state.screenType === "mobile" ? <BackBtn /> : ""}
             </ChatboxInfor>
-            <MessageRoomBox height={messageRoomBoxHeight} data_in={messageData} />
-            <ChatInput on_Resize={controlmessageRoomBoxHeight} submitbtnfuc={testsubmitbtn} />
+            <MessageRoomBox userID = {userID} inputFocus = {inputFocus} height={messageRoomBoxHeight} setMessageData = {setMessageData} data_in={messageData} />
+            <ChatInput setInputFocus = {setInputFocus} on_Resize={controlmessageRoomBoxHeight} submitbtnfuc={testsubmitbtn} />
 
         </div>
     )

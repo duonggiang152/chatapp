@@ -26,18 +26,25 @@ class User {
 
 class UserController {
   static Users = []
+  static loginUser = null
   static async getLoginUser() {
+    if(this.loginUser) return this.loginUser
     return await fetch(domain + "/info/profi", {
       method: "GET",
       // TODO
       credentials: "same-origin"
     })
-    .then(res => {
+    .then(async res => {
       if(res.status !== 200) throw new Error()
-      return res.json()
+      
+      const user =  res.json()
+      this.loginUser = user
+      return user
     })
     .catch(err => null)
-    
+  }
+  static clean() {
+    this.Users = []
   }
   static async addUser(userID) {
     if (this.Users.filter(user => user.userID === userID).length !== 0) {

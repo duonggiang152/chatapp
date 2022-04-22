@@ -2,12 +2,12 @@
 /**
  * module dependecies
  */
-import { useEffect, useReducer, useState } from "react";
+import { useContext, useEffect, useReducer, useState } from "react";
 import { useHistory } from 'react-router-dom'
 import { SlideBar } from "./slidebar";
 import { ChatContent } from "./chatcontent"
 import domain from "../../config/domain";
-import { ResponsesiveContext, NotificationContext, ChatContext, DialogContext, ControleCurrenRoomContext } from "./context"
+import { ResponsesiveContext, NotificationContext, ChatContext, DialogContext, ControleCurrenRoomContext, NewMessageContext } from "./context"
 import socketIO from "../../controller/socketIO";
 import Dialog from "./dialog"
 import "./css/chatbox.css"
@@ -231,7 +231,6 @@ function ChatApp() {
 			for (let i = 0; i < roomsmessage.length; i++) {
 				if (roomsmessage[i].cbID === chatboxID) {
 					roomsmessage[i].messages.push(messages)
-					console.log(roomsmessage)
 					dispathChatContext({ type: chatContextActions.AddMessage, messages: roomsmessage })
 					return
 				}
@@ -254,7 +253,7 @@ function ChatApp() {
 		addListMessage: (chatboxID, messageList) => {
 			if (typeof (messageList) !== typeof ([])) throw new Error("Second parameter must be array")
 			let roomsmessage = valueChatContext.state.roomsMessage;
-			if(!roomsmessage) roomsmessage = []
+			if (!roomsmessage) roomsmessage = []
 			for (let i = 0; i < roomsmessage.length; i++) {
 				if (roomsmessage[i].cbID === chatboxID) {
 					roomsmessage[i].message = roomsmessage[i].message.concat(messageList)
@@ -383,35 +382,35 @@ function ChatApp() {
 				.then(async res => {
 					if (res.status !== 200) return
 					res = await res.json()
-					console.log(res.room)
+
 					valueChatContext.updateRoomInfo(res.room)
 				})
 				.catch(err => {
 					console.log(err)
 				})
 		})
-		socketIO.listen('new-message', async message => {
-			console.log(message)
-			const room = await RoomController.getRoomByID(message.cbID)
-			await room.addMessage(message, true)
-			valueChatContext.addMessage(message.cbID, message)
-			await fetch(domain + "/room/get-room/" + `${message.cbID}`,
-				{
-					method: 'GET',
-					credentials: 'same-origin',
-					headers: {
-						'Content-Type': 'application/json'
-					}
-				})
-				.then(async res => {
-					if (res.status !== 200) return
-					res = await res.json()
-					valueChatContext.updateRoomInfo(res.room)
-				})
-				.catch(err => {
-					console.log(err)
-				})
-		})
+		// socketIO.listen('new-message', async message => {
+		// 	console.log("1")
+		// 	const room = await RoomController.getRoomByID(message.cbID)
+		// 	await room.addMessage(message, true)
+		// 	valueChatContext.addMessage(message.cbID, message)
+		// 	await fetch(domain + "/room/get-room/" + `${message.cbID}`,
+		// 		{
+		// 			method: 'GET',
+		// 			credentials: 'same-origin',
+		// 			headers: {
+		// 				'Content-Type': 'application/json'
+		// 			}
+		// 		})
+		// 		.then(async res => {
+		// 			if (res.status !== 200) return
+		// 			res = await res.json()
+		// 			valueChatContext.updateRoomInfo(res.room)
+		// 		})
+		// 		.catch(err => {
+		// 			console.log(err)
+		// 		})
+		// })
 		// get unread notification
 		await fetch(domain + "/notification/unread",
 			{
@@ -469,27 +468,31 @@ function ChatApp() {
 				console.log(err)
 			})
 	}, [])
+	const [newMessage, setNewMessage] = useState(1)
+	const valueContextNewMessage = {state: newMessage, setNewMessage: setNewMessage}
 	return (
-		<ControleCurrenRoomContext.Provider value={valueControlCurrenOpenRoom}>
-			<DialogContext.Provider value={valueDialogContext}>
-				<ChatContext.Provider value={valueChatContext}>
-					<ResponsesiveContext.Provider value={valueResponsiveContext}>
-						<Dialog active={(() => valueDialogContext.value)()}>
-							<div>this is div 1</div>
-						</Dialog>
-						<div className={(() => {
-							if (!valueDialogContext.value) return ""
-							return "blur-chat-box"
-						})()} id="chatapp" style={{ overflow: "hidden", display: "flex", width: "100vw", position: "relative" }} >
-							<NotificationContext.Provider value={valueNotificationContext}>
-								<SlideBar />
-							</NotificationContext.Provider>
-							<ChatContent />
-						</div>
-					</ResponsesiveContext.Provider>
-				</ChatContext.Provider>
-			</DialogContext.Provider>
-		</ControleCurrenRoomContext.Provider>
+		<NewMessageContext.Provider value= {valueContextNewMessage} >
+			<ControleCurrenRoomContext.Provider value={valueControlCurrenOpenRoom}>
+				<DialogContext.Provider value={valueDialogContext}>
+					<ChatContext.Provider value={valueChatContext}>
+						<ResponsesiveContext.Provider value={valueResponsiveContext}>
+							<Dialog active={(() => valueDialogContext.value)()}>
+								<div>this is div 1</div>
+							</Dialog>
+							<div className={(() => {
+								if (!valueDialogContext.value) return ""
+								return "blur-chat-box"
+							})()} id="chatapp" style={{ overflow: "hidden", display: "flex", width: "100vw", position: "relative" }} >
+								<NotificationContext.Provider value={valueNotificationContext}>
+									<SlideBar />
+								</NotificationContext.Provider>
+								<ChatContent />
+							</div>
+						</ResponsesiveContext.Provider>
+					</ChatContext.Provider>
+				</DialogContext.Provider>
+			</ControleCurrenRoomContext.Provider>
+		</NewMessageContext.Provider>
 	)
 }
 export { ChatApp }

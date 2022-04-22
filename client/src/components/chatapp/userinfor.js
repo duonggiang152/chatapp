@@ -9,6 +9,8 @@ import "./css/userinfor.css"
 import { DialogContext, NotificationContext } from './context'
 import { useHistory } from 'react-router-dom'
 import domain from '../../config/domain'
+import UserController from '../../controller/userController'
+import RoomController from '../../controller/roomController'
 /**
  * Create a Notification component witch take controll when the notification come
  * @param {object} props 
@@ -99,6 +101,8 @@ function UserInfor(props) {
                         dialogContext.show()
                     }}> Change Avatar </li>
                     <li className='user-menu-item' onClick={async () => {
+                        UserController.clean()
+                        RoomController.clean()
                         await fetch(domain + "/logout",
                             {
                                 method: 'POST',

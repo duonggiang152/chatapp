@@ -13,6 +13,7 @@ function ChatboxInfor(props) {
     const [roomName, setRoomName] = useState()
     const chatContext = useContext(ChatContext)
     const currentContext = useContext(ControleCurrenRoomContext)
+    const [currenRoomID, setCurrentRoomID] =  useState()
     useEffect(() => {
         const callAPI = async () => {
             const user = await fetch(domain + "/info/profi",
@@ -45,6 +46,7 @@ function ChatboxInfor(props) {
             for (let i = 0; i < users.length; i++) {
                 if (users[i].userID !== userID) {
                     setRoomName()
+                    if(!users[i].userID) return
                     const user = await fetch(domain + "/info/" + `${users[i].userID}`,
                         {
                             method: 'GET',
@@ -59,7 +61,11 @@ function ChatboxInfor(props) {
                 }
             }
         }
-        callAPI()
+        if(currenRoomID !== currentContext.currenOpenRoomID ) {
+            setCurrentRoomID(currentContext.currenOpenRoomID)
+            callAPI()
+        }
+        
     }, [props])
     let data = testdata
     return (

@@ -10,8 +10,8 @@ class socketIO {
      * If a connection exist it will disconnect that coonection and reconnect new connection
      */
     static connect() {
-        this.socket.disconnect()
-        this.socket.connect(domain, {autoConnect: false, reconnection: false})
+        // this.socket.disconnect()
+        this.socket.connect(domain)
         this.socket.on("connect", () => {
             console.log("success conneting with server")
         })

@@ -113,6 +113,9 @@ class Room {
     }
   }
   addMessage( message, tail = false) {
+    for(let i= 0 ; i< this.messages.length; i++) {
+      if(message.mID === this.messages[i].mID) return
+    }
     if (!tail) {
       this.messages.push(message)
       return
@@ -123,6 +126,9 @@ class Room {
 }
 class RoomController {
   static rooms = []
+  static clean() {
+    this.rooms = []
+  }
   static async getRoomByID(roomID) {
     for(let i = 0; i < this.rooms.length; i++) {
         if(this.rooms[i].cbID === roomID) {

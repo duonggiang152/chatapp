@@ -25,7 +25,11 @@ function ChatInput(props) {
     return (
         <div   className = {"chat-input"} id = "chat-content-input">
             <div>
-                <textarea ref={boxChat} onKeyPress = {(e) => press(e)} onSubmit = {(e) => {e.preventDefault()}} name = "chatcontent" onChange = {(e) => {
+                <textarea onFocus={() => {
+                    props.setInputFocus(true)
+                }} onBlur = {() => {
+                    props.setInputFocus(false)
+                }} ref={boxChat} onKeyPress = {(e) => press(e)} onSubmit = {(e) => {e.preventDefault()}} name = "chatcontent" onChange = {(e) => {
                     setChatcontent(e.target.value);
                     e.target.style.height = "auto";
                     let temp = e.target.scrollHeight;

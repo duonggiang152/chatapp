@@ -30,4 +30,5 @@ const NotificationContext = React.createContext()
 const ChatContext = React.createContext()
 const DialogContext = React.createContext()
 const ControleCurrenRoomContext = React.createContext()
-export { ResponsesiveContext, NotificationContext, ChatContext, DialogContext, ControleCurrenRoomContext}
+const NewMessageContext         = React.createContext()
+export { ResponsesiveContext, NotificationContext, ChatContext, DialogContext, ControleCurrenRoomContext, NewMessageContext}
