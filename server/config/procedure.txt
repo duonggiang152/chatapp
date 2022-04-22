@@ -37,6 +37,7 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE AcceptFriendRequest(IN ntfID int)
 BEGIN
+	DECLARE datetime            DATETIME;
 	DECLARE userSendRequestID 	INT DEFAULT 0;
     DECLARE userAcceptRequestID INT DEFAULT 0;
     DECLARE privateChatBoxID    INT DEFAULT 0;
@@ -62,7 +63,8 @@ BEGIN
     SET    status = 0
     WHERE  Friend.userID = userSendRequestID;
 	INSERT INTO Friend(userID, friendID) VALUE(userAcceptRequestID, userSendRequestID);
-    INSERT INTO ChatBox(type) VALUE(0);
+    SET datetime = NOW();
+    INSERT INTO ChatBox(type, datemodifi) VALUE(0, datetime);
     SET privateChatBoxID =	LAST_INSERT_ID();
     INSERT INTO ChatBoxMember(cbID, userID) VALUES (privateChatBoxID, userAcceptRequestID), (privateChatBoxID, userSendRequestID);
     INSERT INTO Notification(userID, userIDSend, type) VALUE(userSendRequestID, userAcceptRequestID,1);
@@ -149,6 +151,9 @@ BEGIN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "chat box don't exist or userID was not in chatbox ", MYSQL_ERRNO = 109;
 	END IF;
     INSERT INTO ChatMessage(cbID, userID, message, datetime) VALUE(cbID, userID, message, datetime);
+    UPDATE chatbox
+    SET datemodifi = datetime
+    WHERE chatbox.cbID = cbID;
     SET messageID = LAST_INSERT_ID();
     SELECT * FROM ChatMessage WHERE Chatmessage.mID = messageID;
     COMMIT;

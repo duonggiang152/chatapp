@@ -8,6 +8,17 @@ const User = require("./user")
 
 
 class ChatBox {
+    static async getChatBoxByID(cbID) {
+        const query = `
+            SELECT *
+            FROM ChatBox
+            WHERE cbID = ${cbID}
+        `
+        return DataBase.query(query)
+                        .then(data => {
+                            return data[0]
+                        })
+    }
     /**
      * Create a chatbox can add more then two member, nead at leat one member to setup
      * @async
@@ -70,7 +81,6 @@ class ChatBox {
         let query = `CALL AddMemberToGroupChat(${boxID}, ${userID1}, ${userID2})`;
         return DataBase.query(query)
     }
-
     /**
      * Get member in chatBox base on chatbox ID
      * @async
@@ -88,8 +98,46 @@ class ChatBox {
         let query = `SELECT * FROM ChatBoxMember WHERE cbID = ${cbID};`
         return DataBase.query(query)
     }
+    /**
+     * get chatbox which user take part in
+     * @param {number} userID 
+     * @param {number} offsetID 
+     * @param {number} limit 
+     */
+    static async getChatBoxParticipate(userID, offsetID, limit) {
+        // get datemodifioffsetid
+        if(!userID) return []
+        let optionparam;
+        if(!limit) limit = 1000
+        if(!offsetID) {
+            optionparam = ""
+        }
+        else {
+            // check roomID exist
+            const query = `
+                SELECT *
+                FROM chatbox
+                WHERE cbID = ${offsetID}
+            `
+            const data = await DataBase.query(query)
+                                        .catch(err => {
+                                            return null;
+                                        })
+            if(data.length >= 1) {
+                optionparam = `AND datemodifi < '${data[0].datemodifi}'`
+            }
+            if(!data) return []
+        }
+        const query =`
+            SELECT chatbox.cbID, datemodifi, chatbox.type
+            FROM chatbox, chatboxmember
+            WHERE userID = ${userID} AND chatbox.cbID = chatboxmember.cbID ${optionparam}
+            ORDER BY datemodifi DESC
+            LIMIT ${limit};
+        `
+        return  DataBase.query(query)
+    }
 
 }
 
 module.exports = ChatBox
-

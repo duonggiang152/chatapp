@@ -8,43 +8,12 @@ import domain from "../../config/domain";
 let ownStyle_message = {
 
 }
-
-
-// const 
-
-// let test = [
-//     {
-//         id: 123,
-//         userFriend: "giang",
-//         type: "friendinvite",
-//     },
-//     {
-//         id: 123,
-//         userFriend: "giang",
-//         type: "friendinvite",
-//     },
-//     {
-//         id: 123,
-//         userFriend: "giang",
-//         type: "friendinvite",
-//     },
-//     {
-//         id: 123,
-//         userFriend: "giang",
-//         type: "friendinvite",
-//     },
-//     {
-//         id: 123,
-//         userFriend: "giang",
-//         type: "friendinvite",
-//     },
-// ]
-
 function FriendInvite(props) {
     const [data, setData] = useState();
     const [style, setStyle] = useState("fas fa-check notsend")
     useEffect(async () => 
         {
+            if(data) return
             await fetch(domain + "/info/" + `${props.userIDSend}`,
             {
             method: 'GET',
@@ -55,7 +24,6 @@ function FriendInvite(props) {
             })
             .then(res=> res.json())
             .then(async data => {
-                console.log(props)
                 setData(data)
                 await fetch(domain + "/isacceptfriendrequest/" + `${props.ntfID}`,
                 {
@@ -67,8 +35,6 @@ function FriendInvite(props) {
                 })
                 .then(res=>res.json())
                 .then(data => {
-                    console.log("------------------------------")
-                    console.log(data)
                     if(data.isAccepted) setStyle("fas fa-check notsent")
                 })
             })
@@ -77,7 +43,7 @@ function FriendInvite(props) {
             })
             
         }
-    , [props])
+    , [props.ntfID])
     const acceptFriendRequest =async () => {
         if(style === "fas fa-check notsent" ) return
         const body = {
@@ -111,7 +77,7 @@ function FriendInvite(props) {
         <div>
         <i onClick={() => {
             acceptFriendRequest()
-        }} class={style}></i>
+        }} className={style}></i>
         </div>
     </div>
 }

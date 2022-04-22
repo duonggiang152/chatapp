@@ -48,8 +48,31 @@ class ChatMessage {
                        .then(data => data[0]) 
 
     }
-    
+    /**
+     * Get Message
+     * @async
+     * @static
+     * @param {number} chatboxID 
+     * @param {number} offsetID 
+     * @param {number} limit 
+     * @returns arrayofmessage
+     */
+    static async getMessage(chatboxID,offsetID, limit) {
+        if(!offsetID) offsetID = 0
+        if(!limit)    limit    = 10
+        const conditionparam = `AND mID < ${offsetID}` 
+        const query = `
+            SELECT mID, cbID, userID, userName, message, datetime
+            FROM ChatMessage, Users
+            WHERE cbID =  ${chatboxID} ${ offsetID ? conditionparam : ""} AND userId = idUser
+            ORDER BY mID DESC
+            LIMIT ${limit};
+        `
+        return DataBase.query(query)
+                       
+    }
 }
 
 module.exports = ChatMessage
+
 

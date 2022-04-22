@@ -12,7 +12,7 @@ const express = require("express")
 
  router.post("/", (req, res) => {
      req.logout();
-     res.send({message: "You are logout"})
+     res.status(200).json({message: "You are logout"})
  })
 
 

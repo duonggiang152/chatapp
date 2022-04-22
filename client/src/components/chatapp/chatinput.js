@@ -40,7 +40,7 @@ function ChatInput(props) {
                     console.log(e.target.style.height)
                 }} style = {m_style} ></textarea>
                 <button onClick = {processSubmit}>
-                    <i class="fas fa-share"></i>
+                    <i className="fas fa-share"></i>
                 </button>
             </div>
         </div>

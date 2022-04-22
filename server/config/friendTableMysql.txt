@@ -1,4 +1,4 @@
-CREATE TABLE FRIEND (
+CREATE TABLE Friend (
 	userID   int NOT NULL,
     friendID int NOT NULL,
     status   int DEFAULT 0,

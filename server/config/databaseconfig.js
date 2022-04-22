@@ -2,8 +2,8 @@ const configSigleConnection = {
     host     : 'localhost',
     user     : 'root',
     password : '',
-    database : 'chatapptest'
-   
+    database : 'chatapptest',
+    dateStrings: 'date'
 }
 const configPoolConnection = {
     connectionLimit : 10,
@@ -11,6 +11,7 @@ const configPoolConnection = {
     user     : 'root',
     password : 'password',
     database : 'chatapptest',
+    dateStrings: 'date'
 }
 /**
  * create a sigle connection to database

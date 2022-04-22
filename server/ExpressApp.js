@@ -18,6 +18,8 @@ const isOnline              = require("./routes/tool/isOnline")
 const notification          = require("./routes/user/getnotification")
 const userInfo              = require("./routes/user/info")
 const isFriendRequestAccepted = require("./routes/tool/isAcceptFriendRequest")
+const message                 = require("./routes/user/message")
+const room                    = require("./routes/user/room")
 // need for testing
 const test = require("./routes/routetest")
 /**
@@ -48,6 +50,8 @@ app.use("/isonline", isOnline)
 app.use("/notification", notification)
 app.use("/info", userInfo)
 app.use("/isacceptfriendrequest", isFriendRequestAccepted)
+app.use("/message/get-message",message)
+app.use("/room", room)
 /**
  * Export module
  */

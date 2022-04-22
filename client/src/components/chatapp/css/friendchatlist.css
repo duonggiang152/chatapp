@@ -19,6 +19,7 @@
     border-radius: 5px;
 }
 .friend-chat-list article > * {
+    position: relative;
     flex-shrink: 0;
 }
 .friend-chat-list article > :nth-child(2) {
@@ -33,6 +34,6 @@
     margin: 0px 5px;
 }
 .friend-chat-list article .contentchat :nth-child(3) {
-    width: 60px;
+    padding: 0px 0px 0px 10px;
     flex-shrink: 0;
 }

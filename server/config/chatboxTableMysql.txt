@@ -4,6 +4,7 @@ CREATE TABLE ChatBox (
 	cbID int NOT NULL AUTO_INCREMENT,
     ChatBoxName TEXT,
     type int NOT NULL,
+    datemodifi DATETIME NOT NULL,
 	PRIMARY KEY(cbID)
 );
 -- type field

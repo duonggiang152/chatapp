@@ -27,4 +27,7 @@ const ResponsesiveContext = React.createContext()
 * }
 */
 const NotificationContext = React.createContext()
-export  {ResponsesiveContext, NotificationContext}
+const ChatContext = React.createContext()
+const DialogContext = React.createContext()
+const ControleCurrenRoomContext = React.createContext()
+export { ResponsesiveContext, NotificationContext, ChatContext, DialogContext, ControleCurrenRoomContext}
