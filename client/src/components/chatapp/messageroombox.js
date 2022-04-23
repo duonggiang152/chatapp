@@ -104,25 +104,26 @@ function MessageRoomBox(props) {
     }
     return (
         <div onScroll={ async (e) => {
-
-            if(texmessagebox.current.scrollTop < 500) {
-                setTimeout(async () => {
-                    const lastMessage = data[data.length - 1]
-                const room = await RoomController.getRoomByID(currentRoom)
-                const message = await room.getMessage(offSetID, 100)
-                                          .catch(err => {
-                                              return null
-                                          })
-                if(!message || !message[message.length - 1] || !message[message.length - 1].mID) return
-                let offsetid = message[message.length - 1].mID
-                if(offsetid < offSetID) {
-                    setOffSetID(offsetid)
-                    message.reverse()
-                    props.setMessageData([...message, ...data])
-                }
-                }, 1000);
+            setTimeout(async () => {
+                if(texmessagebox.current.scrollTop < 500) {
+                    
+                        const lastMessage = data[data.length - 1]
+                    const room = await RoomController.getRoomByID(currentRoom)
+                    const message = await room.getMessage(offSetID, 100)
+                                            .catch(err => {
+                                                return null
+                                            })
+                    if(!message || !message[message.length - 1] || !message[message.length - 1].mID) return
+                    let offsetid = message[message.length - 1].mID
+                    if(offsetid < offSetID) {
+                        setOffSetID(offsetid)
+                        message.reverse()
+                        props.setMessageData([...message, ...data])
+                    }
                 
-            }
+                    
+                }
+            }, 500);
             
             
         }} ref={texmessagebox} className={"message-room-box"} style={{ height: `calc(${props.height})` }}>

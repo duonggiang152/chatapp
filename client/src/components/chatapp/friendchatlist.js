@@ -36,20 +36,15 @@ function FriendChat(props) {
         const setup = async () => {
                 RoomController.getRoomByID(props.cbID)
                 .then(async room => {
-
                     const members = await room.getMembers()
-                    // console.log(members)
                     const data = await Promise.all(members.map((async member => {
                         return await UserController.getUserByID(member.userID)
                     })))
                     setData(data)
                     let lastMessage = await room.getMessage(undefined, 1)
                     lastMessage = lastMessage[0]
-                    // console.log(lastMessage)
                     const user = await UserController.getUserByID(lastMessage.userID)
-                    // console.log(user)
                     const userName = await user.getUserName()
-                    console.log(userName)
                     lastMessage.userName = userName
                     // console.log(lastMessage[0])
                     // if(res.message){

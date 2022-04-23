@@ -389,7 +389,6 @@ function ChatApp() {
 				.then(async res => {
 					if (res.status !== 200) return
 					res = await res.json()
-
 					valueChatContext.updateRoomInfo(res.room)
 				})
 				.catch(err => {
