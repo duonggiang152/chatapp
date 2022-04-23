@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
     let offsetID = req.query.offsetid
     let limit    = req.query.limit
     if(!offsetID) {
-        await UserNotification.getUserNotification(req.user.id)
+        await UserNotification.getUserNotification(req.user.id, undefined, 100)
                                 .then(notifications => {
                                     res.status(200)
                                     return res.send(notifications)

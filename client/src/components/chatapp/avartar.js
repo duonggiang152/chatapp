@@ -9,7 +9,7 @@ const avartarStyle = {
         width : "35px",
         height : "35px",
         backgroundColor: "#8a8883",
-        borderRadius: "50px"
+        borderRadius: "50px",
     }
 }
 /**
@@ -18,7 +18,7 @@ const avartarStyle = {
  */
 const Avartar = (props) => {
     if(props.small) {
-        if(props.url == "" || !props.url) {
+        if(true) {
             return (
                 <div onClick = {(e) => {
                     if(props.onClick) props.onClick(e)
@@ -39,7 +39,7 @@ const Avartar = (props) => {
        
     }
     else {
-        if(props.url === "") {
+        if(true) {
             return (
                 <div onClick = {(e) => {
                     if(props.onClick)

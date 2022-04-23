@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./css/chatinput.css"
 // default properties of chatboxinput
 const m_style = {
@@ -22,6 +22,12 @@ function ChatInput(props) {
             return true;
         }
     }
+    useEffect(() => {
+        if(props.messageData.length === 0) {
+            boxChat.current.focus()
+        }
+    })
+    
     return (
         <div   className = {"chat-input"} id = "chat-content-input">
             <div>

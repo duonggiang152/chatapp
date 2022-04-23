@@ -11,6 +11,7 @@ import domain from "../../config/domain"
 import "./css/chatcontent.css"
 import  Room  from "../../controller/roomController"
 import RoomController from "../../controller/roomController"
+import UserController from "../../controller/userController"
 // data for test
 let data = [
     {
@@ -128,17 +129,29 @@ function ChatContent(props) {
     const [messageData, setMessageData] = useState([]);
     const newMessageContext = useContext(NewMessageContext)
     const testsubmitbtn = async (value) => {
+        console.log(value)
         let temps = {
             value: false
         }
+       
+        const user = await UserController.getUserByID(userID)
+        const userName = await user.getUserName()
+        let d = new Date,
+        dformat = [d.getMonth()+1,
+               d.getDate(),
+               d.getFullYear()].join('/')+' '+
+              [d.getHours(),
+               d.getMinutes(),
+               d.getSeconds()].join(':');
         let temp = {
             url: "",
-            id: userID,
+            userID: userID,
             message: value,
             isYou: true,
-            sucess: temps
+            sucess: temps,
+            userName: userName,
+            datetime: dformat
         };
-        
         const cbID = currentRoom.currenOpenRoomID
         const body = {
             "cbID": cbID,
@@ -163,7 +176,10 @@ function ChatContent(props) {
         })
         const room = await RoomController.getRoomByID(cbID)
         if(!room || !room.addMessage) return
-        await room.addMessage(temp, true)
+        console.log("---------")
+        console.log(room)
+        console.log("---------")
+        room.addMessage(temp, true)
         newMessageContext.setNewMessage(newMessageContext.state + 1)
         setMessageData([...messageData, temp]);
     }
@@ -174,7 +190,7 @@ function ChatContent(props) {
                 {responsiveContext.state && responsiveContext.state.screenType === "mobile" ? <BackBtn /> : ""}
             </ChatboxInfor>
             <MessageRoomBox userID = {userID} inputFocus = {inputFocus} height={messageRoomBoxHeight} setMessageData = {setMessageData} data_in={messageData} />
-            <ChatInput setInputFocus = {setInputFocus} on_Resize={controlmessageRoomBoxHeight} submitbtnfuc={testsubmitbtn} />
+            <ChatInput messageData = {messageData} setInputFocus = {setInputFocus} on_Resize={controlmessageRoomBoxHeight} submitbtnfuc={testsubmitbtn} />
 
         </div>
     )

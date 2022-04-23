@@ -69,3 +69,4 @@ class UserController {
   }
 }
 export default UserController
+export {User}

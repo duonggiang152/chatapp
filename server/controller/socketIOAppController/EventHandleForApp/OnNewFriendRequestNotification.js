@@ -27,6 +27,6 @@ module.exports = () => {
     socketUsers.forEach((socketid) => {
         IOServer.io.to(socketid).emit("new-notification", neededInfo)
     })
-   
+    
   })
 }

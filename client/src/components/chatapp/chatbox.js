@@ -12,6 +12,7 @@ import socketIO from "../../controller/socketIO";
 import Dialog from "./dialog"
 import "./css/chatbox.css"
 import RoomController from "../../controller/roomController";
+import { User } from "../../controller/userController";
 /**
  * Private variable
  */
@@ -269,6 +270,7 @@ function ChatApp() {
 			return
 		},
 		updateRoomInfo: (roominfo) => {
+			if(!roominfo) return
 			const makeDate = str => {
 
 				const [_, yyyy, mm, dd, hh, min, ss] = str.match(/(\d{4})-(\d{2})\-(\d{2}) (\d{2}):(\d{2}):(\d{2})/);
@@ -364,7 +366,12 @@ function ChatApp() {
 		checkType();
 		window.addEventListener('resize', checkType)
 		socketIO.connect()
-		socketIO.listen('new-notification', notification => {
+		socketIO.listen('new-notification', async notification => {
+			const userID = notification.userSend
+			console.log(notification)
+			const user = new User(userID)
+			const userName = await user.getUserName()
+			notification.userName = userName
 			valueNotificationContext.addNotification(notification)
 			if (NotificationState.isOpenNotificationBox) return
 			valueNotificationContext.addUnreadNotification(notification)
@@ -449,7 +456,7 @@ function ChatApp() {
 				console.log(err)
 			})
 		// update room 
-		fetch(domain + "/room/get-room", {
+		fetch(domain + "/room/get-room/?limit=100", {
 			method: 'GET',
 			credentials: 'same-origin',
 			headers: {

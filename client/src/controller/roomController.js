@@ -25,7 +25,6 @@ class Room {
       let membersInfo = await Promise.all(membersRawInfo.map(async (memberRawInfo) => {
         const user = await UserController.getUserByID(memberRawInfo.userID)
         const userName = await user.getUserName()
-        console.log(userName)
         return {
           userID: memberRawInfo.userID,
           userName: userName,
@@ -40,16 +39,16 @@ class Room {
     if (!offsetID) {
       const currentNumberOfMessage = this.messages.length
       const numberMessageMustGet = limit - currentNumberOfMessage
-      if (numberMessageMustGet < 0) {
+      if (numberMessageMustGet <= 0) {
         return this.messages.filter((mmessage, index) => {
           if(index < limit) return true
           return false
         })
       }
       const lastMessage = this.messages[this.messages.length - 1]
-      const query = (!lastMessage ? `cbid=${this.cbID}&limit=${numberMessageMustGet}` : `cbid=${this.cbID}&offsetid=${lastMessage.mID}&limit=${numberMessageMustGet}`)
+      const query = (!lastMessage ? `cbid=${this.cbID}&limit=${numberMessageMustGet < 100 ? 100 : numberMessageMustGet}` : `cbid=${this.cbID}&offsetid=${lastMessage.mID}&limit=${numberMessageMustGet < 100 ? 100 : numberMessageMustGet}`)
       const current= this
-      return await fetch(domain +
+      await fetch(domain +
         "/message/get-message/?" +
         query,
         {
@@ -61,13 +60,13 @@ class Room {
           message.message.forEach(element => {
             current.addMessage(element)
           });
-          return current.messages.filter((element, index) => {
-            if(index < limit) return true
-            return false
-          })
         })
         .catch(err => {
           console.log(err)
+        })
+        return current.messages.filter((element, index) => {
+          if(index < limit) return true
+          return false
         })
       
     }
@@ -75,10 +74,10 @@ class Room {
       /* Find messageID, if it not exist in currently client store, throw new Err
          Case list message in the client must be continous to easy to get mesage in the latter without have to call api to client
       */
-     const isMessageExist = false
-     const numberOffMessageMustGet = 0
-     const current= this
-     const indexMessage = 0
+     let isMessageExist = false
+     let numberOffMessageMustGet = 0
+     let current= this
+     let indexMessage = 0
      for(let i =0 ; i < this.messages.length; i++) {
        if(this.messages[i].mID === offsetID) {
          indexMessage = i
@@ -88,7 +87,7 @@ class Room {
        }
      }
      if(!isMessageExist) throw new Error("You must call new message from message you got")
-     const query = `cbid=${this.cbID}&offsetid=${this.offsetID}&limit=${numberOffMessageMustGet}`
+     const query = `cbid=${this.cbID}&offsetid=${offsetID}&limit=${numberOffMessageMustGet < 100 ? 100 : numberOffMessageMustGet }`
      return await fetch(domain +
       "/message/get-message/?" +
       query,
@@ -96,9 +95,13 @@ class Room {
         method: "GET",
         credentials: "same-origin"
       })
-      .then(message => message.json())
+      .then(async message => {
+        const data = await message.json()
+
+       
+        return data.message
+      })
       .then(message => {
-        console.log("-------------1")
         message.forEach(element => {
           current.addMessage(element)
         });
@@ -114,7 +117,9 @@ class Room {
   }
   addMessage( message, tail = false) {
     for(let i= 0 ; i< this.messages.length; i++) {
-      if(message.mID === this.messages[i].mID) return
+      if(message.mID && this.messages[i].mID && message.mID === this.messages[i].mID) {
+        return
+      }
     }
     if (!tail) {
       this.messages.push(message)
@@ -142,7 +147,6 @@ class RoomController {
                 })
                 .then(res=>res.json())
                 .then(roomRawData=> {
-                  // console.log(roomRawData)
                   if(!roomRawData.room) return null
                   const room = new Room(roomRawData.room.cbID)
                   this.rooms.push(room)

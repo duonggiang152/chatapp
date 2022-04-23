@@ -13,8 +13,14 @@ const Logger = require("../../Logger/Logger");
         const boxMember = await ChatBox.getMemberOfChatBox(messageInfo.cbID)
         const sendPacket = messageInfo
         boxMember.forEach(async member => {
+            const sockets = await SocketManager.getSocket(member.userID)
+            if(!sockets) return
+            sockets.forEach(socket => {
+                IOServer.io.to(socket).emit("new-update-room", {
+                    cbID: messageInfo.cbID
+                })
+            })
             if(member.userID !== messageInfo.userId) {
-                const sockets = await SocketManager.getSocket(member.userID)
                 if(!sockets) return
                 sockets.forEach(socket => {
                     IOServer.io.to(socket).emit("new-message", sendPacket)

@@ -60,23 +60,11 @@ function UserInfor(props) {
     const history = useHistory()
     useEffect(() => {
         const callAPI = async () => {
-            const username = await fetch(domain + "/info/profi",
-                {
-                    method: 'GET',
-                    credentials: 'same-origin',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .then(async res => {
-                    if (res.status !== 200) return
-                    res = await res.json()
-                    return res.userName
-                })
-                .catch(err => {
-                    console.log(err)
-                    return null
-                })
+            let username = await UserController.getLoginUser()
+                            .catch(err=> {
+                                console.log(err)
+                            })
+            username = username.userName
             setUserName(username)
         }
         callAPI()
@@ -117,7 +105,7 @@ function UserInfor(props) {
                     }} > Log out</li>
                 </ul>
             </div>
-            <Avartar url={""} onFocus={() => {
+            <Avartar url={"/avartardefault.img"} onFocus={() => {
                 userinfoelement.current.className = 'user-menu user-menu-active'
             }} onBlur={(e) => {
                 onBlur(e)

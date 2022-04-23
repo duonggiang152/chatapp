@@ -73,6 +73,9 @@ class UserNotification {
      * @return {Array} An array of notification
      */
     static async getUserNotification(userID, begin, limit) {
+        if(!limit) {
+            limit = 10
+        }
         if(!begin) {
             // 10 lates notifications
             const query = `
@@ -80,7 +83,7 @@ class UserNotification {
                 FROM Notification
                 WHERE userID = ${userID}
                 ORDER BY ntfID DESC
-                LIMIT 10;
+                LIMIT ${limit};
             `
             return  databaseModel.query(query)
                             .then(data => {
@@ -91,9 +94,7 @@ class UserNotification {
                             throw new SystemError()
                             })
         }
-        if(!limit) {
-            limit = 10
-        }
+        
         const query = `
         SELECT *
         FROM Notification
