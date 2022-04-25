@@ -1,3 +1,4 @@
+import "./css/avatar.css"
 const avartarStyle = {
     default : {
         width : "50px",
@@ -18,7 +19,7 @@ const avartarStyle = {
  */
 const Avartar = (props) => {
     if(props.small) {
-        if(true) {
+        if(!props.url) {
             return (
                 <div onClick = {(e) => {
                     if(props.onClick) props.onClick(e)
@@ -36,10 +37,28 @@ const Avartar = (props) => {
                 </div>
             )
         }
-       
+        if(props.url) {
+            return (
+                <div onClick = {(e) => {
+                    if(props.onClick) props.onClick(e)
+                }}  onFocus ={(e) => {
+                    if(props.onFocus)
+                    props.onFocus(e)
+                }}  onBlur = {(e) => {
+                    if(props.onBlur)
+                    props.onBlur(e)
+                }} 
+                onFocusout = {(e) => {
+                    if(props.onFocusout)
+                    props.onFocusout(e)
+                }} className = "avatar" style = {avartarStyle.default_small} tabIndex= {-1}>
+                    <img src = {props.url}></img>
+                </div>
+            )
+        }
     }
     else {
-        if(true) {
+        if(!props.url) {
             return (
                 <div onClick = {(e) => {
                     if(props.onClick)
@@ -56,6 +75,27 @@ const Avartar = (props) => {
                     if(props.onFocusout)
                     props.onFocusout(e)
                 }}  className = "avatar" style = {avartarStyle.default} tabIndex= {-1}>
+                </div>
+            )
+        }
+        else  {
+            return (
+                <div onClick = {(e) => {
+                    if(props.onClick)
+                    props.onClick(e)
+                }} onFocus ={(e) => {
+                    if(props.onFocus)
+                    props.onFocus(e)
+                }} 
+                onBlur = {(e) => {
+                    if(props.onBlur)
+                    props.onBlur(e)
+                }}
+                onFocusout = {(e) => {
+                    if(props.onFocusout)
+                    props.onFocusout(e)
+                }}  className = "avatar" style = {avartarStyle.default} tabIndex= {-1}>
+                    <img src = {props.url}></img>
                 </div>
             )
         }

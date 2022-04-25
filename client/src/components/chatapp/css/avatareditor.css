@@ -1,0 +1,50 @@
+#avatar-control {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 250px;
+}
+#avatar-control {
+  width: 250px;
+  display: flex;
+  text-align: center;
+}
+#avatar-control > div {
+    margin: 10px;
+}
+#avatar-control .add-btn {
+  cursor: pointer;
+  margin: 20px 0px;
+  padding: 5px;
+  background-color: rgb(50, 167, 157);
+  color: white;
+  transition: background-color, color 0.2s ease;
+}
+#avatar-control .add-btn:hover {
+  margin: 20px 0px;
+  padding: 5px;
+  background-color: rgb(6, 244, 224);
+  color: rgb(255, 255, 255);
+}
+#avatar-control .Zoom {
+  width: 100%;
+  display: flex;
+  text-align: center;
+  justify-content: space-between;
+}
+#avatar-control .Change-Avatar-Btn {
+  width: 100%;
+  text-align: center;
+  padding: 4px;
+  font-size: 20px;
+  background-color: rgb(50, 50, 50);
+  color: rgb(217, 218, 219);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color, color 0.2s ease;
+}
+#avatar-control .Change-Avatar-Btn:hover {
+
+  background-color: rgb(22, 22, 22);
+  color: rgb(244, 246, 247);
+}

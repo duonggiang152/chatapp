@@ -42,6 +42,7 @@ function MessageRoomBox(props) {
     const [offSetID, setOffSetID] = useState()
     const initMessage = async () => {
         const room = await RoomController.getRoomByID(curretRoomContext.currenOpenRoomID)
+                                         .catch(err =>  null)
         if (!room) return
         const message = await room.getMessage(undefined, 100)
         message.forEach((element, i) => {

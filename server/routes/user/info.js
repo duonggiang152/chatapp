@@ -1,4 +1,5 @@
 const express = require('express')
+const Avatar = require('../../model/avatar')
 const User = require('../../model/user')
 
 
@@ -12,15 +13,16 @@ router.get('/profi', async (req, res) => {
     }
     const ID = req.user.id
     await User.getUserById(ID)
-        .then(user => {
+        .then(async user => {
             if (!user) {
                 res.status(404)
                 return res.send({ message: "user don't exist" })
             }
-            res.status(200)
-            return res.send({
+            const avatar = await Avatar.getAvatarUrl(user.idUser).catch(err => null)
+            return res.status(200).send({
                 id: user.idUser,
-                userName: user.userName
+                userName: user.userName,
+                url: avatar
             })
         })
         .catch(err => {
@@ -43,15 +45,17 @@ router.get('/:id', async (req, res) => {
         return res.send({ message: "err" })
     }
     await User.getUserById(userID)
-        .then(user => {
+        .then(async user => {
             if (!user) {
                 res.status(404)
                 return res.send({ message: "user don't exist" })
             }
+            const avatar = await Avatar.getAvatarUrl(user.idUser).catch(err => null)
             res.status(200)
             return res.send({
                 id: user.idUser,
-                userName: user.userName
+                userName: user.userName,
+                avatar: avatar
             })
         })
         .catch(err => {

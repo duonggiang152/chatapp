@@ -64,6 +64,7 @@ function UserInfor(props) {
                             .catch(err=> {
                                 console.log(err)
                             })
+            if(!username) return
             username = username.userName
             setUserName(username)
         }
@@ -71,6 +72,7 @@ function UserInfor(props) {
 
     }, [props])
     const onBlur = (e) => {
+        console.log("run")
         if (!e || !e.relatedTarget) {
             userinfoelement.current.className = 'user-menu'
             return

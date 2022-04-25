@@ -20,6 +20,7 @@ const userInfo              = require("./routes/user/info")
 const isFriendRequestAccepted = require("./routes/tool/isAcceptFriendRequest")
 const message                 = require("./routes/user/message")
 const room                    = require("./routes/user/room")
+const uploaddata            = require("./routes/tool/uploaddata")
 // need for testing
 const test = require("./routes/routetest")
 /**
@@ -27,6 +28,7 @@ const test = require("./routes/routetest")
  * @private
  */
 const app      = express();
+
 app.use(cors())
 /**
  * Middleware
@@ -52,6 +54,7 @@ app.use("/info", userInfo)
 app.use("/isacceptfriendrequest", isFriendRequestAccepted)
 app.use("/message/get-message",message)
 app.use("/room", room)
+app.use("/upload", uploaddata)
 /**
  * Export module
  */

@@ -1,0 +1,10 @@
+create table Avatar (
+	aID int NOT NULL AUTO_INCREMENT,
+    userID int NOT NULL,
+    avatarName VARCHAR(1000),
+    webViewLink VARCHAR(1000),
+    webContentLink VARCHAR(1000),
+    imgID VARCHAR(1000),
+    PRIMARY KEY (aID),
+    FOREIGN KEY (userID) REFERENCES Users(idUser)
+)

@@ -15,10 +15,14 @@
     transform: translate(-50%, -50%);
     border-radius: 30px;
     padding: 40px 10px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 }
 
 .dialog-active {
-    display: block;
+    display: flex;
     animation: show-animation 0.5s ease forwards;
 }
 

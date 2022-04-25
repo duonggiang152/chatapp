@@ -29,12 +29,12 @@ function FriendChat(props) {
     const [roomdetail, setRoomdetail] = useState([])
     // for access responsiveContext
     const responsesiveContext = useContext(ResponsesiveContext)
-    const controleCurrenRoom  = useContext(ControleCurrenRoomContext)
+    const controleCurrenRoom = useContext(ControleCurrenRoomContext)
     const newMEssageContext = useContext(NewMessageContext)
     const [data, setData] = useState([])
     useEffect(() => {
         const setup = async () => {
-                RoomController.getRoomByID(props.cbID)
+            RoomController.getRoomByID(props.cbID)
                 .then(async room => {
                     const members = await room.getMembers()
                     const data = await Promise.all(members.map((async member => {
@@ -49,7 +49,7 @@ function FriendChat(props) {
                     // console.log(lastMessage[0])
                     // if(res.message){
                     //     const [_, yyyy, mm, dd, hh, min, ss] = res.message[0].datetime.match(/(\d{4})-(\d{2})\-(\d{2}) (\d{2}):(\d{2}):(\d{2})/);
-				    //     const date1 = new Date(yyyy, mm - 1, dd, hh, min, ss)
+                    //     const date1 = new Date(yyyy, mm - 1, dd, hh, min, ss)
                     //     const date2 = new Date()
                     //     let result = ""
                     //     if(date1.getFullYear() !== date2.getFullYear()) result = date1.getFullYear()
@@ -71,20 +71,32 @@ function FriendChat(props) {
         }
         setup()
     }, [newMEssageContext])
+    let user = {}
     let profiID = props.profi.id
-    if(data.length ===0) return null
+    try {
+        console.log(data)
+        console.log(profiID)
+        user = data[0].userID === profiID ? data[1] : data[0]
+        console.log(user.avatar)
+        
+    }
+    catch (err) {
+
+    }
+    
+    if (data.length === 0) return null
     if (profiID)
         return (
-            <article  onClick={
+            <article onClick={
                 () => {
                     controleCurrenRoom.setCurrenOpenRoomID(props.cbID)
                     if (responsesiveContext.state.screenType === "mobile") {
                         responsesiveContext.setMobileModeOnChatbox()
-                       
+
                     }
                 }
             }>
-                <Avartar small url={props.urlavatar} />
+                <Avartar small url={user.avatar} />
                 <div className={"tittle-contentchat"}>
                     {roomdetail && roomdetail.members && roomdetail.members.length >= 2 && profiID ?
                         <h3 className={"tittle"}>{data[0].userID === profiID ? data[1].userName : data[0].userName}</h3> : ""
@@ -130,8 +142,8 @@ function FriendChatList(props) {
     }
     useEffect(async () => {
         // update userID
-        const user = await UserController.getLoginUser()
-        if(!user) user = {}
+        let user = await UserController.getLoginUser()
+        if (!user) user = {}
         setProfi(user)
         // await fetch(domain + "/info/profi",
         //     {

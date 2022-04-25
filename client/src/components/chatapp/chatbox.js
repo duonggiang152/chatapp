@@ -13,6 +13,7 @@ import Dialog from "./dialog"
 import "./css/chatbox.css"
 import RoomController from "../../controller/roomController";
 import { User } from "../../controller/userController";
+import AvatarEditor from "./AvatarEditor"
 /**
  * Private variable
  */
@@ -270,7 +271,7 @@ function ChatApp() {
 			return
 		},
 		updateRoomInfo: (roominfo) => {
-			if(!roominfo) return
+			if (!roominfo) return
 			const makeDate = str => {
 
 				const [_, yyyy, mm, dd, hh, min, ss] = str.match(/(\d{4})-(\d{2})\-(\d{2}) (\d{2}):(\d{2}):(\d{2})/);
@@ -360,7 +361,7 @@ function ChatApp() {
 			}
 		})
 		.catch(err => {
-			console.log(err)
+			history.push("/login")
 		})
 	useEffect(async () => {
 		checkType();
@@ -475,15 +476,15 @@ function ChatApp() {
 			})
 	}, [])
 	const [newMessage, setNewMessage] = useState(1)
-	const valueContextNewMessage = {state: newMessage, setNewMessage: setNewMessage}
+	const valueContextNewMessage = { state: newMessage, setNewMessage: setNewMessage }
 	return (
-		<NewMessageContext.Provider value= {valueContextNewMessage} >
+		<NewMessageContext.Provider value={valueContextNewMessage} >
 			<ControleCurrenRoomContext.Provider value={valueControlCurrenOpenRoom}>
 				<DialogContext.Provider value={valueDialogContext}>
 					<ChatContext.Provider value={valueChatContext}>
 						<ResponsesiveContext.Provider value={valueResponsiveContext}>
 							<Dialog active={(() => valueDialogContext.value)()}>
-								<div>this is div 1</div>
+								<AvatarEditor/>
 							</Dialog>
 							<div className={(() => {
 								if (!valueDialogContext.value) return ""

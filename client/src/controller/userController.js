@@ -3,24 +3,29 @@ class User {
   constructor(userID) {
     this.userID = userID
   }
-  
+
   async getUserName() {
-    if (this.userName !==null && this.userName) return this.userName
+    if (this.userName !== null && this.userName) return this.userName
     const user = await fetch(domain + "/info/" + `${this.userID}`, {
       method: "GET",
       // TODO
       credentials: "same-origin"
     })
-    .then(res => {
-      if(res.status !== 200) throw new Error()
-      return res.json()
-    })
-    .catch(err => new Error())
-    if(user instanceof Error) {
-        return null
+      .then(res => {
+        if (res.status !== 200) throw new Error()
+        return res.json()
+      })
+      .catch(err => new Error())
+    if (user instanceof Error) {
+      return null
     }
     this.userName = user.userName
+    this.avatar   = user.avatar
     return this.userName
+  }
+  async getAvatar() {
+    this.getUserName()
+    return this.avatar
   }
 }
 
@@ -28,20 +33,20 @@ class UserController {
   static Users = []
   static loginUser = null
   static async getLoginUser() {
-    if(this.loginUser) return this.loginUser
+    if (this.loginUser) return this.loginUser
     return await fetch(domain + "/info/profi", {
       method: "GET",
       // TODO
       credentials: "same-origin"
     })
-    .then(async res => {
-      if(res.status !== 200) throw new Error()
-      
-      const user =  res.json()
-      this.loginUser = user
-      return user
-    })
-    .catch(err => null)
+      .then(async res => {
+        if (res.status !== 200) throw new Error()
+
+        const user = res.json()
+        this.loginUser = user
+        return user
+      })
+      .catch(err => null)
   }
   static clean() {
     this.Users = []
@@ -56,17 +61,17 @@ class UserController {
   }
   static async getUserByID(userID) {
     let userExist = false
-    for(let i =0 ; i< this.Users.length; i++) {
-      if(this.Users[i].userID === userID) {
+    for (let i = 0; i < this.Users.length; i++) {
+      if (this.Users[i].userID === userID) {
         userExist = true
         break
       }
     }
-    if(!userExist) {
+    if (!userExist) {
       await this.addUser(userID)
-    }    
+    }
     return this.Users.filter(user => user.userID === userID)[0]
   }
 }
 export default UserController
-export {User}
+export { User }
