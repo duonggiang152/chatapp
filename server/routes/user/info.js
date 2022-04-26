@@ -22,7 +22,7 @@ router.get('/profi', async (req, res) => {
             return res.status(200).send({
                 id: user.idUser,
                 userName: user.userName,
-                url: avatar
+                avatar: avatar
             })
         })
         .catch(err => {

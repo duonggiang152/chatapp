@@ -34,6 +34,7 @@ const Avartar = (props) => {
                     if(props.onFocusout)
                     props.onFocusout(e)
                 }}  className = "avatar" style = {avartarStyle.default_small} tabIndex= {-1}>
+                    <img src = {process.env.PUBLIC_URL + "/avartardefault.png"}></img>
                 </div>
             )
         }
@@ -75,10 +76,11 @@ const Avartar = (props) => {
                     if(props.onFocusout)
                     props.onFocusout(e)
                 }}  className = "avatar" style = {avartarStyle.default} tabIndex= {-1}>
+                <img src = {process.env.PUBLIC_URL + "/avartardefault.png"}></img>
                 </div>
             )
         }
-        else  {
+        if(props.url)  {
             return (
                 <div onClick = {(e) => {
                     if(props.onClick)

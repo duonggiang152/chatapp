@@ -11,7 +11,10 @@ router.post("/avatar", (req, res, next) => {
     const {body, files} = req
     if(!files) res.status(403).json({message: "File must have key avatar"})
     let avatar;
+    // console.log(files)
+    console.log(body)
     for(let i = 0 ; i< files.length; i++) {
+      console.log(files[i])
       if(files[i].fieldname === "avatar") avatar = files[i]
     }
     if(!avatar)return res.status(403).json({message: "File must have key avatar"})

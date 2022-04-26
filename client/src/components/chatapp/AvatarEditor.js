@@ -7,6 +7,8 @@ function AvatarEditor() {
   const [urlDefault, setURLDefault] = useState()
   const [editor, setEditor] = useState()
   const [urlCrop, setURLCrop] = useState()
+  const [status, setStatus] = useState("Change Avatar")
+  const [preventAction, setPreventAction] = useState(false)
   function scaleChange(e) {
     const v = e.target.value
     setScale(1 + v/100)
@@ -22,18 +24,40 @@ function AvatarEditor() {
     setURLDefault(url)
     console.log(url);
   };
-  const setEditorRef = (ed) => {
+  const setEditorRef = async (ed) => {
     setEditor(ed)
     if(!ed || !ed.getImageScaledToCanvas) return
-    console.log(ed.getImageScaledToCanvas().toDataURL())
-    setURLCrop(ed.getImageScaledToCanvas().toDataURL())
+    const blob = await new Promise(resolve => ed.getImageScaledToCanvas().toBlob(resolve));
+    setURLCrop(blob)
   };
-  const changeAvatar = () => {
+  const changeAvatar = async () => {
     const formData = new FormData()
-    if(!urlDefault) return
     formData.append("avatar", urlCrop)
-    // await fetch(domain)
+    if(!urlDefault) return
+    setPreventAction(true)
+    setStatus("waiting")
+    fetch(domain + "/upload/avatar", {
+      method: "POST",
+      credentials: "same-origin",
+      body: formData
+    })
+    .then(() => {
+      setPreventAction(false)
+      setStatus("Changing success, refresh page to update new result")
+      setTimeout(() => {
+        setStatus("Change Avatar")
+      }, 5000)
+    })
+    .catch(err => {
+      setPreventAction(false)
+      setStatus("Err, refresh page and upload again")
+      setTimeout(() => {
+        setStatus("Change Avatar")
+      }, 5000)
+      console.log(err)
+    })
   }
+  const classBTN = (!preventAction ? "Change-Avatar-Btn" : "Change-Avatar-Btn noClick")
   return (
     <>
       <Avatareditor
@@ -58,8 +82,7 @@ function AvatarEditor() {
             <div>Zoom: </div>
             <input onChange={scaleChange} type="range" id="volume" name="volume" min="0" max="100"></input>
           </div>
-          <div className="Change-Avatar-Btn">Change Avatar</div>
-          <img src={urlCrop}></img>
+          <div onClick={changeAvatar} className="Change-Avatar-Btn">{status}</div>
       </div>
     </>
   )

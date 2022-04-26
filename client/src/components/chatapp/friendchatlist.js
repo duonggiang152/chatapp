@@ -74,10 +74,7 @@ function FriendChat(props) {
     let user = {}
     let profiID = props.profi.id
     try {
-        console.log(data)
-        console.log(profiID)
         user = data[0].userID === profiID ? data[1] : data[0]
-        console.log(user.avatar)
         
     }
     catch (err) {

@@ -30,7 +30,8 @@ const initialState = {
 const actions = {
 	turn_pc_mode: "TURN-PC-MODE",
 	turn_mobile_slide_bar: "TURN-MOBILE-SLIDE-BAR",
-	turn_mobile_chatbox: "TURN-MOBILE-CHATBOX"
+	turn_mobile_chatbox: "TURN-MOBILE-CHATBOX",
+	clear: "CLEAR-DATA"
 }
 // reducer to handle ResponsiveContext module
 const reducer = (state, action) => {
@@ -60,6 +61,11 @@ const reducer = (state, action) => {
 				}
 			}
 		}
+		case actions.clear: {
+			return {
+				...initialState
+			}
+		}
 		default:
 			throw new Error(`Not support ${action.type}`)
 	}
@@ -78,7 +84,8 @@ const NotificationActions = {
 	clearAllNewNotification: "READ_UNREAD_NOTIFICATION",
 	initUnreadNotification: "UNREAD_NOTIFICATION_INIT",
 	initNotification: "INIT_NOTIFICATION",
-	addNotification: "ADD_NOTIFICATION"
+	addNotification: "ADD_NOTIFICATION",
+	clear: "CLEAR"
 }
 // reducer Notification
 const reducerNotification = (state, actions) => {
@@ -125,6 +132,11 @@ const reducerNotification = (state, actions) => {
 				Notifications: [...state.Notifications]
 			}
 		}
+		case NotificationActions.clear: {
+			return {
+				...initialNotificaionContext
+			}
+		}
 		default:
 			throw new Error(`Not support ${actions.type}`)
 	}
@@ -138,7 +150,8 @@ const initChatContext = {
 const chatContextActions = {
 	UpdateMessage: "UPDATE_ROOM_MESSAGE",
 	InitRoomInfo: "INIT_ROOM_INFO",
-	AddMessage: "ADD_MESSAGE"
+	AddMessage: "ADD_MESSAGE",
+	clear: "CLEAR"
 }
 // reducer
 /*
@@ -156,6 +169,10 @@ const reducerContext = (state, actions) => {
 			return {
 				roomsMessage: [...state.roomsMessage],
 				roomsInfo: [...actions.room]
+			}
+		case chatContextActions.clear:
+			return {
+				...initChatContext
 			}
 		default:
 			throw new Error(`Not support ${actions.type}`)
@@ -179,6 +196,9 @@ function ChatApp() {
 		},
 		setMobileModeOnChatbox: () => {
 			dispathResponsiveMethod({ type: actions.turn_mobile_chatbox })
+		},
+		clear: () => {
+			dispathResponsiveMethod({type: actions.clear})
 		}
 	}
 	// init state for notificationbox
@@ -215,6 +235,9 @@ function ChatApp() {
 					})
 			});
 			dispathNotificationContext({ type: NotificationActions.clearAllNewNotification })
+		},
+		clear: () => {
+			dispathNotificationContext({type: NotificationActions.clear})
 		}
 	}
 	const [ChatContextState, dispathChatContext] = useReducer(reducerContext, initChatContext)
@@ -311,6 +334,9 @@ function ChatApp() {
 			}
 			dispathChatContext({ type: chatContextActions.UpdateMessage, room: roomsInfo })
 			return
+		},
+		clear: () => {
+			dispathChatContext({ type: chatContextActions.clear})
 		}
 	}
 	// dialog

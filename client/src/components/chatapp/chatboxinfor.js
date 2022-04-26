@@ -14,6 +14,7 @@ function ChatboxInfor(props) {
     const chatContext = useContext(ChatContext)
     const currentContext = useContext(ControleCurrenRoomContext)
     const [currenRoomID, setCurrentRoomID] =  useState()
+    const [avatarURL, setAvatarURL] = useState()
     useEffect(() => {
         const callAPI = async () => {
             const user = await fetch(domain + "/info/profi",
@@ -27,6 +28,7 @@ function ChatboxInfor(props) {
                 })
             if(!user) return
             setUserID(user.id)
+            setAvatarURL(user.url)
         }
         callAPI()
     }, [])
@@ -57,6 +59,8 @@ function ChatboxInfor(props) {
                             console.log(err)
                         })
                     setRoomName(user.userName)
+                    console.log(user)
+                    setAvatarURL(user.avatar)
                     return
                 }
             }
@@ -71,7 +75,7 @@ function ChatboxInfor(props) {
     return (
         <div className={"chat-box-infor"}>
             {props.children}
-            <Avartar url={data.url} />
+            <Avartar url={avatarURL} />
             <h3 className={"tittle"}>{roomName}</h3>
         </div>
     )

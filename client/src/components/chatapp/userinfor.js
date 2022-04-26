@@ -6,7 +6,7 @@ import { Avartar } from "./avartar"
 // css
 import "./css/userinfor.css"
 // context
-import { DialogContext, NotificationContext } from './context'
+import { ChatContext, DialogContext, NotificationContext, ResponsesiveContext } from './context'
 import { useHistory } from 'react-router-dom'
 import domain from '../../config/domain'
 import UserController from '../../controller/userController'
@@ -58,14 +58,17 @@ function UserInfor(props) {
     const userinfoelement = useRef()
     const dialogContext = useContext(DialogContext)
     const history = useHistory()
+    const [avatar, setAvatar] = useState("")
     useEffect(() => {
         const callAPI = async () => {
-            let username = await UserController.getLoginUser()
+            let user = await UserController.getLoginUser()
                             .catch(err=> {
                                 console.log(err)
                             })
-            if(!username) return
-            username = username.userName
+            console.log(user)
+            if(!user) return
+            let username = user.userName
+            setAvatar(user.avatar)
             setUserName(username)
         }
         callAPI()
@@ -81,6 +84,7 @@ function UserInfor(props) {
             return
         userinfoelement.current.className = 'user-menu'
     }
+    console.log(avatar)
     return (
         <div id='user-info'>
             <div onFocus={() => {
@@ -99,6 +103,7 @@ function UserInfor(props) {
                                 credentials: 'same-origin',
                             })
                             .then(res => {
+                                window.location.reload()
                                 if (res.status === 200) history.push("/login")
                             })
                             .catch(err => {
@@ -107,7 +112,7 @@ function UserInfor(props) {
                     }} > Log out</li>
                 </ul>
             </div>
-            <Avartar url={"/avartardefault.img"} onFocus={() => {
+            <Avartar url = {avatar} onFocus={() => {
                 userinfoelement.current.className = 'user-menu user-menu-active'
             }} onBlur={(e) => {
                 onBlur(e)

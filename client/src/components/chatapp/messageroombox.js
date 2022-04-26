@@ -10,6 +10,15 @@ import socketIO from "../../controller/socketIO"
 
 function TextMessage(props) {
     let _class_private = "";
+    const [url, setURL] = useState()
+    useEffect(() => {
+        const callAPI = async () => {
+        if(!props.userID) setURL(null)
+        const user = await UserController.getUserByID(props.userID)
+        const userURl = await user.getAvatar()
+        setURL(userURl)}
+        callAPI()
+    },[])
     if (props.isYou) {
         _class_private = `message-chat message-right ${props.isYou}`
         return (
@@ -24,7 +33,7 @@ function TextMessage(props) {
         _class_private = `message-chat message-left ${props.isYou}`
         return (
             <div className={_class_private}>
-                <Avartar small {...props} />
+                <Avartar url = {url} small {...props} />
                 <p>
                     {props.message}
                 </p>
@@ -45,12 +54,13 @@ function MessageRoomBox(props) {
                                          .catch(err =>  null)
         if (!room) return
         const message = await room.getMessage(undefined, 100)
-        message.forEach((element, i) => {
+        message.forEach(async (element, i) => {
+            
             if (message[i].isYou === undefined) {
                 const isYou = (element.userID === loginUser.id ? true : false)
                 message[i] = {
                     ...element,
-                    isYou: isYou
+                    isYou: isYou,
                 }
             }
         });
@@ -70,7 +80,6 @@ function MessageRoomBox(props) {
             const room = await RoomController.getRoomByID(message.cbID)
             const user = await UserController.getUserByID(message.userSend)
             message.userID = message.userId
-            console.log(message)
             await room.addMessage(message, true)
             
             props.setMessageData([...props.data_in, message])
