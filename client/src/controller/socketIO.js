@@ -1,15 +1,16 @@
 /**
  * module dependencies
  */
-import socketio from "socket.io-client"
+import io from "socket.io-client"
 import domain from "../config/domain"
 class socketIO {
-    static socket = socketio(domain)
+    static socket = io()
     /**
      * Connect socketio to server
      * If a connection exist it will disconnect that coonection and reconnect new connection
      */
     static connect() {
+        this.socket = io()
         // this.socket.disconnect()
         this.socket.connect(domain)
         this.socket.on("connect", () => {
