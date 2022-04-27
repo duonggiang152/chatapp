@@ -77,8 +77,11 @@ function MessageRoomBox(props) {
                 newMessageContext.setNewMessage(newMessageContext.state + 1)
                 const room = await RoomController.getRoomByID(message.cbID)
                 message.userID = message.userId
+                if(message.cbID === curretRoomContext.currenOpenRoomID) {
+                    props.setMessageData([...props.data_in, message])
+                }
                 await room.addMessage(message, true)
-                props.setMessageData([...props.data_in, message])
+                
                 texmessagebox.current.scrollTop = texmessagebox.current.scrollHeight;
             })
         }
