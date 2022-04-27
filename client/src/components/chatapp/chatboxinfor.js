@@ -1,17 +1,11 @@
 import { useContext, useEffect, useState } from "react"
 import { Avartar } from "./avartar"
-import { ChatContext, ControleCurrenRoomContext } from "./context"
+import { ControleCurrenRoomContext } from "./context"
 import domain from "../../config/domain"
 import "./css/chatboxinfor.css"
-const testdata = {
-    url: "",
-    tittle: "Test   tittle",
-    online: false,
-}
 function ChatboxInfor(props) {
     const [userID, setUserID] = useState()
     const [roomName, setRoomName] = useState()
-    const chatContext = useContext(ChatContext)
     const currentContext = useContext(ControleCurrenRoomContext)
     const [currenRoomID, setCurrentRoomID] =  useState()
     const [avatarURL, setAvatarURL] = useState()
@@ -71,7 +65,6 @@ function ChatboxInfor(props) {
         }
         
     }, [props])
-    let data = testdata
     return (
         <div className={"chat-box-infor"}>
             {props.children}

@@ -5,7 +5,7 @@ import "./css/avatareditor.css"
 function AvatarEditor() {
   const [scale, setScale] = useState(1)
   const [urlDefault, setURLDefault] = useState()
-  const [editor, setEditor] = useState()
+  // const [editor, setEditor] = useState()
   const [urlCrop, setURLCrop] = useState()
   const [status, setStatus] = useState("Change Avatar")
   const [preventAction, setPreventAction] = useState(false)
@@ -25,7 +25,7 @@ function AvatarEditor() {
     console.log(url);
   };
   const setEditorRef = async (ed) => {
-    setEditor(ed)
+    // setEditor(ed)
     if(!ed || !ed.getImageScaledToCanvas) return
     const blob = await new Promise(resolve => ed.getImageScaledToCanvas().toBlob(resolve));
     setURLCrop(blob)
@@ -82,7 +82,7 @@ function AvatarEditor() {
             <div>Zoom: </div>
             <input onChange={scaleChange} type="range" id="volume" name="volume" min="0" max="100"></input>
           </div>
-          <div onClick={changeAvatar} className="Change-Avatar-Btn">{status}</div>
+          <div onClick={changeAvatar} className={classBTN}>{status}</div>
       </div>
     </>
   )

@@ -1,8 +1,7 @@
-'use strict'
 /**
  * module dependecies
  */
-import { useContext, useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { useHistory } from 'react-router-dom'
 import { SlideBar } from "./slidebar";
 import { ChatContent } from "./chatcontent"
@@ -11,7 +10,6 @@ import { ResponsesiveContext, NotificationContext, ChatContext, DialogContext, C
 import socketIO from "../../controller/socketIO";
 import Dialog from "./dialog"
 import "./css/chatbox.css"
-import RoomController from "../../controller/roomController";
 import { User } from "../../controller/userController";
 import AvatarEditor from "./AvatarEditor"
 /**
@@ -312,8 +310,8 @@ function ChatApp() {
 					}
 					if (roomsInfo.length >= 2) {
 						roomsInfo.sort((a, b) => {
-							const d1 = makeDate(a.datemodifi)
-							const d2 = makeDate(b.datemodifi)
+							// const d1 = makeDate(a.datemodifi)
+							// const d2 = makeDate(b.datemodifi)
 							return makeDate(b.datemodifi) - makeDate(a.datemodifi)
 						})
 					}
@@ -327,8 +325,8 @@ function ChatApp() {
 			})
 			if (roomsInfo.length >= 2) {
 				roomsInfo.sort((a, b) => {
-					const d1 = makeDate(a.datemodifi)
-					const d2 = makeDate(b.datemodifi)
+					// const d1 = makeDate(a.datemodifi)
+					// const d2 = makeDate(b.datemodifi)
 					return makeDate(b.datemodifi) - makeDate(a.datemodifi)
 				})
 			}
@@ -389,8 +387,9 @@ function ChatApp() {
 		.catch(err => {
 			history.push("/login")
 		})
-	useEffect(async () => {
-		checkType();
+	useEffect(() => {
+		const callAPI = async () => {
+			checkType();
 		window.addEventListener('resize', checkType)
 		socketIO.connect()
 		socketIO.listen('new-notification', async notification => {
@@ -500,6 +499,8 @@ function ChatApp() {
 			.catch(err => {
 				console.log(err)
 			})
+		}
+		callAPI()
 	}, [])
 	const [newMessage, setNewMessage] = useState(1)
 	const valueContextNewMessage = { state: newMessage, setNewMessage: setNewMessage }

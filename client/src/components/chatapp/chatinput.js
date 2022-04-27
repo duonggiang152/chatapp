@@ -14,7 +14,7 @@ function ChatInput(props) {
         props.submitbtnfuc(chatcontent);
     }
     function press(e) {
-        if(e.charCode == 13 && !e.shiftKey) {
+        if(e.charCode === 13 && !e.shiftKey) {
             e.preventDefault();
             if(e.target.value !== "")
             props.submitbtnfuc(e.target.value);

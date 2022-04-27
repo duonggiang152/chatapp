@@ -2,10 +2,8 @@ import { ChatApp } from './components/chatapp/chatbox'
 import { Login } from './components/Login/login'
 import {
     BrowserRouter,
-    Router,
     Switch,
     Route,
-    Link,
   } from "react-router-dom";
 import './app.css'
 function App() {

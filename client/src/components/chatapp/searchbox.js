@@ -1,4 +1,4 @@
-import {useState, useRef} from 'react'
+import {useState} from 'react'
 import "./css/searchbox.css"
 function SearchBox(props) {
     const [searchValue, setSearchValue] = useState("");

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useContext } from "react"
-import { ControleCurrenRoomContext, ChatContext, NewMessageContext } from "./context"
+import { ControleCurrenRoomContext, NewMessageContext } from "./context"
 import "./css/messageroombox.css"
 import "./css/textmessage.css"
 
@@ -17,8 +17,8 @@ function TextMessage(props) {
         const user = await UserController.getUserByID(props.userID)
         const userURl = await user.getAvatar()
         setURL(userURl)}
-        callAPI()
-    },[])
+        callAPI(props.userID)
+    },[props.userID])
     if (props.isYou) {
         _class_private = `message-chat message-right ${props.isYou}`
         return (
@@ -44,10 +44,8 @@ function TextMessage(props) {
 function MessageRoomBox(props) {
     const [currentRoom, setCurrentRoom] = useState()
     const curretRoomContext = useContext(ControleCurrenRoomContext)
-    const chatContext = useContext(ChatContext)
     const texmessagebox = useRef(null);
     const [loginUser, setLoginUser] = useState()
-    const [message, setMesssage] = useState([])
     const [offSetID, setOffSetID] = useState()
     const initMessage = async () => {
         const room = await RoomController.getRoomByID(curretRoomContext.currenOpenRoomID)
@@ -74,22 +72,22 @@ function MessageRoomBox(props) {
     
 
     useEffect(() => {
-        
-        socketIO.listen('new-message', async message => {
-            newMessageContext.setNewMessage(newMessageContext.state + 1)
-            const room = await RoomController.getRoomByID(message.cbID)
-            const user = await UserController.getUserByID(message.userSend)
-            message.userID = message.userId
-            await room.addMessage(message, true)
-            
-            props.setMessageData([...props.data_in, message])
-            texmessagebox.current.scrollTop = texmessagebox.current.scrollHeight;
-        })
-    }, [props])
+        const calllAPI = async () => {
+            socketIO.listen('new-message', async message => {
+                newMessageContext.setNewMessage(newMessageContext.state + 1)
+                const room = await RoomController.getRoomByID(message.cbID)
+                message.userID = message.userId
+                await room.addMessage(message, true)
+                
+                props.setMessageData([...props.data_in, message])
+                texmessagebox.current.scrollTop = texmessagebox.current.scrollHeight;
+            })
+        }
+       calllAPI()
+    }, [props.data_in])
    
     const newMessageContext = useContext(NewMessageContext)
     useEffect(() => {
-        
         const callAPI = async () => {
             const loginuser = await UserController.getLoginUser()
             setLoginUser(loginuser)
@@ -116,8 +114,6 @@ function MessageRoomBox(props) {
         <div onScroll={ async (e) => {
             setTimeout(async () => {
                 if(texmessagebox.current.scrollTop < 500) {
-                    
-                        const lastMessage = data[data.length - 1]
                     const room = await RoomController.getRoomByID(currentRoom)
                     const message = await room.getMessage(offSetID, 100)
                                             .catch(err => {

@@ -2,9 +2,6 @@ import React, { useState, useContext, useEffect } from 'react'
 import "./css/friendchatlist.css"
 import { Avartar } from './avartar'
 import { ResponsesiveContext, ChatContext, ControleCurrenRoomContext, NewMessageContext } from './context'
-import { SearchBox } from './searchbox'
-import domain from '../../config/domain'
-import socketIO from '../../controller/socketIO'
 import UserController from '../../controller/userController'
 import RoomController from '../../controller/roomController'
 const Content_Style = {
@@ -75,12 +72,12 @@ function FriendChat(props) {
     let profiID = props.profi.id
     try {
         user = data[0].userID === profiID ? data[1] : data[0]
-        
+
     }
     catch (err) {
 
     }
-    
+
     if (data.length === 0) return null
     if (profiID)
         return (
@@ -137,29 +134,15 @@ function FriendChatList(props) {
                 setStyleComponentInline(ownStyle_friendchatlist);
             }, 150)
     }
-    useEffect(async () => {
-        // update userID
-        let user = await UserController.getLoginUser()
-        if (!user) user = {}
-        setProfi(user)
-        // await fetch(domain + "/info/profi",
-        //     {
-        //         method: 'GET',
-        //         credentials: 'same-origin',
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         }
-        //     })
-        //     .then(async res => {
-        //         if (res.status !== 200) {
-        //             setProfi({})
-        //         }
-        //         res = await res.json()
-        //         setProfi(res)
-        //     })
-        //     .catch(err => {
-        //         console.log(err)
-        //     })
+    useEffect( () => {
+        const callAPI = async () => {
+            // update userID
+            let user = await UserController.getLoginUser()
+            if (!user) user = {}
+            setProfi(user)
+        }
+        callAPI()
+
     }, [])
     return (
         <div style={styleComponentInline} className={animationactive}>

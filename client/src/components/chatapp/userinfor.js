@@ -6,7 +6,7 @@ import { Avartar } from "./avartar"
 // css
 import "./css/userinfor.css"
 // context
-import { ChatContext, DialogContext, NotificationContext, ResponsesiveContext } from './context'
+import { DialogContext, NotificationContext } from './context'
 import { useHistory } from 'react-router-dom'
 import domain from '../../config/domain'
 import UserController from '../../controller/userController'

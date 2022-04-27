@@ -2,31 +2,15 @@
  * module dependencies
  */
 import { useContext, useEffect, useState } from "react"
-import { ResponsesiveContext, ControleCurrenRoomContext, ChatContext, NewMessageContext } from "./context"
+import { ResponsesiveContext, ControleCurrenRoomContext, NewMessageContext } from "./context"
 import { ChatboxInfor } from "./chatboxinfor"
 import { ChatInput } from "./chatinput"
 import { MessageRoomBox } from "./messageroombox"
 import domain from "../../config/domain"
 // css
 import "./css/chatcontent.css"
-import  Room  from "../../controller/roomController"
 import RoomController from "../../controller/roomController"
 import UserController from "../../controller/userController"
-// data for test
-let data = [
-    {
-        url: "",
-        id: 123,
-        message: "hello, my name is giang hello, my name is giang hello, my name is giang hello, my name is giang hello, my name is giang hello, my name is giang",
-        isYou: true
-    },
-    {
-        url: "",
-        id: 123,
-        message: "hello, my name is giang",
-        isYou: false
-    }
-]
 
 /**
  * generate a CHATBOX
@@ -54,7 +38,6 @@ function ChatContent(props) {
     const [classComponent, setClassComponent] = useState("chat-content")
     const responsiveContext = useContext(ResponsesiveContext)
     const currentRoom = useContext(ControleCurrenRoomContext)
-    const chatContext = useContext(ChatContext)
     const [messageRoomBoxHeight, setMessageRoomBoxHeight] = useState("100% - 70px - 10px - 5px - 41px")
     const [userID, setUserID] = useState();
     // update display type by changing classComponent state when screen type change

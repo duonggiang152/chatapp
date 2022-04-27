@@ -1,1 +1,2 @@
-export default "http://localhost:80"
+const domain = "http://localhost:80"
+export default domain

@@ -59,7 +59,7 @@ function Particle (x, y, radius, color, context, type, numberMobileCircle = 0){
     }
     this.draw = () => {
         this.context.beginPath();
-        if(this.type == "pc"){
+        if(this.type === "pc"){
         this.context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
         }
         else 
@@ -89,7 +89,7 @@ const Banner_Circle_Animation = (props) => {
             }
         }
         setReRender(previ => previ++)
-    }, [props.ScreenType])
+    }, [props])
   
     const canvasRef = useRef(null)
     // color

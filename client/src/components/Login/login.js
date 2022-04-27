@@ -3,7 +3,6 @@ import LoginForm from "./loginform"
 import Banner from "./banner"
 import "./css/login.css"
 let windowSize = {width : undefined,height: undefined}
-let Type = "pc"
 function Login() {
     // state for store type of screen
     const [type, setType] = useState()

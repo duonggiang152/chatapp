@@ -1,8 +1,7 @@
-'use strict'
 /**
  * module dependencies
  */
-import {useRef, useState, useContext, createContext, useReducer} from 'react'
+import {useRef, useContext, createContext, useReducer} from 'react'
 import "./css/loginform.css"
 import domain from "../../config/domain"
 import { useHistory } from 'react-router-dom'

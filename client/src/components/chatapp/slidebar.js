@@ -38,20 +38,20 @@ const mobileStyle = {
 // and method to controle which type of content the slide bar dispaly
 // use useContext and useReducer 
 // initial state
-const initialState = {
-    displayType: "relativechatbox",
-    positionComponent: {
-        relativechatbox: 2,
-        notification   : 1,
-        onlineFriend   : 1
-    }
-}
-// action
-const actions = {
-    show_relative_chatbox: "SHOW_RELATIVE_CHAT_BOX",
-    show_notification_box: "SHOW_NOTIFICATION_BOX",
-    show_onlineFriend    : "SHOW_ONLINE_FRIEND"
-}
+// const initialState = {
+//     displayType: "relativechatbox",
+//     positionComponent: {
+//         relativechatbox: 2,
+//         notification   : 1,
+//         onlineFriend   : 1
+//     }
+// }
+// // action
+// const actions = {
+//     show_relative_chatbox: "SHOW_RELATIVE_CHAT_BOX",
+//     show_notification_box: "SHOW_NOTIFICATION_BOX",
+//     show_onlineFriend    : "SHOW_ONLINE_FRIEND"
+// }
 
 //------------------------------------------------------------
 //  ------------------COMPONENT --------------------------------------------

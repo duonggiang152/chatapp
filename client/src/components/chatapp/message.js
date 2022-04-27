@@ -2,7 +2,6 @@ import { useState, useEffect, useContext } from "react";
 import "./css/message.css"
 import "./css/friendinvite.css"
 
-import { SearchBox } from "./searchbox"
 import { NotificationContext } from "./context"
 import domain from "../../config/domain";
 import UserController from "../../controller/userController";
@@ -12,7 +11,8 @@ let ownStyle_message = {
 function FriendInvite(props) {
     const [data, setData] = useState();
     const [style, setStyle] = useState("fas fa-check notsend")
-    useEffect(async () => {
+    useEffect( () => {
+       const callAPI = async () => {
         let id = props.userIDSend
         if (!id) {
             id = props.userIDSend
@@ -45,9 +45,9 @@ function FriendInvite(props) {
             .catch(err => {
                 setData(null)
             })
-
-    }
-        , [props.ntfID])
+       }
+       callAPI()
+    }, [props.ntfID])
     const acceptFriendRequest = async () => {
         if (style === "fas fa-check notsent") return
         const body = {
@@ -88,11 +88,13 @@ function FriendInvite(props) {
 }
 function AcceptFriendRequest(props) {
     const [data, setData] = useState();
-    useEffect(async () => {
-        const data = await UserController.getUserByID(props.userIDSend)
-        setData(data)
-    }
-        , [props])
+    useEffect(() => {
+        const callAPI = async () => {
+            const data = await UserController.getUserByID(props.userIDSend)
+            setData(data)
+        }
+        callAPI()
+    }, [props])
     if (!data) {
         return (null)
     }
