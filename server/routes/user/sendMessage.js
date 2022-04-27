@@ -34,6 +34,7 @@ route.post("/", async (req, res) => {
                             return res.send();
                         }
                         else if(err instanceof QueryFailed) {
+                            console.log(err)
                             switch(err.errno) {
                                 case 109:
                                     return res.send(  

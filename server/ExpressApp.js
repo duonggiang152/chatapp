@@ -1,6 +1,7 @@
 /**
 * Module dependencies
 */
+const path = require('path')
 const cors                  = require("cors")
 const express               = require("express")
 const LoginRoute            = require("./routes/authentication/login.js")
@@ -33,28 +34,32 @@ app.use(cors())
 /**
  * Middleware
  */
+app.use(express.static(path.join(__dirname, 'build')))
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'))
+})
 app.use(Middleware)
 /**
  * Route
  */
-app.use("/login", LoginRoute)
-app.use("/logout",LogoutRoute)
-app.use("/routetest", test)
-app.use("/register", RegisterRoute)
-app.use("/friendrequest", FriendRequest)
-app.use("/acceptfriendrequest",AcceptFriendRequest)
-app.use("/sendmessage", SendMessage)
-app.use("/isauth", isauth)
-app.use("/findsimilarname", GetUserBySimilarName)
-app.use("/isfriend", isFriend)
-app.use("/issendedfriendrequest", isSendedFriendRequest)
-app.use("/isonline", isOnline)
-app.use("/notification", notification)
-app.use("/info", userInfo)
-app.use("/isacceptfriendrequest", isFriendRequestAccepted)
-app.use("/message/get-message",message)
-app.use("/room", room)
-app.use("/upload", uploaddata)
+app.use("/api/login", LoginRoute)
+app.use("/api/logout",LogoutRoute)
+app.use("/api/routetest", test)
+app.use("/api/register", RegisterRoute)
+app.use("/api/friendrequest", FriendRequest)
+app.use("/api/acceptfriendrequest",AcceptFriendRequest)
+app.use("/api/sendmessage", SendMessage)
+app.use("/api/isauth", isauth)
+app.use("/api/findsimilarname", GetUserBySimilarName)
+app.use("/api/isfriend", isFriend)
+app.use("/api/issendedfriendrequest", isSendedFriendRequest)
+app.use("/api/isonline", isOnline)
+app.use("/api/notification", notification)
+app.use("/api/info", userInfo)
+app.use("/api/isacceptfriendrequest", isFriendRequestAccepted)
+app.use("/api/message/get-message",message)
+app.use("/api/room", room)
+app.use("/api/upload", uploaddata)
 /**
  * Export module
  */

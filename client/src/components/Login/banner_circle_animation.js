@@ -203,7 +203,6 @@ const Banner_Circle_Animation = (props) => {
         
         return () =>  {
             ctx.fillRect(0, 0, canvasSize.width, canvasSize.height);
-            console.log("print-out the screen");
             cancelAnimationFrame(handlerAniamtionFrame)
         }
     },[props.screenType])

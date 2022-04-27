@@ -14,19 +14,19 @@
 //     dateStrings: 'date'
 // }
 const configSigleConnection = {
-    host     : 'sql11.freesqldatabase.com',
-    user     : 'sql11488519',
-    password : 'DLQZAuStC4',
-    database : 'sql11488519',
-    dateStrings: 'date',
-    port: 3306
+    host     : 'brdg3aktlk1hcbnxce1r-mysql.services.clever-cloud.com',
+    user     : 'ucbqdfyfmbnt2hfk',
+    password : 'ypLyolhXPkR5eNyAVhLG',
+    database : 'brdg3aktlk1hcbnxce1r',
+    port: 3306,
+    dateStrings: 'date'
 }
 const configPoolConnection = {
-    connectionLimit : 10,
-    host     : 'sql11.freesqldatabase.com',
-    user     : 'sql11488519',
-    password : 'DLQZAuStC4',
-    database : 'sql11488519',
+    connectionLimit : 5,
+    host     : 'brdg3aktlk1hcbnxce1r-mysql.services.clever-cloud.com',
+    user     : 'ucbqdfyfmbnt2hfk',
+    password : 'ypLyolhXPkR5eNyAVhLG',
+    database : 'brdg3aktlk1hcbnxce1r',
     port: 3306,
     dateStrings: 'date'
 }

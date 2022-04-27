@@ -13,12 +13,12 @@ function FriendInvite(props) {
     const [style, setStyle] = useState("fas fa-check notsend")
     useEffect( () => {
        const callAPI = async () => {
-        let id = props.userIDSend
-        if (!id) {
-            id = props.userIDSend
-        }
-        if (data) return
-        await fetch(domain + "/info/" + `${props.userIDSend}`,
+        let id = props.userIDSend || props.userSend
+        // if (!id) {
+        //     id = props.userIDSend
+        // }
+        // if (data) return
+        await fetch(domain + "/info/" + `${id}`,
             {
                 method: 'GET',
                 credentials: 'same-origin',
@@ -88,9 +88,10 @@ function FriendInvite(props) {
 }
 function AcceptFriendRequest(props) {
     const [data, setData] = useState();
+    const ID = props.userIDSend || props.userSend
     useEffect(() => {
         const callAPI = async () => {
-            const data = await UserController.getUserByID(props.userIDSend)
+            const data = await UserController.getUserByID(ID)
             setData(data)
         }
         callAPI()
@@ -102,7 +103,7 @@ function AcceptFriendRequest(props) {
         <p>{data.userName} đã chấp nhận lời mời kết bạn của bạn</p>
     </div>
 }
-function Message() {
+function Message(props) {
     const notificationContext = useContext(NotificationContext)
     const data = notificationContext.state.Notifications
     return (
@@ -149,7 +150,7 @@ function MessageBox(props) {
     // setup socketIO listener to get new message
     return (
         <div style={styleComponentInline} className={animationactive}>
-            <Message />
+            <Message {...props} />
         </div>
     )
 }

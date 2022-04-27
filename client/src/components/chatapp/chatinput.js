@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useContext } from "react";
+import { ControleCurrenRoomContext } from "./context";
 import "./css/chatinput.css"
 // default properties of chatboxinput
 const m_style = {
@@ -7,6 +8,8 @@ const m_style = {
 function ChatInput(props) {
     const boxChat = useRef(null)
     const [chatcontent, setChatcontent] = useState("");
+    const [roomID, setRoomID] = useState()
+    const currentRoom = useContext(ControleCurrenRoomContext)
     function processSubmit() {
         boxChat.current.value = ""
         setChatcontent("")
@@ -23,10 +26,15 @@ function ChatInput(props) {
         }
     }
     useEffect(() => {
-        if(props.messageData.length === 0) {
+        if(currentRoom.currenOpenRoomID !== roomID) {
+            setRoomID(currentRoom.currenOpenRoomID)
+             if(props.messageData.length === 0) {
             boxChat.current.focus()
+            }
+            
         }
-    })
+       
+    }, [currentRoom])
     
     return (
         <div   className = {"chat-input"} id = "chat-content-input">
@@ -47,7 +55,6 @@ function ChatInput(props) {
                         e.target.style.height = `${temp}px`
                         props.on_Resize(`100% - 70px - 10px - 5px - ${temp}px`)
                     }
-                    console.log(e.target.style.height)
                 }} style = {m_style} ></textarea>
                 <button onClick = {processSubmit}>
                     <i className="fas fa-share"></i>

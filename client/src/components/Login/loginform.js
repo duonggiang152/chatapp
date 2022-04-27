@@ -49,6 +49,7 @@ function Login() {
     const Login = async () => {
         const username = usernameInputElement.current.value
         const password = passwordInputElement.current.value
+        passwordInputElement.current.value = ""
         if(!username) {
             Message.updateLoginMessage("Username must be fill")
             return
@@ -94,12 +95,12 @@ function Login() {
     return (
         <>
         <form className = "form" id = "login-form" method="POST">
-            <h3>Đăng Nhập</h3>
+            <h3>Login</h3>
             <div className='message'>{Message.MessageState.type === actions.update_login_message ? Message.MessageState.message : ""}</div>
             <div>
-                <input ref={usernameInputElement} name = "username" placeholder = "Tài khoản" type = "text"></input>
-                <input ref={passwordInputElement} autocomplete="off" name = "password" placeholder = "Mật khẩu" type = "password"></input>
-                <input onClick={Login} value = "Đăng Nhập" type = "button"></input>
+                <input ref={usernameInputElement} name = "username" placeholder = "username" type = "text"></input>
+                <input ref={passwordInputElement} autocomplete="off" name = "password" placeholder = "password" type = "password"></input>
+                <input onClick={Login} value = "Login" type = "button"></input>
             </div>
         </form>
         </>
@@ -114,7 +115,7 @@ function Register() {
     const registerOnClick = (e) => {
         registerForm.current.classList.add("active_aniamtion");
         registerForm.current.classList.remove("active_aniamtion_btn_login");
-        console.log(registerForm.current.childNodes[0].classList.remove("select_btn"))
+        registerForm.current.childNodes[0].classList.remove("select_btn")
     }
     const loginBtnOnClick = (e) => {
         registerForm.current.classList.add("active_aniamtion_btn_login");
@@ -125,6 +126,8 @@ function Register() {
         const userName = usernameInputElement.current.value
         const password = passwordInputElement.current.value
         const verifiPassword = verifyInputElement.current.value
+        passwordInputElement.current.value = ""
+        verifyInputElement.current.value = ""
         if(password !== verifiPassword) {
             Message.updateRegisterMessage("Confirm password must match")
             return
@@ -155,15 +158,15 @@ function Register() {
     }
     return (
         <form ref = {registerForm} className = "form active_aniamtion_btn_login" id = "register-form">
-            <h3 className = "select_btn" onClick = {registerOnClick}>Đăng Kí</h3>
+            <h3 className = "select_btn" onClick = {registerOnClick}>Register</h3>
             <div className='message'>{Message.MessageState.type === actions.update_register_message ? Message.MessageState.message : ""}</div>
             <div>
-                <input ref={usernameInputElement} name = "username" placeholder = "Tài khoản" type = "text"></input>
-                <input ref={passwordInputElement} name = "password" placeholder = "Mật khẩu" type = "password"></input>
-                <input ref={verifyInputElement} name = "verifypassword" placeholder = "Nhập lại mật khẩu" type = "password"></input>
-                <input value = "Đăng kí" type = "button" onClick={postRegister}></input>
+                <input ref={usernameInputElement} name = "username" placeholder = "username" type = "text"></input>
+                <input ref={passwordInputElement} name = "password" placeholder = "password" type = "password"></input>
+                <input ref={verifyInputElement} name = "verifypassword" placeholder = "verifi password" type = "password"></input>
+                <input value = "Register" type = "button" onClick={postRegister}></input>
                 <div onClick = {loginBtnOnClick} id = "btn-login">
-                    Đăng Nhập tại đây  
+                    Login i here  
                 </div>
             </div>
         </form>

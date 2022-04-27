@@ -23,7 +23,7 @@ function FriendChat(props) {
      * }]
      * }
      */
-    const [roomdetail, setRoomdetail] = useState([])
+    const [roomdetail, setRoomdetail] = useState({})
     // for access responsiveContext
     const responsesiveContext = useContext(ResponsesiveContext)
     const controleCurrenRoom = useContext(ControleCurrenRoomContext)
@@ -34,15 +34,19 @@ function FriendChat(props) {
             RoomController.getRoomByID(props.cbID)
                 .then(async room => {
                     const members = await room.getMembers()
+                    
                     const data = await Promise.all(members.map((async member => {
                         return await UserController.getUserByID(member.userID)
                     })))
+                    // console.log(data)
                     setData(data)
                     let lastMessage = await room.getMessage(undefined, 1)
-                    lastMessage = lastMessage[0]
-                    const user = await UserController.getUserByID(lastMessage.userID)
-                    const userName = await user.getUserName()
-                    lastMessage.userName = userName
+                    if(lastMessage && lastMessage.length !== 0) {
+                        lastMessage = lastMessage[0]
+                        const user = await UserController.getUserByID(lastMessage.userID)
+                        const userName = await user.getUserName()
+                        lastMessage.userName = userName
+                    }
                     // console.log(lastMessage[0])
                     // if(res.message){
                     //     const [_, yyyy, mm, dd, hh, min, ss] = res.message[0].datetime.match(/(\d{4})-(\d{2})\-(\d{2}) (\d{2}):(\d{2}):(\d{2})/);
@@ -77,7 +81,7 @@ function FriendChat(props) {
     catch (err) {
 
     }
-
+    // console.log(profiID)
     if (data.length === 0) return null
     if (profiID)
         return (
@@ -89,7 +93,7 @@ function FriendChat(props) {
 
                     }
                 }
-            }>
+            } tabIndex>
                 <Avartar small url={user.avatar} />
                 <div className={"tittle-contentchat"}>
                     {roomdetail && roomdetail.members && roomdetail.members.length >= 2 && profiID ?

@@ -116,7 +116,7 @@ class ChatBox {
             // check roomID exist
             const query = `
                 SELECT *
-                FROM chatbox
+                FROM ChatBox
                 WHERE cbID = ${offsetID}
             `
             const data = await DataBase.query(query)
@@ -129,9 +129,9 @@ class ChatBox {
             if(!data) return []
         }
         const query =`
-            SELECT chatbox.cbID, datemodifi, chatbox.type
-            FROM chatbox, chatboxmember
-            WHERE userID = ${userID} AND chatbox.cbID = chatboxmember.cbID ${optionparam}
+            SELECT ChatBox.cbID, datemodifi, ChatBox.type
+            FROM ChatBox, ChatBoxMember
+            WHERE userID = ${userID} AND ChatBox.cbID = ChatBoxMember.cbID ${optionparam}
             ORDER BY datemodifi DESC
             LIMIT ${limit};
         `

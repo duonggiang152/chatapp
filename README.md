@@ -1,7 +1,9 @@
 # chatapp
 using reactjs, mysql, nodejs, expressjs, socketIO
-Host: sql11.freesqldatabase.com
-Database name: sql11488519
-Database user: sql11488519
-Database password: DLQZAuStC4
-Port number: 3306
+connectionLimit : 5,
+host     : 'brdg3aktlk1hcbnxce1r-mysql.services.clever-cloud.com',
+user     : 'ucbqdfyfmbnt2hfk',
+password : 'ypLyolhXPkR5eNyAVhLG',
+database : 'brdg3aktlk1hcbnxce1r',
+port: 3306,
+dateStrings: 'date'

@@ -72,23 +72,7 @@ function ChatContent(props) {
     }, [responsiveContext, showChatContent])
     useEffect(() => {
         const callAPI = async () => {
-            const userID = await fetch(domain + "/info/profi",
-                {
-                    method: 'GET',
-                    credentials: 'same-origin',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .then(async res => {
-                    if (res.status !== 200) return
-                    res = await res.json()
-                    return res.id
-                })
-                .catch(err => {
-                    console.log(err)
-                    return null
-                })
+            const userID = await UserController.getLoginUser()
             setUserID(userID)
         }
         callAPI()
@@ -112,13 +96,12 @@ function ChatContent(props) {
     const [messageData, setMessageData] = useState([]);
     const newMessageContext = useContext(NewMessageContext)
     const testsubmitbtn = async (value) => {
-        console.log(value)
         let temps = {
             value: false
         }
-       
-        const user = await UserController.getUserByID(userID)
-        const userName = await user.getUserName()
+        // const user = await UserController.getUserByID(userID.id)
+        const user = await UserController.getLoginUser()
+        const userName = user.userName
         let d = new Date,
         dformat = [d.getMonth()+1,
                d.getDate(),
@@ -159,14 +142,16 @@ function ChatContent(props) {
         })
         const room = await RoomController.getRoomByID(cbID)
         if(!room || !room.addMessage) return
-        console.log("---------")
-        console.log(room)
-        console.log("---------")
-        room.addMessage(temp, true)
         newMessageContext.setNewMessage(newMessageContext.state + 1)
         setMessageData([...messageData, temp]);
     }
     const [inputFocus, setInputFocus] = useState(false) 
+    const [cbID, setcbID] = useState()
+    useEffect(() => {
+        if(currentRoom.currenOpenRoomID !== cbID) {
+            setInputFocus(true)
+        }
+    }, [currentRoom])
     return (
         <div style={{ overflow: "hidden" }} className={classComponent} id="chat-content">
             <ChatboxInfor userID = {userID} trgger = {currentRoom}>

@@ -3,6 +3,8 @@ import { Avartar } from "./avartar"
 import { ControleCurrenRoomContext } from "./context"
 import domain from "../../config/domain"
 import "./css/chatboxinfor.css"
+import UserController from "../../controller/userController"
+import RoomController from "../../controller/roomController"
 function ChatboxInfor(props) {
     const [userID, setUserID] = useState()
     const [roomName, setRoomName] = useState()
@@ -25,15 +27,20 @@ function ChatboxInfor(props) {
             setAvatarURL(user.url)
         }
         callAPI()
-    }, [])
+    }, [currentContext])
     useEffect(() => {
         const callAPI = async () => {
+            const room = await RoomController.getRoomByID(currentContext.currenOpenRoomID)
+            const user = await room.getMembers()
             const users = await fetch(domain + "/room/room-member/" + `${currentContext.currenOpenRoomID}`,
                 {
                     method: 'GET',
                     credentials: 'same-origin'
                 })
-                .then(res => res.json())
+                .then(async res => {
+                    res = await res.json()
+                    return res
+                })
                 .then(data => data.member)
                 .catch(err => {
                     console.log(err)
@@ -43,6 +50,7 @@ function ChatboxInfor(props) {
                 if (users[i].userID !== userID) {
                     setRoomName()
                     if(!users[i].userID) return
+                    // const user = await UserController.getUserByID(users[i].userID)
                     const user = await fetch(domain + "/info/" + `${users[i].userID}`,
                         {
                             method: 'GET',
@@ -53,7 +61,6 @@ function ChatboxInfor(props) {
                             console.log(err)
                         })
                     setRoomName(user.userName)
-                    console.log(user)
                     setAvatarURL(user.avatar)
                     return
                 }
@@ -62,9 +69,12 @@ function ChatboxInfor(props) {
         if(currenRoomID !== currentContext.currenOpenRoomID ) {
             setCurrentRoomID(currentContext.currenOpenRoomID)
             callAPI()
+            .catch(Err => {
+                console.log(Err)
+            })
         }
         
-    }, [props])
+    }, [currentContext])
     return (
         <div className={"chat-box-infor"}>
             {props.children}

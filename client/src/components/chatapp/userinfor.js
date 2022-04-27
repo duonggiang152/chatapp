@@ -65,7 +65,6 @@ function UserInfor(props) {
                             .catch(err=> {
                                 console.log(err)
                             })
-            console.log(user)
             if(!user) return
             let username = user.userName
             setAvatar(user.avatar)
@@ -75,7 +74,6 @@ function UserInfor(props) {
 
     }, [props])
     const onBlur = (e) => {
-        console.log("run")
         if (!e || !e.relatedTarget) {
             userinfoelement.current.className = 'user-menu'
             return
@@ -84,7 +82,6 @@ function UserInfor(props) {
             return
         userinfoelement.current.className = 'user-menu'
     }
-    console.log(avatar)
     return (
         <div id='user-info'>
             <div onFocus={() => {

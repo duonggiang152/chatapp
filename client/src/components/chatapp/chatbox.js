@@ -99,7 +99,7 @@ const reducerNotification = (state, actions) => {
 			return {
 				isOpenNotificationBox: state.isOpenNotificationBox,
 				unreadNotifications: [...state.unreadNotifications],
-				Notifications: [...state.Notifications, actions.noti]
+				Notifications: [actions.noti, ...state.Notifications]
 			}
 		}
 		case NotificationActions.initUnreadNotification: {
@@ -119,7 +119,7 @@ const reducerNotification = (state, actions) => {
 		case NotificationActions.addUnreadNotification: {
 			return {
 				isOpenNotificationBox: state.isOpenNotificationBox,
-				unreadNotifications: [...state.unreadNotifications, { id: actions.notificationID }],
+				unreadNotifications: [{ id: actions.notificationID }, ...state.unreadNotifications],
 				Notifications: [...state.Notifications]
 			}
 		}
@@ -393,8 +393,7 @@ function ChatApp() {
 		window.addEventListener('resize', checkType)
 		socketIO.connect()
 		socketIO.listen('new-notification', async notification => {
-			const userID = notification.userSend
-			console.log(notification)
+			const userID = notification.userSend || notification.userIDSend
 			const user = new User(userID)
 			const userName = await user.getUserName()
 			notification.userName = userName
