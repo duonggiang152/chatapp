@@ -23,15 +23,16 @@ function ChatboxInfor(props) {
                     console.log(err)
                 })
             if(!user) return
+            if(!currentContext.currenOpenRoomID) {
             setUserID(user.id)
             setAvatarURL(user.url)
+            }
         }
         callAPI()
     }, [currentContext])
     useEffect(() => {
         const callAPI = async () => {
-            const room = await RoomController.getRoomByID(currentContext.currenOpenRoomID)
-            const user = await room.getMembers()
+            // const user = await room.getMembers()
             const users = await fetch(domain + "/room/room-member/" + `${currentContext.currenOpenRoomID}`,
                 {
                     method: 'GET',
@@ -50,16 +51,7 @@ function ChatboxInfor(props) {
                 if (users[i].userID !== userID) {
                     setRoomName()
                     if(!users[i].userID) return
-                    // const user = await UserController.getUserByID(users[i].userID)
-                    const user = await fetch(domain + "/info/" + `${users[i].userID}`,
-                        {
-                            method: 'GET',
-                            credentials: 'same-origin'
-                        })
-                        .then(res => res.json())
-                        .catch(err => {
-                            console.log(err)
-                        })
+                    const user = await UserController.getUserByID(users[i].userID)
                     setRoomName(user.userName)
                     setAvatarURL(user.avatar)
                     return

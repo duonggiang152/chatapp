@@ -8,7 +8,7 @@ const SocketIOApp   = require("./SocketIOApp")
  * Local variable
  * @private
  */
-const PORT     = process.env.PORT || 80
+const PORT     = process.env.PORT || 3000;
 
 /**
  * set up apps

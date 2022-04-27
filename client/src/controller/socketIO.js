@@ -1,18 +1,19 @@
 /**
  * module dependencies
  */
-import io from "socket.io-client"
-import domain from "../config/domain"
+import socketio from "socket.io-client"
+// import domain from "../config/domain"
+// const domain = "http://localhost:80"
 class socketIO {
-    static socket = io()
+    static socket = socketio()
     /**
      * Connect socketio to server
      * If a connection exist it will disconnect that coonection and reconnect new connection
      */
     static connect() {
-        this.socket = io()
-        // this.socket.disconnect()
-        this.socket.connect(domain)
+        this.socket.disconnect()
+        // this.socket.connect(domain)
+        this.socket.connect()
         this.socket.on("connect", () => {
             console.log("success conneting with server")
         })

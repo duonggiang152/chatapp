@@ -111,7 +111,7 @@ function ChatContent(props) {
                d.getSeconds()].join(':');
         let temp = {
             url: "",
-            userID: userID,
+            userID: user.id,
             message: value,
             isYou: true,
             sucess: temps,
@@ -121,7 +121,7 @@ function ChatContent(props) {
         const cbID = currentRoom.currenOpenRoomID
         const body = {
             "cbID": cbID,
-            "message": value
+            "message": value,
         }
         fetch(domain + "/sendmessage", {
             method: "POST",
@@ -149,6 +149,7 @@ function ChatContent(props) {
     const [cbID, setcbID] = useState()
     useEffect(() => {
         if(currentRoom.currenOpenRoomID !== cbID) {
+            setcbID(currentRoom.currenOpenRoomID)
             setInputFocus(true)
         }
     }, [currentRoom])

@@ -4,6 +4,7 @@ import { SearchBox } from './searchbox'
 import {Avartar} from "./avartar"
 import dommain   from "../../config/domain"
 import domain from '../../config/domain';
+import UserController from "../../controller/userController"
 let ownStyle_friendlist = {
 
 }
@@ -28,6 +29,7 @@ function Friend(props) {
             }
         })
     }
+
     if(props.err) {
         return (
             <></>
@@ -37,7 +39,7 @@ function Friend(props) {
         if(props.isOnline) {
             return (
                 <div className = {"friend"}>
-                    <Avartar small url = {`${props.friendurl}`} />
+                    <Avartar small url = {props.url} />
                     <h3>{props.username}</h3>
                     <i class="online fa fa-solid fa-circle"></i>
                 </div>
@@ -45,7 +47,7 @@ function Friend(props) {
         }
         return (
             <div className = {"friend"}>
-                <Avartar small url = {`${props.friendurl}`} />
+                <Avartar small url = {props.url} />
                 <h3>{props.username}</h3>
                 <i class="notonline fa fa-solid fa-circle"></i>
             </div>
@@ -54,7 +56,7 @@ function Friend(props) {
     if(!props.friendRequest) {
         return (
             <div className = {"friend"}>
-                <Avartar small url = {`${props.friendurl}`} />
+                <Avartar small url = {props.url} />
                 <h3>{props.username}</h3>
                 <i onClick={() => {
                     sendFriendRequest(props.id)
@@ -66,7 +68,7 @@ function Friend(props) {
     else {
         return (
             <div className = {"friend"}>
-                <Avartar small url = {`${props.friendurl}`} />
+                <Avartar small url = {props.url} />
                 <h3>{props.username}</h3>
                 <i ref = {icon} class="notonline fa fa-solid fa-user"></i>
 
@@ -177,6 +179,9 @@ function FriendList(props) {
     }
     // function for handle event when searchBox value change
     const onSearchBoxChange = async (value) => {
+        const ID = await UserController.getLoginUser()
+                                        .then(data => data.id)
+                                        .catch(err => -1)
         // update the similarName cheking variable
         try {
             if(value === smilarName) return
@@ -189,10 +194,15 @@ function FriendList(props) {
                 })
             .then(response => response.json())
             .then( async (data) => {
+                if(!data) return
                 if(value === smilarName) {
                     
                     const update =await Promise.all(data.map(async (user) => {
                         const isfriend = await checkFriend(user.id)
+                        const avatar     = await UserController.getUserByID(user.id)
+                                                            .then(data => data.avatar)
+                                                            .catch(err => {})
+                        if(user.id === ID) return null
                         if(isfriend === null) {
                             return {
                                 err: true
@@ -205,7 +215,8 @@ function FriendList(props) {
                                 id: user.id,
                                 friendurl: "",
                                 username:  user.userName,
-                                isOnline : isOnline
+                                isOnline : isOnline,
+                                url: avatar
                             }
                         }
                         else {
@@ -219,7 +230,8 @@ function FriendList(props) {
                                 id: user.id,
                                 friendurl: "",
                                 username:  user.userName,
-                                friendRequest : isSentFriendRequest
+                                friendRequest : isSentFriendRequest,
+                                url: avatar
                             }
                         }
                         
