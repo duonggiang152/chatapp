@@ -1,16 +1,33 @@
+// const configSigleConnection = {
+//     host     : 'localhost',
+//     user     : 'root',
+//     password : '',
+//     database : 'chatapptest',
+//     dateStrings: 'date'
+// }
+// const configPoolConnection = {
+//     connectionLimit : 10,
+//     host     : 'localhost',
+//     user     : 'root',
+//     password : 'password',
+//     database : 'chatapptest',
+//     dateStrings: 'date'
+// }
 const configSigleConnection = {
-    host     : 'localhost',
-    user     : 'root',
-    password : '',
-    database : 'chatapptest',
-    dateStrings: 'date'
+    host     : 'sql11.freesqldatabase.com',
+    user     : 'sql11488519',
+    password : 'DLQZAuStC4',
+    database : 'sql11488519',
+    dateStrings: 'date',
+    port: 3306
 }
 const configPoolConnection = {
     connectionLimit : 10,
-    host     : 'localhost',
-    user     : 'root',
-    password : 'password',
-    database : 'chatapptest',
+    host     : 'sql11.freesqldatabase.com',
+    user     : 'sql11488519',
+    password : 'DLQZAuStC4',
+    database : 'sql11488519',
+    port: 3306,
     dateStrings: 'date'
 }
 /**

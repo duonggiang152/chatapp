@@ -106,7 +106,7 @@ DELIMITER ;
 
 
 ------------------- ADD MEMBER TO GROUP CHAT -----------------------------
-
+DELIMITER $$
 CREATE PROCEDURE AddMemberToGroupChat(IN cbID int ,IN userID1 int, IN userID2 int)
 BEGIN
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
