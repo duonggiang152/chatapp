@@ -24,7 +24,7 @@ router.post("/", async (req, res) => {
             }
             else { 
                 res.status(404)
-                return res.send({message: "UserName Existed"})
+                return res.send({message: "Username Existed"})
             }
         })
         .catch(err => {

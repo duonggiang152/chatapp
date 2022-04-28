@@ -27,7 +27,7 @@ const router = express.Router()
                         }
                         if(!user) {
                             res.status("400")
-                            return res.send({message: "Username wrong or password not correct"})
+                            return res.send({message: "Username is wrong or password not correct"})
                         }
                         req.login(user, (err) => {
                             if(err) {
