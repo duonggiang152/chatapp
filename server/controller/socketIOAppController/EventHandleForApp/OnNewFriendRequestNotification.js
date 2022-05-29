@@ -14,7 +14,7 @@ module.exports = () => {
    * @EventListen new-notification
    */
     eventEmitterSocketIOApp.on("new-friendrequest-notification", async (userid, ntfID) => {
-    const socketUsers = SocketManager.getSocket(userid)
+    const socketUsers = await SocketManager.getSocket(userid)
     let newNotification = await UserNotification.getNotificationByID(ntfID)
     let neededInfo      = {
                              ntfID   : newNotification.ntfID,

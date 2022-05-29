@@ -1,8 +1,20 @@
 /**
  * Module dependence
  */
-
+const DataBase = require("../../model/databaseModel")
 class SocketManager {
+    static clearSocket() {
+        const query = `
+        DELETE FROM SocketIO;
+        `
+         DataBase.query(query)
+            .then(data => {
+                console.log("clear: socketio")
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
     /**
      * This variable for store pair ID user and ID socket
      */
@@ -16,10 +28,22 @@ class SocketManager {
      * @static
      */
     static addSocket(userID, SocketID) {
-        if(!SocketManager.SocketStorage[userID]) {
-            SocketManager.SocketStorage[userID] = new Array()
-        }
-        SocketManager.SocketStorage[`${userID}`].push(SocketID)
+        const query = `
+            INSERT INTO SocketIO
+            values(${userID}, "${SocketID}")
+        `
+        DataBase.query(query)
+            .then(data => {
+                console.log(data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        // if(!SocketManager.SocketStorage[userID]) {
+        //     SocketManager.SocketStorage[userID] = new Array()
+
+        // }
+        // SocketManager.SocketStorage[`${userID}`].push(SocketID)
     }
     /**
      * this method will remove a socket to the storage
@@ -28,9 +52,9 @@ class SocketManager {
      * @returns 
      */
     static disconnectSocket(userID, socketID) {
-        if(!SocketManager.SocketStorage[userID]) return
+        if (!SocketManager.SocketStorage[userID]) return
         const index = SocketManager.SocketStorage[userID].indexOf(socketID)
-        if(index < 0) return
+        if (index < 0) return
         SocketManager.SocketStorage[userID].splice(index, 1)
     }
     /**
@@ -40,9 +64,21 @@ class SocketManager {
      * @return array if exist socket mathch with the ID and null if not
      * @static
      */
-    static getSocket(userID) {
-        if(!this.SocketStorage[userID]) return null
-        return this.SocketStorage[userID]
+    static async getSocket(userID) {
+        const query = `
+            SELECT socketID from SocketIO WHERE userID = ${userID};
+        `
+        return await DataBase.query(query)
+            .then(datas => {
+                const result = datas.map((data) => {
+                    return data.socketID
+                })
+                return result
+            })
+            .catch(err => {
+                return []
+            })
+        // return this.SocketStorage[userID]
     }
     /**
      * 
@@ -54,5 +90,4 @@ class SocketManager {
 /**
  * Module export
  */
-
 module.exports = SocketManager;

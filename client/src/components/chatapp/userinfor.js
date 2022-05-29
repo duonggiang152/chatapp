@@ -6,7 +6,7 @@ import { Avartar } from "./avartar"
 // css
 import "./css/userinfor.css"
 // context
-import { DialogContext, NotificationContext } from './context'
+import { BtnNavBarContext,DialogContext, NotificationContext } from './context'
 import { useHistory } from 'react-router-dom'
 import domain from '../../config/domain'
 import UserController from '../../controller/userController'
@@ -54,6 +54,7 @@ const Notification = (props) => {
 }
 function UserInfor(props) {
     const notificationValue = useContext(NotificationContext)
+    const btnNavBarContext  = useContext(BtnNavBarContext)
     const [userName, setUserName] = useState("");
     const userinfoelement = useRef()
     const dialogContext = useContext(DialogContext)
@@ -90,7 +91,12 @@ function UserInfor(props) {
                 <ul tabIndex>
                     <li className='user-menu-item' onClick={() => {
                         dialogContext.show()
+                        btnNavBarContext.changeNavBarHandle(1)
                     }}> Change Avatar </li>
+                    <li className = 'user-menu-item' onClick = {() => {
+                        dialogContext.show()
+                        btnNavBarContext.changeNavBarHandle(2)
+                    }}> Create Group </li>
                     <li className='user-menu-item' onClick={async () => {
                         UserController.clean()
                         RoomController.clean()

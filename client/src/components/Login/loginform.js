@@ -163,7 +163,7 @@ function Register() {
             <div>
                 <input ref={usernameInputElement} name = "username" placeholder = "username" type = "text"></input>
                 <input ref={passwordInputElement} name = "password" placeholder = "password" type = "password"></input>
-                <input ref={verifyInputElement} name = "verifypassword" placeholder = "verify password" type = "password"></input>
+                <input ref={verifyInputElement} name = "verifypassword" placeholder = "verifi password" type = "password"></input>
                 <input value = "Register" type = "button" onClick={postRegister}></input>
                 <div onClick = {loginBtnOnClick} id = "btn-login">
                     Login i here  

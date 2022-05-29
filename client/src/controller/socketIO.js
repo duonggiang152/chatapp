@@ -3,9 +3,9 @@
  */
 import socketio from "socket.io-client"
 // import domain from "../config/domain"
-// const domain = "http://localhost:80"
+const domain = "http://localhost:80"
 class socketIO {
-    static socket = socketio()
+    static socket = socketio("http://localhost:88/")
     /**
      * Connect socketio to server
      * If a connection exist it will disconnect that coonection and reconnect new connection

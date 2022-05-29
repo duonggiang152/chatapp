@@ -14,7 +14,7 @@ const ChatBox = require("../../../model/chatbox");
  */
 module.exports = ()=>{
      eventEmitterSocketIOApp.on("new-accept-friend-request-notification", async (userID, ntfID)=>{
-        const socketUsers   = SocketManager.getSocket(userID)
+        const socketUsers   = await SocketManager.getSocket(userID)
         let newNotification = await UserNotification.getNotificationByID(ntfID)
         let sendDataObject  = {
             ntfID   : ntfID,
@@ -35,7 +35,7 @@ module.exports = ()=>{
                 if(boxs1[i].cbID === boxs2[j].cbID && boxs1[i].type === 0) {
                     stop = true
                     // send update room message
-                    const socketUser1 = SocketManager.getSocket(user1)
+                    const socketUser1 = await SocketManager.getSocket(user1)
                     if(socketUser1) {
                         socketUser1.forEach((socketID) => {
                             IOServer.io.to(socketID).emit("new-update-room", {
@@ -43,7 +43,7 @@ module.exports = ()=>{
                             })
                         })
                     }
-                    const socketUser2 = SocketManager.getSocket(user2)
+                    const socketUser2 = await SocketManager.getSocket(user2)
                     if(socketUser2) {
                         socketUser2.forEach((socketID) => {
                             IOServer.io.to(socketID).emit("new-update-room", {

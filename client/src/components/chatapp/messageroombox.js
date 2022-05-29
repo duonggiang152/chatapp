@@ -74,6 +74,7 @@ function MessageRoomBox(props) {
     useEffect(() => {
         const calllAPI = async () => {
             socketIO.listen('new-message', async message => {
+                console.log(message)
                 newMessageContext.setNewMessage(newMessageContext.state + 1)
                 const room = await RoomController.getRoomByID(message.cbID)
                 message.userID = message.userId

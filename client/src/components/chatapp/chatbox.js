@@ -6,12 +6,13 @@ import { useHistory } from 'react-router-dom'
 import { SlideBar } from "./slidebar";
 import { ChatContent } from "./chatcontent"
 import domain from "../../config/domain";
-import { ResponsesiveContext, NotificationContext, ChatContext, DialogContext, ControleCurrenRoomContext, NewMessageContext } from "./context"
+import { BtnNavBarContext, ResponsesiveContext, NotificationContext, ChatContext, DialogContext, ControleCurrenRoomContext, NewMessageContext } from "./context"
 import socketIO from "../../controller/socketIO";
 import Dialog from "./dialog"
 import "./css/chatbox.css"
 import { User } from "../../controller/userController";
 import AvatarEditor from "./AvatarEditor"
+import CreateGroup from "./creategroup"
 /**
  * Private variable
  */
@@ -153,7 +154,7 @@ const chatContextActions = {
 }
 // reducer
 /*
-	
+
 
 */
 const reducerContext = (state, actions) => {
@@ -196,7 +197,7 @@ function ChatApp() {
 			dispathResponsiveMethod({ type: actions.turn_mobile_chatbox })
 		},
 		clear: () => {
-			dispathResponsiveMethod({type: actions.clear})
+			dispathResponsiveMethod({ type: actions.clear })
 		}
 	}
 	// init state for notificationbox
@@ -235,7 +236,7 @@ function ChatApp() {
 			dispathNotificationContext({ type: NotificationActions.clearAllNewNotification })
 		},
 		clear: () => {
-			dispathNotificationContext({type: NotificationActions.clear})
+			dispathNotificationContext({ type: NotificationActions.clear })
 		}
 	}
 	const [ChatContextState, dispathChatContext] = useReducer(reducerContext, initChatContext)
@@ -334,7 +335,7 @@ function ChatApp() {
 			return
 		},
 		clear: () => {
-			dispathChatContext({ type: chatContextActions.clear})
+			dispathChatContext({ type: chatContextActions.clear })
 		}
 	}
 	// dialog
@@ -390,20 +391,60 @@ function ChatApp() {
 	useEffect(() => {
 		const callAPI = async () => {
 			checkType();
-		window.addEventListener('resize', checkType)
-		socketIO.connect()
-		socketIO.listen('new-notification', async notification => {
-			const userID = notification.userSend || notification.userIDSend
-			const user = new User(userID)
-			const userName = await user.getUserName()
-			notification.userName = userName
-			valueNotificationContext.addNotification(notification)
-			if (NotificationState.isOpenNotificationBox) return
-			valueNotificationContext.addUnreadNotification(notification)
-		})
-		socketIO.listen('new-update-room', async room => {
-			const id = room.cbID
-			await fetch(domain + "/room/get-room/" + `${id}`,
+			window.addEventListener('resize', checkType)
+			socketIO.connect()
+			socketIO.listen('new-notification', async notification => {
+				const userID = notification.userSend || notification.userIDSend
+				const user = new User(userID)
+				const userName = await user.getUserName()
+				notification.userName = userName
+				valueNotificationContext.addNotification(notification)
+				if (NotificationState.isOpenNotificationBox) return
+				valueNotificationContext.addUnreadNotification(notification)
+			})
+			socketIO.listen('new-update-room', async room => {
+				const id = room.cbID
+				await fetch(domain + "/room/get-room/" + `${id}`,
+					{
+						method: 'GET',
+						credentials: 'same-origin',
+						headers: {
+							'Content-Type': 'application/json'
+						}
+					})
+					.then(async res => {
+						if (res.status !== 200) return
+						res = await res.json()
+						valueChatContext.updateRoomInfo(res.room)
+					})
+					.catch(err => {
+						console.log(err)
+					})
+			})
+			// socketIO.listen('new-message', async message => {
+			// 	console.log("1")
+			// 	const room = await RoomController.getRoomByID(message.cbID)
+			// 	await room.addMessage(message, true)
+			// 	valueChatContext.addMessage(message.cbID, message)
+			// 	await fetch(domain + "/room/get-room/" + `${message.cbID}`,
+			// 		{
+			// 			method: 'GET',
+			// 			credentials: 'same-origin',
+			// 			headers: {
+			// 				'Content-Type': 'application/json'
+			// 			}
+			// 		})
+			// 		.then(async res => {
+			// 			if (res.status !== 200) return
+			// 			res = await res.json()
+			// 			valueChatContext.updateRoomInfo(res.room)
+			// 		})
+			// 		.catch(err => {
+			// 			console.log(err)
+			// 		})
+			// })
+			// get unread notification
+			await fetch(domain + "/notification/unread",
 				{
 					method: 'GET',
 					credentials: 'same-origin',
@@ -411,119 +452,90 @@ function ChatApp() {
 						'Content-Type': 'application/json'
 					}
 				})
-				.then(async res => {
-					if (res.status !== 200) return
-					res = await res.json()
-					valueChatContext.updateRoomInfo(res.room)
+				.then(async response => {
+					return await response.json()
+				})
+				.then(data => {
+					const unreadNoti = data['unreadNoti']
+					valueNotificationContext.initUnreadNotification(unreadNoti)
 				})
 				.catch(err => {
 					console.log(err)
 				})
-		})
-		// socketIO.listen('new-message', async message => {
-		// 	console.log("1")
-		// 	const room = await RoomController.getRoomByID(message.cbID)
-		// 	await room.addMessage(message, true)
-		// 	valueChatContext.addMessage(message.cbID, message)
-		// 	await fetch(domain + "/room/get-room/" + `${message.cbID}`,
-		// 		{
-		// 			method: 'GET',
-		// 			credentials: 'same-origin',
-		// 			headers: {
-		// 				'Content-Type': 'application/json'
-		// 			}
-		// 		})
-		// 		.then(async res => {
-		// 			if (res.status !== 200) return
-		// 			res = await res.json()
-		// 			valueChatContext.updateRoomInfo(res.room)
-		// 		})
-		// 		.catch(err => {
-		// 			console.log(err)
-		// 		})
-		// })
-		// get unread notification
-		await fetch(domain + "/notification/unread",
-			{
+			// get notification for init
+			fetch(domain + "/notification",
+				{
+					method: 'GET',
+					credentials: 'same-origin',
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				})
+				.then(async response => {
+					return await response.json()
+				})
+				.then(data => {
+					valueNotificationContext.initNotification(data)
+				})
+				.catch(err => {
+					console.log(err)
+				})
+			// update room 
+			fetch(domain + "/room/get-room/?limit=100", {
 				method: 'GET',
 				credentials: 'same-origin',
 				headers: {
 					'Content-Type': 'application/json'
 				}
 			})
-			.then(async response => {
-				return await response.json()
-			})
-			.then(data => {
-				const unreadNoti = data['unreadNoti']
-				valueNotificationContext.initUnreadNotification(unreadNoti)
-			})
-			.catch(err => {
-				console.log(err)
-			})
-		// get notification for init
-		fetch(domain + "/notification",
-			{
-				method: 'GET',
-				credentials: 'same-origin',
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			})
-			.then(async response => {
-				return await response.json()
-			})
-			.then(data => {
-				valueNotificationContext.initNotification(data)
-			})
-			.catch(err => {
-				console.log(err)
-			})
-		// update room 
-		fetch(domain + "/room/get-room/?limit=100", {
-			method: 'GET',
-			credentials: 'same-origin',
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		})
-			.then(async res => {
-				if (res.status !== 200) return
-				res = await res.json()
-				const rooms = res.rooms
-				for (let i = 0; i < rooms.length; i++) {
-					valueChatContext.updateRoomInfo(rooms[i])
-				}
-			})
-			.catch(err => {
-				console.log(err)
-			})
+				.then(async res => {
+					if (res.status !== 200) return
+					res = await res.json()
+					const rooms = res.rooms
+					for (let i = 0; i < rooms.length; i++) {
+						valueChatContext.updateRoomInfo(rooms[i])
+					}
+				})
+				.catch(err => {
+					console.log(err)
+				})
 		}
 		callAPI()
 	}, [])
 	const [newMessage, setNewMessage] = useState(1)
 	const valueContextNewMessage = { state: newMessage, setNewMessage: setNewMessage }
+	const [navBar, changeNavBar] = useState(1)
+	const changeNavBarHandle = (value) => {
+		changeNavBar(value)
+	}
 	return (
 		<NewMessageContext.Provider value={valueContextNewMessage} >
 			<ControleCurrenRoomContext.Provider value={valueControlCurrenOpenRoom}>
-				<DialogContext.Provider value={valueDialogContext}>
-					<ChatContext.Provider value={valueChatContext}>
-						<ResponsesiveContext.Provider value={valueResponsiveContext}>
-							<Dialog active={(() => valueDialogContext.value)()}>
-								<AvatarEditor/>
-							</Dialog>
-							<div className={(() => {
-								if (!valueDialogContext.value) return ""
-								return "blur-chat-box"
-							})()} id="chatapp" style={{ overflow: "hidden", display: "flex", width: "100vw", position: "relative" }} >
-								<NotificationContext.Provider value={valueNotificationContext}>
-									<SlideBar />
-								</NotificationContext.Provider>
-								<ChatContent />
-							</div>
-						</ResponsesiveContext.Provider>
-					</ChatContext.Provider>
-				</DialogContext.Provider>
+				<BtnNavBarContext.Provider value = {{changeNavBarHandle:changeNavBarHandle}}>
+					<DialogContext.Provider value={valueDialogContext}>
+						<ChatContext.Provider value={valueChatContext}>
+							<ResponsesiveContext.Provider value={valueResponsiveContext}>
+								<Dialog active={(() => valueDialogContext.value)()}>
+									{
+										(() => {
+											if (navBar === 1) return (<AvatarEditor />)
+											return (<CreateGroup />)
+										})()
+									}
+								</Dialog>
+								<div className={(() => {
+									if (!valueDialogContext.value) return ""
+									return "blur-chat-box"
+								})()} id="chatapp" style={{ overflow: "hidden", display: "flex", width: "100vw", position: "relative" }} >
+									<NotificationContext.Provider value={valueNotificationContext}>
+										<SlideBar />
+									</NotificationContext.Provider>
+									<ChatContent />
+								</div>
+							</ResponsesiveContext.Provider>
+						</ChatContext.Provider>
+					</DialogContext.Provider>
+				</BtnNavBarContext.Provider>
 			</ControleCurrenRoomContext.Provider>
 		</NewMessageContext.Provider>
 	)
