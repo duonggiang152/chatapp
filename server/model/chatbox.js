@@ -53,7 +53,7 @@ class ChatBox {
         }
 
         // insert to database
-        let query = `CALL CreateGroupChat(${userCreateID}, ${firstMemberID}, ${name})`
+        let query = `CALL CreateGroupChat(${userCreateID}, ${firstMemberID}, '${name}')`
 
         return DataBase.query(query)
     }
@@ -139,5 +139,4 @@ class ChatBox {
     }
 
 }
-
 module.exports = ChatBox

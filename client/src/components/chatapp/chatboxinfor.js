@@ -32,6 +32,26 @@ function ChatboxInfor(props) {
     }, [currentContext])
     useEffect(() => {
         const callAPI = async () => {
+            const room = await fetch(domain + "/room/get-room/" + `${currentContext.currenOpenRoomID}`,
+                {
+                    method: 'GET',
+                    credentials: 'same-origin'
+                })
+                .then(async res => {
+                    res = await res.json()
+                    return res
+                })
+                .then(async data => {
+                    return data.room
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+             if(room.ChatBoxName) {
+                setRoomName(room.ChatBoxName)
+                setAvatarURL(null)
+                return 
+             }
             // const user = await room.getMembers()
             const users = await fetch(domain + "/room/room-member/" + `${currentContext.currenOpenRoomID}`,
                 {

@@ -89,11 +89,8 @@ BEGIN
 		ROLLBACK;
         RESIGNAL;
     END;
-    START TRANSACTION;
-    IF (SELECT COUNT(*) FROM Users WHERE idUser = userID1 OR idUser = userID2) != 2 THEN
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "user1 or user2 don't exist", MYSQL_ERRNO = 103;
-	END IF;
-    INSERT INTO Chatbox(ChatBoxName, type) Value(name, 1);
+    SET datetime = NOW();
+    INSERT INTO Chatbox(ChatBoxName, type, datemodifi) Value(name, 1, datetime);
     SET publicChatBoxID = LAST_INSERT_ID();
     INSERT INTO ChatBoxMember(cbID, userID, admin, nickname) VALUES(publicChatBoxID, userID1, 1, null), (publicChatBoxID, userID2, 0, null);
 	COMMIT;
@@ -115,15 +112,6 @@ BEGIN
         RESIGNAL;
     END;
     START TRANSACTION;
-    IF (SELECT COUNT(*) FROM Users WHERE idUser = userID1 OR idUser = userID2) != 2 THEN
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "user1 or user2 don't exist", MYSQL_ERRNO = 103;
-	END IF;
-    IF NOT EXISTS (SELECT * FROM ChatBoxMember WHERE ChatBoxMember.cbID = cbID AND ChatBoxMember.userID = userID1 AND admin = 1 ) THEN
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "chat box don't exist or userID1 was not admin of chatbox ", MYSQL_ERRNO = 106;
-	END IF;
-    IF EXISTS (SELECT * FROm ChatBoxMember WHERE ChatBoxMember.cbID = cbID AND ChatBoxMember.userID = userID2) THEN
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "This person already in chatbox", MYSQL_ERRNO = 107;
-	END IF;
     INSERT INTO ChatBoxMember(cbID, userID, admin) VALUES (cbID, userID2, 0);
     COMMIT;
     
@@ -154,6 +142,35 @@ BEGIN
     UPDATE ChatBox
     SET datemodifi = datetime
     WHERE ChatBox.cbID = cbID;
+    SET messageID = LAST_INSERT_ID();
+    SELECT * FROM ChatMessage WHERE ChatMessage.mID = messageID;
+    COMMIT;
+    
+END$$
+DELIMITER ;
+
+
+// next ver add message
+CREATE PROCEDURE AddMessageToChatBox(IN cbID int ,IN userID int, IN message TEXT)
+BEGIN
+	DECLARE datetime DATETIME;
+    DECLARE messageID INT;
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+		ROLLBACK;
+        RESIGNAL;
+    END;
+    SET datetime = NOW();
+    UPDATE ChatBox
+    SET datemodifi = datetime
+    WHERE ChatBox.cbID = cbID;
+    START TRANSACTION;
+    
+    IF NOT EXISTS (SELECT * FROM ChatBoxMember WHERE ChatBoxMember.cbID = cbID AND ChatBoxMember.userID = userID ) THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "chat box don't exist or userID was not in chatbox ", MYSQL_ERRNO = 109;
+	END IF;
+    INSERT INTO ChatMessage(cbID, userID, message, datetime) VALUE(cbID, userID, message, datetime);
+    
     SET messageID = LAST_INSERT_ID();
     SELECT * FROM ChatMessage WHERE ChatMessage.mID = messageID;
     COMMIT;

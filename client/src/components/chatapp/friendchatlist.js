@@ -23,7 +23,9 @@ function FriendChat(props) {
      * }]
      * }
      */
-    const [roomdetail, setRoomdetail] = useState({})
+    console.log("run")
+    const [roomdetail, setRoomdetail] = useState({name: "LOADING"})
+
     // for access responsiveContext
     const responsesiveContext = useContext(ResponsesiveContext)
     const controleCurrenRoom = useContext(ControleCurrenRoomContext)
@@ -34,7 +36,6 @@ function FriendChat(props) {
             RoomController.getRoomByID(props.cbID)
                 .then(async room => {
                     const members = await room.getMembers()
-                    
                     const data = await Promise.all(members.map((async member => {
                         return await UserController.getUserByID(member.userID)
                     })))
@@ -60,6 +61,7 @@ function FriendChat(props) {
                     // }
                     // return res.message[0]
                     setRoomdetail({
+                        name: room.name,
                         cbID: props.cbID,
                         members: data,
                         lastmessage: lastMessage
@@ -81,6 +83,12 @@ function FriendChat(props) {
     catch (err) {
 
     }
+    let nameBox = ""
+    console.log(roomdetail)
+    if(!roomdetail.name)
+        nameBox = data[0].userID === profiID ? data[1].userName : data[0].userName
+    else 
+        nameBox = roomdetail.name
     // console.log(profiID)
     if (data.length === 0) return null
     if (profiID)
@@ -97,7 +105,7 @@ function FriendChat(props) {
                 <Avartar small url={user.avatar} />
                 <div className={"tittle-contentchat"}>
                     {roomdetail && roomdetail.members && roomdetail.members.length >= 2 && profiID ?
-                        <h3 className={"tittle"}>{data[0].userID === profiID ? data[1].userName : data[0].userName}</h3> : ""
+                        <h3 className={"tittle"}>{nameBox}</h3> : ""
                     }
                     {
                         roomdetail && roomdetail.lastmessage ?

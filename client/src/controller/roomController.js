@@ -150,6 +150,8 @@ class RoomController {
                   if(!roomRawData.room) return null
                   const room = new Room(roomRawData.room.cbID)
                   this.rooms.push(room)
+                  room.type = roomRawData.room.type
+                  room.name = roomRawData.room.ChatBoxName
                   return room
                 })
   }

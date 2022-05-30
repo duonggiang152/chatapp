@@ -206,6 +206,9 @@ class User {
                             })
         return promise
     }
+    static async FindFriend(userID, name) {
+
+    }
 }
 
 /**

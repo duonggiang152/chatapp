@@ -42,6 +42,13 @@ router.get("/:clienthavesimilarname?/:start?/:end?", async (req, res) => {
         return res.send({ message: "err" })
     }
 })
-
+router.get("/friend/:similarname", async (req, res) => {
+    try {
+        
+    }
+    catch(err) {
+        return res.status(500).json({message: "Lỗi hệ thống"})
+    }
+})
 
 module.exports = router

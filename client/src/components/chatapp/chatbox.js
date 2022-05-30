@@ -403,6 +403,7 @@ function ChatApp() {
 				valueNotificationContext.addUnreadNotification(notification)
 			})
 			socketIO.listen('new-update-room', async room => {
+				console.log(room)
 				const id = room.cbID
 				await fetch(domain + "/room/get-room/" + `${id}`,
 					{

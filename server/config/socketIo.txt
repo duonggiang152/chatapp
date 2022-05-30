@@ -1,0 +1,5 @@
+create table SocketIO (
+	 userID int not null,
+     socketID varchar(200),
+     FOREIGN KEY (userID) REFERENCES Users(idUser)
+)

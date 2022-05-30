@@ -2,6 +2,7 @@ import { useState, useRef } from 'react'
 import { Avartar } from "./avartar"
 import domain from '../../config/domain';
 import { SearchBox } from "./searchbox"
+import "./css/creategroup.css"
 function Friend(props) {
   const icon = useRef(null)
   const sendFriendRequest = async (id) => {
@@ -71,15 +72,39 @@ function Friend(props) {
   }
 }
 function CreateGroup(props) {
+  const GroupMember = useState([])
   return (
-    <div>
+    <div id='create-group'>
       <SearchBox />
       <div>
         <div>Bạn Bè</div>
+        <div className='friend-list'>
+          <Friend username="giang"></Friend>
+          <Friend username="giang"></Friend>
+          <Friend username="giang"></Friend>
+          <Friend username="giang"></Friend>
+          <Friend username="giang"></Friend>
+          <Friend username="giang"></Friend>
+          <Friend username="giang"></Friend>
+          <Friend username="giang"></Friend>
+          <Friend username="giang"></Friend>
+          <Friend username="giang"></Friend>
+          <Friend username="giang"></Friend>
+          <Friend username="giang"></Friend>
+          <Friend username="giang"></Friend>
+          <Friend username="giang"></Friend>
+          <Friend username="giang"></Friend>
+          <Friend username="giang"></Friend>
+          <Friend username="giang"></Friend>
+          <Friend username="giang"></Friend>
+          <Friend username="giang"></Friend>
+          <Friend username="giang"></Friend>
+        </div>
+      </div>
+      <div className='add-group-list'>
+        <div> Danh Sách thêm</div>
         <div>
-          <Friend></Friend>
-          <Friend></Friend>
-          <Friend></Friend>
+          <span>giang, </span><span>giang, </span><span>giang, </span>
         </div>
       </div>
     </div>

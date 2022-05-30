@@ -1,0 +1,65 @@
+/* #create-group > :nth-child(2) {
+  width: 400px;
+}
+#create-group > :nth-child(2) > :nth-child(2) > div {
+  width: 400px;
+  text-align: center;
+  display: flex;
+}
+ */
+
+
+
+#create-group {
+  margin: 80px auto;
+  /* height: calc(100% - 100px - 45px); */
+  padding: 15px;
+  position: absolute;
+  top: 0px;
+  z-index: -1;
+  height: 100%;
+  width: 100%;
+  max-height: 600px;
+  /* overflow: none; */
+  overflow-y: scroll;
+  background: rgb(85, 85, 85);
+    /* padding of mother element is 20px  */
+}
+#create-group> :nth-child(2) {
+  height: calc(100%-200px);
+  width: 100%;
+}
+#create-group> :nth-child(2) > :nth-child(2) {
+  max-height: 300px;
+    overflow-y: scroll;
+  width: 100%;
+}
+
+#create-group .friend {
+width: 100%;
+color: white;
+height: 60px;
+display: flex;
+align-items: center;
+position: relative;
+}
+#create-group .friend > :nth-child(2) {
+margin-left: 10px;
+text-transform: uppercase;
+}
+#create-group .friend > :nth-child(3) {
+position: absolute;
+right: 0px;
+top: 50%;
+transform: translateY(-50%);
+}
+#create-group .friend > .notonline {
+color: black;
+}
+#create-group .friend > .online {
+color: green;
+}
+
+#create-group .add-group-list {
+  margin-top: 20px;
+}
