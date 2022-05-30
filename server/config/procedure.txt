@@ -149,8 +149,8 @@ BEGIN
 END$$
 DELIMITER ;
 
-
-// next ver add message
+------------------------------------------ VER 2 -----------------------------------------------------
+------------------------------------------------------------------------------------------------------
 CREATE PROCEDURE AddMessageToChatBox(IN cbID int ,IN userID int, IN message TEXT)
 BEGIN
 	DECLARE datetime DATETIME;
@@ -174,6 +174,34 @@ BEGIN
     SET messageID = LAST_INSERT_ID();
     SELECT * FROM ChatMessage WHERE ChatMessage.mID = messageID;
     COMMIT;
+    
+END$$
+DELIMITER ;
+
+
+
+DELIMITER $$
+
+CREATE PROCEDURE CreateGroupChat(IN userID1 int, IN userID2 int, IN name TEXT)
+BEGIN
+	DECLARE publicChatBoxID INT DEFAULT 0;
+    DECLARE datetime            DATETIME;
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+		ROLLBACK;
+        RESIGNAL;
+    END;
+    START TRANSACTION;
+    IF (SELECT COUNT(*) FROM Users WHERE idUser = userID1 OR idUser = userID2) != 2 THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "user1 or user2 don't exist", MYSQL_ERRNO = 103;
+	END IF;
+    SET datetime = NOW();
+    INSERT INTO Chatbox(ChatBoxName, type, datemodifi) Value(name, 1, datetime);
+    SET publicChatBoxID = LAST_INSERT_ID();
+	
+    INSERT INTO ChatBoxMember(cbID, userID, admin, nickname) VALUES(publicChatBoxID, userID1, 1, null), (publicChatBoxID, userID2, 0, null);
+    SELECT  publicChatBoxID;
+	COMMIT;
     
 END$$
 DELIMITER ;

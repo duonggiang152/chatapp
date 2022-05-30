@@ -20,16 +20,17 @@
   height: 100%;
   width: 100%;
   max-height: 600px;
+  
   /* overflow: none; */
   overflow-y: scroll;
   background: rgb(85, 85, 85);
     /* padding of mother element is 20px  */
 }
-#create-group> :nth-child(2) {
-  height: calc(100%-200px);
+#create-group> :nth-child(3) {
+  height: calc(100% - 300px);
   width: 100%;
 }
-#create-group> :nth-child(2) > :nth-child(2) {
+#create-group> :nth-child(3) > :nth-child(2) {
   max-height: 300px;
     overflow-y: scroll;
   width: 100%;
@@ -62,4 +63,25 @@ color: green;
 
 #create-group .add-group-list {
   margin-top: 20px;
+  height: 60px;
+}
+
+
+#create-group .create-group-btn {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+  text-align: center;
+  border-radius: 10px;
+  width: 70px;
+  padding: 10px;
+  background-color: rgb(87, 129, 87);
+  color: rgb(148, 148, 148);
+  transition: background-color, color 0.2s ease;
+}
+#create-group .create-group-btn:hover {
+  padding: 10px;
+  background-color: rgb(0, 255, 0);
+  color: rgb(255, 255, 255);
 }

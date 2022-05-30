@@ -4,7 +4,7 @@
  */
 const Error = require("../controller/Error/Error.js/Error");
 const SystemError = require("../controller/Exception/SystemError");
-const db       = require("./databaseModel");
+const db = require("./databaseModel");
 const Password = require("./password")
 
 
@@ -16,7 +16,7 @@ class User {
      * User infomation
      * @private
      */
-    m_name     = undefined;
+    m_name = undefined;
     m_password = undefined;
 
 
@@ -39,7 +39,7 @@ class User {
     * @err       catch in promise state
     * @private
     */
-   
+
     #addUser() {
         return User.addUser(this.m_name, this.m_password)
     }
@@ -62,17 +62,17 @@ class User {
         `
         const promise = new Promise(async (res, rej) => {
             let isUserExist = db.query(query)
-                                    .then((result) => {
-                                    if(result.length === 1) return true
-                                    else return false   
-                                    })
-                                   
+                .then((result) => {
+                    if (result.length === 1) return true
+                    else return false
+                })
+
             res(isUserExist)
         })
-        .catch(err => {
-            Error.ExamineSystemError(err)
-            throw new SystemError()
-        })
+            .catch(err => {
+                Error.ExamineSystemError(err)
+                throw new SystemError()
+            })
         return promise
     }
     /**
@@ -89,24 +89,24 @@ class User {
             FROM Users
             WHERE idUser = ${id};
         `
-        const promise =  new Promise((res, rej) => {
-                                        res(db.query(query))
-                                    })
-                                    .then(data => {
-                                        if(data.length === 0) {
-                                            return null
-                                        }
-                                        else if(data.length >= 1) {
-                                            return data[0]
-                                        }
-                                        
-                                    })
-                                    .catch(error => {
-                                        Error.ExamineSystemError(error)
-                                        throw new SystemError()
-                                    })
+        const promise = new Promise((res, rej) => {
+            res(db.query(query))
+        })
+            .then(data => {
+                if (data.length === 0) {
+                    return null
+                }
+                else if (data.length >= 1) {
+                    return data[0]
+                }
+
+            })
+            .catch(error => {
+                Error.ExamineSystemError(error)
+                throw new SystemError()
+            })
         return promise
-    }   
+    }
     /**
      * find the user wich similar username as parameter
      * @param {string} name 
@@ -134,28 +134,28 @@ class User {
      * @static
      */
     static async addUser(userName, password) {
-        const promise =  User.isExistUser(userName)
-        .then(async (isExist) => {
-            if(!isExist) {
-                const hashPassword = await Password.hash(password)
-                const sql = `INSERT INTO Users (userName, password) VALUES ("${userName}", "${hashPassword}");`
-                await db.query(sql)
-                            .then(() => {
-                                return true
-                            })
-                            .catch(err => {
-                                throw err
-                            })
-                return true
-            }
-            else {
-                return false
-            }
-        })
-        .catch(err => {
-            Error.ExamineSystemError(err)
-            throw new SystemError()
-        })
+        const promise = User.isExistUser(userName)
+            .then(async (isExist) => {
+                if (!isExist) {
+                    const hashPassword = await Password.hash(password)
+                    const sql = `INSERT INTO Users (userName, password) VALUES ("${userName}", "${hashPassword}");`
+                    await db.query(sql)
+                        .then(() => {
+                            return true
+                        })
+                        .catch(err => {
+                            throw err
+                        })
+                    return true
+                }
+                else {
+                    return false
+                }
+            })
+            .catch(err => {
+                Error.ExamineSystemError(err)
+                throw new SystemError()
+            })
         return promise
     }
     /**
@@ -169,49 +169,71 @@ class User {
      */
     static async GetUserByAccountAndPassword(userName, password) {
         // get user
-        const promise   =   new Promise(async (res, rej) => {
-                            const query =       `
+        const promise = new Promise(async (res, rej) => {
+            const query = `
                             SELECT * FROM Users
                             WHERE userName = "${userName}";`;
-                            res(db.query(query))
-                            })
-        // check if User exist
-                            .then((data) => {
-                                if(data.length === 0) {
-                                    return null
-                                }
-                                else if(data.length >= 1) {   
-                                    return  {
-                                                passwordHashed: data[0].password,
-                                                user :data[0]
-                                            }      
-                                }
-                            })
-        // check if password match
-                            .then(async (data) => {
-                                if(data == null) 
-                                    return null
-                                let passwordHashed = data.passwordHashed
-                                let user     = data.user
-                                let match = await Password.compare(password, passwordHashed)
-                                if(match) {
-                                    return user
-                                } else {
-                                    return null
-                                }
-                            })
-                            .catch(err => {
-                                Error.ExamineSystemError(err)
-                                throw new SystemError()
-                            })
+            res(db.query(query))
+        })
+            // check if User exist
+            .then((data) => {
+                if (data.length === 0) {
+                    return null
+                }
+                else if (data.length >= 1) {
+                    return {
+                        passwordHashed: data[0].password,
+                        user: data[0]
+                    }
+                }
+            })
+            // check if password match
+            .then(async (data) => {
+                if (data == null)
+                    return null
+                let passwordHashed = data.passwordHashed
+                let user = data.user
+                let match = await Password.compare(password, passwordHashed)
+                if (match) {
+                    return user
+                } else {
+                    return null
+                }
+            })
+            .catch(err => {
+                Error.ExamineSystemError(err)
+                throw new SystemError()
+            })
         return promise
     }
-    static async FindFriend(userID, name) {
-
+    static async FindFriendBySimilarName(userID, name) {
+        const queryGetFriend = `
+                SELECT Friend.friendID, U.userName
+                FROM Friend, Users as U
+                WHERE userID = ${userID} AND status = 0 AND friendID = U.idUser
+            `
+        return db.query(queryGetFriend)
+                 .then(async friends => {
+                    const friendIDs = friends.map(friend => friend.friendID)
+                    const queryGetSimilarName = `
+                    SELECT * 
+                    FROM Users
+                    WHERE userName REGEXP '^${name}';`
+                    const userMatchs = await db.query(queryGetSimilarName)
+                    const resultID = []
+                    userMatchs.forEach(userMatch => {
+                        if(friendIDs.includes(userMatch.idUser)) {
+                            resultID.push({id: userMatch.idUser, userName: userMatch.userName})
+                        }
+                    })
+                    return resultID
+                 })
+           
     }
 }
+
 
 /**
  * Export user model
  */
- module.exports = User;
+module.exports = User;

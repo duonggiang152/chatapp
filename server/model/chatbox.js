@@ -56,6 +56,9 @@ class ChatBox {
         let query = `CALL CreateGroupChat(${userCreateID}, ${firstMemberID}, '${name}')`
 
         return DataBase.query(query)
+                        .then(data => {
+                            return data[0][0].publicChatBoxID
+                        })
     }
     /**
      * Add new Member to chatBox
@@ -139,4 +142,6 @@ class ChatBox {
     }
 
 }
+
+
 module.exports = ChatBox

@@ -4,12 +4,31 @@
  */
 const express = require("express")
 const User = require("../../model/user")
-
 /**
  * local variable
  * @private
  */
-const router = express.Router()
+ const router = express.Router()
+
+router.get("/friend/:similarname", async (req, res) => {
+    try {
+        if (!req.user) {
+            res.status("404")
+            return res.send();
+        }
+        console.log(req.user)
+        const similarname = req.params.similarname
+        console.log(similarname)
+        const user = await User.FindFriendBySimilarName(req.user.id, similarname)
+        console.log(user)
+        return res.status(200).json(user)
+    }
+    catch(err) {
+        console.log(err)
+        return res.status(500).json({message: "Lỗi hệ thống"})
+    }
+})
+
 /**
  * @param {string} clienthavesimilarname the string have to find user which that relative name
  * @param {number} start
@@ -42,13 +61,6 @@ router.get("/:clienthavesimilarname?/:start?/:end?", async (req, res) => {
         return res.send({ message: "err" })
     }
 })
-router.get("/friend/:similarname", async (req, res) => {
-    try {
-        
-    }
-    catch(err) {
-        return res.status(500).json({message: "Lỗi hệ thống"})
-    }
-})
+
 
 module.exports = router

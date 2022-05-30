@@ -4,7 +4,6 @@ const ChatMessage = require('../../model/message');
 const router = express.Router()
 
 router.get('/',async (req, res) => {
-    console.log(req.user)
     if(!req.user) {
         res.status("404")
         return res.send();

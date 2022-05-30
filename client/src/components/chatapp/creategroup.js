@@ -1,112 +1,102 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Avartar } from "./avartar"
 import domain from '../../config/domain';
 import { SearchBox } from "./searchbox"
 import "./css/creategroup.css"
 function Friend(props) {
-  const icon = useRef(null)
-  const sendFriendRequest = async (id) => {
-    const route = domain + '/friendrequest'
-    const body = {
-      userID: id
+  const [status, setStatus] = useState(true)
+  const handdleClick = () => {
+    console.log(props.id)
+    if (props.handdleClick) {
+      props.handdleClick({ id: props.id, userName: props.username })
     }
-    await fetch(route, {
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body)
-    })
-      .then(response => {
-        if (response.status === 200) {
-          icon.current.className = "notonline fa fa-solid fa-user"
-        }
-      })
+    setStatus(false)
   }
+  useEffect(() => {
+    setStatus(props.active)
+  }, [])
 
-  if (props.err) {
-    return (
-      <></>
-    )
-  }
-  if (props.isFriend) {
-    if (props.isOnline) {
-      return (
-        <div className={"friend"}>
-          <Avartar small url={props.url} />
-          <h3>{props.username}</h3>
-          <i class="online fa fa-solid fa-circle"></i>
-        </div>
-      )
-    }
+  if (status)
     return (
       <div className={"friend"}>
         <Avartar small url={props.url} />
         <h3>{props.username}</h3>
-        <i class="notonline fa fa-solid fa-circle"></i>
+        <i onClick={handdleClick} class="online fa fa-solid fa-user"></i>
       </div>
     )
-  }
-  if (!props.friendRequest) {
-    return (
-      <div className={"friend"}>
-        <Avartar small url={props.url} />
-        <h3>{props.username}</h3>
-        <i onClick={() => {
-          sendFriendRequest(props.id)
-        }} ref={icon} class="online fa fa-solid fa-user"></i>
-
-      </div>
-    )
-  }
-  else {
-    return (
-      <div className={"friend"}>
-        <Avartar small url={props.url} />
-        <h3>{props.username}</h3>
-        <i ref={icon} class="notonline fa fa-solid fa-user"></i>
-
-      </div>
-    )
-  }
+  return (
+    <div className={"friend"}>
+      <Avartar small url={props.url} />
+      <h3>{props.username}</h3>
+      <i onClick={handdleClick} class="notonline fa fa-solid fa-user"></i>
+    </div>
+  )
 }
 function CreateGroup(props) {
-  const GroupMember = useState([])
+  const [groupMember, setGroupMember] = useState([])
+  const [matchFriends, setMatchFriends] = useState([])
+  const [name, setName] = useState()
+  const handdlerChanging = (value) => {
+    const callAPI = async () => {
+      const users = await fetch(domain + `/findsimilarname/friend/${value}`,
+        {
+          method: 'GET',
+          credentials: 'same-origin'
+        })
+        .then(res => res.json())
+        .catch(err => {
+          console.log(err)
+          return []
+        })
+      setMatchFriends(users)
+    }
+    callAPI()
+  }
+  const handdleClick = ({ id, userName }) => {
+    for (let i = 0; i < groupMember.length; i++) {
+      if (groupMember[i].id === id) return
+    }
+    setGroupMember([...groupMember, { id, userName }])
+  }
+  const handdlerNameChanging = (value) => {
+    console.log(value)
+    setName(value)
+  }
   return (
     <div id='create-group'>
-      <SearchBox />
+      <SearchBox placeholder = {"Tìm kiếm bạn bè"} haddlerChanging={handdlerChanging} />
+      <SearchBox placeholder = {"Tên Group"} haddlerChanging={handdlerNameChanging} />
       <div>
         <div>Bạn Bè</div>
-        <div className='friend-list'>
-          <Friend username="giang"></Friend>
-          <Friend username="giang"></Friend>
-          <Friend username="giang"></Friend>
-          <Friend username="giang"></Friend>
-          <Friend username="giang"></Friend>
-          <Friend username="giang"></Friend>
-          <Friend username="giang"></Friend>
-          <Friend username="giang"></Friend>
-          <Friend username="giang"></Friend>
-          <Friend username="giang"></Friend>
-          <Friend username="giang"></Friend>
-          <Friend username="giang"></Friend>
-          <Friend username="giang"></Friend>
-          <Friend username="giang"></Friend>
-          <Friend username="giang"></Friend>
-          <Friend username="giang"></Friend>
-          <Friend username="giang"></Friend>
-          <Friend username="giang"></Friend>
-          <Friend username="giang"></Friend>
-          <Friend username="giang"></Friend>
+        <div className='friend-list'>{
+          matchFriends.map((friend) => {
+            let active = true
+            for (let i = 0; i < groupMember.length; i++) {
+              if (groupMember[i].id === friend.id){
+                active = false;
+                break
+              }
+            }
+            return <Friend active = {active} handdleClick={handdleClick} id={friend.id} small username={friend.userName}></Friend>
+          })
+        }
         </div>
       </div>
       <div className='add-group-list'>
         <div> Danh Sách thêm</div>
         <div>
-          <span>giang, </span><span>giang, </span><span>giang, </span>
+          {
+            groupMember.map(groupMember => {
+              return (
+                <>
+                  <span>{groupMember.userName}, </span>
+                </>
+              )
+            })
+          }
         </div>
       </div>
+      <div className='create-group-btn'><div>Tạo</div></div>
     </div>
   )
 }

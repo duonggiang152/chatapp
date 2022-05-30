@@ -23,7 +23,6 @@ function FriendChat(props) {
      * }]
      * }
      */
-    console.log("run")
     const [roomdetail, setRoomdetail] = useState({name: "LOADING"})
 
     // for access responsiveContext
@@ -39,7 +38,6 @@ function FriendChat(props) {
                     const data = await Promise.all(members.map((async member => {
                         return await UserController.getUserByID(member.userID)
                     })))
-                    // console.log(data)
                     setData(data)
                     let lastMessage = await room.getMessage(undefined, 1)
                     if(lastMessage && lastMessage.length !== 0) {
@@ -84,7 +82,6 @@ function FriendChat(props) {
 
     }
     let nameBox = ""
-    console.log(roomdetail)
     if(!roomdetail.name)
         nameBox = data[0].userID === profiID ? data[1].userName : data[0].userName
     else 

@@ -22,6 +22,7 @@ const isFriendRequestAccepted = require("./routes/tool/isAcceptFriendRequest")
 const message                 = require("./routes/user/message")
 const room                    = require("./routes/user/room")
 const uploaddata            = require("./routes/tool/uploaddata")
+const createGroupChatBox    = require("./routes/user/createChatGroup")
 // need for testing
 const test = require("./routes/routetest")
 /**
@@ -60,6 +61,7 @@ app.use("/api/isacceptfriendrequest", isFriendRequestAccepted)
 app.use("/api/message/get-message",message)
 app.use("/api/room", room)
 app.use("/api/upload", uploaddata)
+app.use("/api/create-chat-group", createGroupChatBox)
 /**
  * Export module
  */
