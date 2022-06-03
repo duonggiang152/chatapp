@@ -19,6 +19,7 @@ route.post("/", async (req, res) => {
     }
     return ChatMessage.addNewChatMessage(req.body.cbID, req.user.id, req.body.message)
                       .then( async message => {
+                        ChatMessage.addCountMessage()
                         UserNotification.NewMessageNotification(req.user.id, message)
                         return res.send(
                             {
@@ -53,6 +54,7 @@ route.post("/", async (req, res) => {
                             return res.send();
                         }
                       })
+   
 })
 
 module.exports = route

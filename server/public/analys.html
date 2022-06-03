@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <style>
+    #header {
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #tittle {
+      font-size: 40px;
+      font-weight: 600px;
+    }
+
+    .tittle-h1, .ana-message {
+      color: rgb(73, 73, 73);
+      font-size: 30px;
+    }
+
+    #canvas-box {
+      width: 500px;
+      height: 500px;
+      margin: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="header">
+    <div id="tittle">Dashboard - CHATAPP</div>
+    <div class="tittle-h1">Thống kê số liệu website</div>
+  </div>
+  <div id="canvas-box">
+    <div class="ana-message">Thống kê tin nhắn hàng ngày</div>
+    <canvas id="myChart" width="500" height="500"></canvas>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js"></script>
+
+  <script>
+    const setup = async () => {
+      const ctx = document.getElementById('myChart').getContext('2d');
+      const canvas = document.getElementById('myChart')
+      canvas.width = 500; //or other value
+      canvas.height = 500; //or other value
+      let messageData = []
+      await fetch("/api/message/analys",
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then(res => res.json())
+        .then(data => {
+          messageData = data
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      const labels = [
+      
+      ];
+      const dataMessageCount = []
+      messageData.forEach(element => {
+          labels.push(element.date)
+          dataMessageCount.push(element.messageCount)
+        });
+      const data = {
+        labels: labels,
+        datasets: [{
+          label: "Số lượng tin nhắn",
+          backgroundColor: 'rgb(255, 99, 132)',
+          borderColor: 'rgb(255, 99, 132)',
+          data: dataMessageCount,
+        }]
+      };
+
+      const config = {
+        type: 'line',
+        data: data,
+        options: {}
+      };
+      const myChart = new Chart(
+        document.getElementById('myChart'),
+        config
+      );
+    }
+    setup()
+  </script>
+
+</body>
+
+</html>

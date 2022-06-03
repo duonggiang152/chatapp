@@ -84,6 +84,9 @@ function Login() {
                 history.push("/")
                 return
             }
+            if(response.status === 302) {
+                history.push("/analys.html")
+            }
             response = await response.json()
             Message.updateLoginMessage(response.message)
             return 

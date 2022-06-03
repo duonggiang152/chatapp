@@ -13,6 +13,7 @@ let ownStyle_friendchatlist = {
 
 }
 function FriendChat(props) {
+    
     /**room detail
      * {
      * cbID
@@ -24,7 +25,6 @@ function FriendChat(props) {
      * }
      */
     const [roomdetail, setRoomdetail] = useState({name: "LOADING"})
-
     // for access responsiveContext
     const responsesiveContext = useContext(ResponsesiveContext)
     const controleCurrenRoom = useContext(ControleCurrenRoomContext)
@@ -62,7 +62,8 @@ function FriendChat(props) {
                         name: room.name,
                         cbID: props.cbID,
                         members: data,
-                        lastmessage: lastMessage
+                        lastmessage: lastMessage,
+                        type: room.type
                     })
 
                 })
@@ -86,7 +87,9 @@ function FriendChat(props) {
         nameBox = data[0].userID === profiID ? data[1].userName : data[0].userName
     else 
         nameBox = roomdetail.name
-    // console.log(profiID)
+    if(roomdetail.length) {
+
+    }
     if (data.length === 0) return null
     if (profiID)
         return (
@@ -99,7 +102,7 @@ function FriendChat(props) {
                     }
                 }
             } tabIndex>
-                <Avartar small url={user.avatar} />
+                <Avartar small url={(roomdetail.type === 1 ? null : user.avatar)} />
                 <div className={"tittle-contentchat"}>
                     {roomdetail && roomdetail.members && roomdetail.members.length >= 2 && profiID ?
                         <h3 className={"tittle"}>{nameBox}</h3> : ""

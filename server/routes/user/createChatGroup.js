@@ -19,11 +19,12 @@ router.post("/", async (req, res) => {
     if (!name) name = req.user.username
     if (typeof (userIDs) !== typeof ([]))
       throw new Error()
-    if (userIDs.length <= 1)
-      throw new Error()
     if (!userIDs.includes(ownerID)) {
       userIDs.unshift(ownerID)
     }
+    if (userIDs.length <= 1)
+      throw new Error()
+
     // create group
     const idGroup = await ChatBox.createGroupChatBox(userIDs[0], userIDs[1], name)
       .then(async data => {
@@ -35,14 +36,14 @@ router.post("/", async (req, res) => {
     for (let i = 0; i < userIDs.length; i++) {
 
       const sockets = await SocketManager.getSocket(userIDs[i])
-      if(typeof(sockets) !== typeof([])) continue;
-      
+      if (typeof (sockets) !== typeof ([])) continue;
+
       sockets.forEach((socket) => {
         IOServer.io.to(socket).emit("new-update-room", {
           cbID: idGroup
         })
       })
-     
+
     }
     return res.status(200).json({ message: " tạo thành công", id: idGroup })
   } catch (err) {

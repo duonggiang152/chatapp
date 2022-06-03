@@ -20,17 +20,17 @@ class ChatMessage {
      * system err 
      * typeerr
      */
-    static async addNewChatMessage(idBox,idUser, message) {
-        if(typeof(idBox) != typeof(1) || typeof(idUser) != typeof(1)) {
+    static async addNewChatMessage(idBox, idUser, message) {
+        if (typeof (idBox) != typeof (1) || typeof (idUser) != typeof (1)) {
             throw new TypeError("boxId and userID have to be number")
         }
-        if(typeof(message) != typeof("")) {
+        if (typeof (message) != typeof ("")) {
             throw new TypeError("message have to be a string")
         }
         const query = `CALL AddMessageToChatBox(${idBox},${idUser},"${message}");`
         return DataBase.query(query)
-                        .then(data => data[0][0])
-    }  
+            .then(data => data[0][0])
+    }
     /**
      * get chat message infomation by ID
      * @static
@@ -45,7 +45,7 @@ class ChatMessage {
     static async getChatMessagebyID(mID) {
         const query = `SELECT * from ChatMessage WHERE mID = ${mID};`
         return DataBase.query(query)
-                       .then(data => data[0]) 
+            .then(data => data[0])
 
     }
     /**
@@ -57,21 +57,73 @@ class ChatMessage {
      * @param {number} limit 
      * @returns arrayofmessage
      */
-    static async getMessage(chatboxID,offsetID, limit) {
-        if(!offsetID) offsetID = 0
-        if(!limit)    limit    = 10
-        const conditionparam = `AND mID < ${offsetID}` 
+    static async getMessage(chatboxID, offsetID, limit) {
+        if (!offsetID) offsetID = 0
+        if (!limit) limit = 10
+        const conditionparam = `AND mID < ${offsetID}`
         const query = `
             SELECT mID, cbID, userID, userName, message, datetime
             FROM ChatMessage, Users
-            WHERE cbID =  ${chatboxID} ${ offsetID ? conditionparam : ""} AND userId = idUser
+            WHERE cbID =  ${chatboxID} ${offsetID ? conditionparam : ""} AND userId = idUser
             ORDER BY mID DESC
             LIMIT ${limit};
         `
         return DataBase.query(query)
-                       
+
+    }
+
+    static async addCountMessage() {
+        function GFG_Fun() {
+            var date = new Date(); 
+            var now_utc =  Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),
+            date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+
+            const date2 = new Date(now_utc);
+            const year = date2.getFullYear()
+            const month = date2.getMonth() + 1
+            const date1 = date2.getDate() 
+            
+            return "" + year +"-"+month + "-"+ date1
+        }
+        const date = GFG_Fun()
+        console.log(date)
+        const checkDateExistQuery = `
+            SELECT *
+            FROM MessageAnalys
+            WHERE date = "${date}"
+        `
+        return DataBase.query(checkDateExistQuery)
+            .then(async data => {
+                if (data.length === 0) {
+                    const createRecord = `
+                                    insert into MessageAnalys
+                                    value("${date}", 1);
+                                
+                                `
+                    return DataBase.query(createRecord)
+                }
+                else {
+                    const setRecord = `
+                                    update MessageAnalys
+                                    set messageCount = messageCount + 1
+                                    where date = "${date}"
+                                `
+                    return DataBase.query(setRecord)
+                }
+            })
+    }
+    static async getCountMessage() {
+        const query =
+            `SELECT *
+            FROM MessageAnalys
+            ORDER BY date
+            limit 20`
+        return DataBase.query(query)
+
     }
 }
+
+
 
 module.exports = ChatMessage
 

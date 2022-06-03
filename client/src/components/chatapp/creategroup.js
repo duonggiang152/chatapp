@@ -33,6 +33,7 @@ function Friend(props) {
   )
 }
 function CreateGroup(props) {
+  const btnCreate = useRef(null)
   const [groupMember, setGroupMember] = useState([])
   const [matchFriends, setMatchFriends] = useState([])
   const [name, setName] = useState()
@@ -59,8 +60,50 @@ function CreateGroup(props) {
     setGroupMember([...groupMember, { id, userName }])
   }
   const handdlerNameChanging = (value) => {
-    console.log(value)
+   
     setName(value)
+  }
+  const createGroupClick =async () => {
+    btnCreate.current.innerHTML = "Wating"
+    console.log(groupMember)
+    if(groupMember.length === 0) {
+      setTimeout(() => {
+        btnCreate.current.innerHTML = "Tạo"
+      }, 2000)
+      btnCreate.current.innerHTML = "Không thể tạo group không có thành viên"
+      return
+    }
+    const body = {
+      groupname: name,
+      userIDs : []
+    }
+    for(let i =0 ;i < groupMember.length; i++) {
+      body.userIDs.push(groupMember[i].id)
+    }
+    console.log(body)
+    await fetch(domain + `/create-chat-group`,
+    {
+      method: 'POST',
+      headers : {
+        'Content-Type': 'application/json',
+    },
+      credentials: 'same-origin',
+      body: JSON.stringify(body)
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log(data)
+      btnCreate.current.innerHTML = "Tạo thành công refresh lại trang để sử dụng group"
+      setTimeout(() => {
+        btnCreate.current.innerHTML = "Tạo"
+      }, 3000)
+    })
+    .catch(err => {
+      setTimeout(() => {
+        btnCreate.current.innerHTML = "Lỗi"
+      }, 3000)
+      console.log(err)
+    })
   }
   return (
     <div id='create-group'>
@@ -96,7 +139,7 @@ function CreateGroup(props) {
           }
         </div>
       </div>
-      <div className='create-group-btn'><div>Tạo</div></div>
+      <div ref={btnCreate} onClick={createGroupClick}  className='create-group-btn'><div>Tạo</div></div>
     </div>
   )
 }

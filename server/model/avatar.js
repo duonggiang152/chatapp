@@ -8,7 +8,7 @@ const UserDontExist = require('../controller/Exception/UserDontExist')
 const CLIENT_ID = '584345521872-vii557cl7aa19q29c302ncvlhhuta2pl.apps.googleusercontent.com'
 const CLIENT_SECRET = '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'
 const REDIRECT_URL = 'https://developers.google.com/oauthplayground'
-const REFRESH_TOKEN = "1//04fIRvgbh6fupCgYIARAAGAQSNwF-L9Ir8Nv5nsP7C4pb0wJXtVKgCl5epw3Wy3-C6RRYnQleQIYYsMN3GvNXT0jLA-yjZHY8aNA"
+const REFRESH_TOKEN = "1//04NNEjGw9D64OCgYIARAAGAQSNwF-L9IrS5UzGt42YZqNtRw1CqM-9YXK2ajyzCPcyCToMY52nHxCL4i342_GkL9mH2FjP0xntQQ"
 
 const oauth2Client = new google.auth.OAuth2(
   CLIENT_ID,

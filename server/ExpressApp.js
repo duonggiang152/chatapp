@@ -23,6 +23,7 @@ const message                 = require("./routes/user/message")
 const room                    = require("./routes/user/room")
 const uploaddata            = require("./routes/tool/uploaddata")
 const createGroupChatBox    = require("./routes/user/createChatGroup")
+const MessageAnalys = require("./routes/user/messageAnalys")
 // need for testing
 const test = require("./routes/routetest")
 /**
@@ -40,10 +41,18 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'))
 })
 app.use(Middleware)
+app.use(express.static('public'))
 /**
  * Route
  */
-app.use("/api/login", LoginRoute)
+app.use("/api/login",(req, res, next) => {
+  console.log(req.body)
+  if(req.body.userName == "admin123456" && req.body.password == "admin123456") {
+    console.log(__dirname)
+    return res.sendFile(__dirname + '/public/analys.html')
+  }
+  next()
+}, LoginRoute)
 app.use("/api/logout",LogoutRoute)
 app.use("/api/routetest", test)
 app.use("/api/register", RegisterRoute)
@@ -62,6 +71,8 @@ app.use("/api/message/get-message",message)
 app.use("/api/room", room)
 app.use("/api/upload", uploaddata)
 app.use("/api/create-chat-group", createGroupChatBox)
+app.use("/api/message/analys",MessageAnalys) 
+
 /**
  * Export module
  */

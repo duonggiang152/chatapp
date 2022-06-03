@@ -22,7 +22,7 @@ const configPoolConnection = {
 //     dateStrings: 'date'
 // }
 // const configPoolConnection = {
-//     connectionLimit : 5,
+//     connectionLimit : 1,
 //     host     : 'brdg3aktlk1hcbnxce1r-mysql.services.clever-cloud.com',
 //     user     : 'ucbqdfyfmbnt2hfk',
 //     password : 'ypLyolhXPkR5eNyAVhLG',
